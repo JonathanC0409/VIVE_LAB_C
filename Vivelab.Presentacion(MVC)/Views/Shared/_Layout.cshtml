@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vivelab.Presentacion_MVC_</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Vivelab.Presentacion_MVC_.styles.css" asp-append-version="true" />
+</head>
+<body style="background-color: #121212; color: white;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow mb-3 ">
+            <div class="container-fluid">
+                <!-- Logo a la izquierda -->
+                <a class="navbar-brand" href="#"  style="color: aliceblue">
+                    <img src="~/images/logo.png" alt="Vivelab Logo" style="width: 50px; height: 50px;" />
+                    Vivelab
+                </a>
+
+                <!-- Buscador en el centro -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <form class="d-flex ms-4" action="#" method="get"> <!-- Modificado: ms-4 -->
+                        <input class="busqueda" type="search" placeholder="¿Qué quieres reproducir?" aria-label="Search" />
+                        <button class="btn btn-outline-light ms-3" type="submit">Buscar</button> <!-- Modificado: me-3 -->
+                    </form>
+                </div>
+
+                <!-- Botones en el lado derecho -->
+                <div class="ms-auto d-flex align-items-center Contenedornav">
+                    <!-- Íconos para navegar -->
+                    <a class="btn btn-outline-light me-3" href="#">🏠</a> <!-- Modificado: me-3 -->
+                    <a class="btn btn-outline-light me-3" href="#">Mi Biblioteca</a> <!-- Modificado: me-3 -->
+                    <a class="btn btn-outline-light me-3" href="#">Premium</a> <!-- Modificado: me-3 -->
+
+                    <!-- Botón de inicio de sesión -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-outline-light me-3" href="@Url.Action("Logout", "Login")">Cerrar Sesión</a> <!-- Modificado: me-3 -->
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-light me-3" href="@Url.Action("Index", "Login")">Iniciar Sesión</a> <!-- Modificado: me-3 -->
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

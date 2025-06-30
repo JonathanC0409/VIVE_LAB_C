@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Unirse como artista ";
+}
+<h2>Cambiar Rol a Artista</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Mensaje"]
+    </div>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    @* Verifica si el tipo de usuario es cliente para mostrar la opción de cambiar a artista *@
+    @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
+    {
+        <form method="post" asp-action="CambiarRolUsuario">
+            <input type="hidden" name="email" value="@ViewBag.Email" />
+            <button type="submit" class="btn btn-primary">Cambiar a Artista</button>
+        </form>
+    }
+    else
+    {
+        <p>Ya eres un artista.</p>
+    }
+}
+else
+{
+    <p>Por favor, inicia sesión para cambiar tu rol.</p>
+}

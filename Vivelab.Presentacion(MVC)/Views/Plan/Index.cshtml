@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Planes</h1>
+
+<div class="row">
+    @foreach (var plan in Model)
+    {
+        <div class="col-md-4 mb-4" style="color: black">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@plan.Nombre</h5>
+                    <p class="card-text flex-grow-1">@plan.Descripcion</p>
+                    <ul class="list-unstyled mb-3">
+                        <li><strong>Usuarios:</strong> @plan.CantidadUsuarios</li>
+                        <li><strong>Precio:</strong> @plan.Precio.ToString("C")</li>
+                    </ul>
+                    <a asp-action="Comprar" asp-route-id="@plan.Codigo" class="btn btn-primary mt-auto">
+                        Comprar
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
