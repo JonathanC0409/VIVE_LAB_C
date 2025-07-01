@@ -82,7 +82,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
         }
 
-        public  IActionResult CambiarRolUsuario()
+        public IActionResult CambiarRolUsuario()
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             ViewBag.Email = email;
@@ -112,8 +112,12 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (resultado)
             {
                 ViewBag.Mensaje = "Cuenta eliminada exitosamente.";
-                return RedirectToAction("Index");
+
+
+                await HttpContext.SignOutAsync("Cookies");
+                return RedirectToAction("Index", "Home");
             }
+
             else
             {
                 ViewBag.Mensaje = "Error al eliminar la cuenta. Por favor, inténtelo de nuevo.";

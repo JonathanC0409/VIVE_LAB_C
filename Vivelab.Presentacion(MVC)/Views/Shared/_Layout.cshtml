@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - Vivelab.Presentacion_MVC_</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Vivelab.Presentacion_MVC_.styles.css" asp-append-version="true" />
 </head>
 <body style="background-color: #121212; color: white;">
     <header>
@@ -29,9 +28,11 @@
                 <!-- Botones en el lado derecho -->
                 <div class="ms-auto d-flex align-items-center Contenedornav">
                     <!-- Íconos para navegar -->
-                    <a class="btn btn-outline-light me-3" href="#">🏠</a> <!-- Modificado: me-3 -->
+                    <a class="btn btn-outline-light me-3" href="@Url.Action("Index","Home")">🏠</a> <!-- Modificado: me-3 -->
                     <a class="btn btn-outline-light me-3" href="#">Mi Biblioteca</a> <!-- Modificado: me-3 -->
-                    <a class="btn btn-outline-light me-3" href="#">Premium</a> <!-- Modificado: me-3 -->
+                    <a class="btn btn-outline-light me-3" href="@Url.Action("Index","Plan")">Premium</a> <!-- Modificado: me-3 -->
+                    <a class="btn btn-outline-light me-3" href="@Url.Action("Index","GestionarPerfil")">Perfil</a> <!-- Modificado: me-3 -->
+                    <a class="btn btn-outline-light me-3" href="@Url.Action("Index","Musica")">Musica</a> <!-- Modificado: me-3 -->
 
                     <!-- Botón de inicio de sesión -->
                     @if (User.Identity.IsAuthenticated)

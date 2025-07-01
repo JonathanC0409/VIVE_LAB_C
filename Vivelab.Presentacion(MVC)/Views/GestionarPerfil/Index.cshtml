@@ -41,3 +41,15 @@
     </div>
     <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
 </form>
+
+<!-- Botón para eliminar cuenta con confirmación -->
+<form method="post" asp-action="EliminarCuenta" class="mt-4" id="formEliminarCuenta">
+    <input type="hidden" name="email" value="@ViewBag.Email" />
+    <button type="submit" class="btn btn-danger" onclick="return confirmarEliminacion()">Eliminar cuenta</button>
+</form>
+
+<script>
+    function confirmarEliminacion() {
+        return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción es irreversible.');
+    }
+</script>

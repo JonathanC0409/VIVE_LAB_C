@@ -75,15 +75,17 @@ namespace Vivelab.Servicios
 
         public Task<bool> EliminarCuenta(string email)
         {
-            CRUD<Usuario>.GetAll().ForEach(u =>
+           var usuarios =  CRUD<Usuario>.GetAll();
+            foreach(var u in usuarios)
             {
                 if (u.Email == email)
                 {
                     CRUD<Usuario>.Delete(u.Codigo);
                     Console.WriteLine($"Cuenta del usuario con email {email} eliminada.");
+                    return Task.FromResult(true); // Cuenta eliminada exitosamente
                 }
-            });
-            return Task.FromResult(true); // Cuenta eliminada exitosamente
+            }
+            return Task.FromResult(false); // Cuenta no eliminada
         }
     }
 }

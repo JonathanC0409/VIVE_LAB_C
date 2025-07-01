@@ -147,23 +147,23 @@ namespace Vivelab.Api.Controllers
         // En CancionesController.cs
         [HttpPost("{id}/incrementar-reproduccion")]
         public async Task<IActionResult> IncrementarReproduccion(int id)
-        {
-            // Buscar la canción por su ID
+         {
             var cancion = await _context.Canciones.FindAsync(id);
             if (cancion == null)
             {
                 return NotFound();
             }
 
-            // Incrementar el contador de reproducciones
+            // Incrementamos la cantidad de reproducciones
             cancion.TotalReproducciones++;
 
-            // Guardar los cambios en la base de datos
+            // Guardamos los cambios en la base de datos
             _context.Canciones.Update(cancion);
             await _context.SaveChangesAsync();
 
             return NoContent(); // Respuesta exitosa sin contenido
         }
+
 
 
     }

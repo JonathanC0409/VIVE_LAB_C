@@ -18,12 +18,6 @@ namespace Vivelab.Presentacion_MVC_
 
             //Registrar Servicios
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddScoped<ICancionService, CancionService>(serviceProvider =>
-            {
-                var blobService = serviceProvider.GetRequiredService<BlobServiceClient>();
-                var containerName = builder.Configuration["AzureStorage:ContainerName"];
-                return new CancionService(blobService, containerName);
-            });
             builder.Services.AddScoped<IMetodoPagoService, MetodoPagoService>();
             builder.Services.AddScoped<ISuscripcionService, SuscripcionService>();
             builder.Services.AddScoped<IPlanService, PlanService>();
