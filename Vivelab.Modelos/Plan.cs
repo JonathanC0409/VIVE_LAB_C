@@ -14,7 +14,6 @@ public  class Plan
 
     public double Precio { get; set; }
 
-    [Column("cantidadUsuarios")]
     public int CantidadUsuarios { get; set; }
 
     public string Descripcion { get; set; } 

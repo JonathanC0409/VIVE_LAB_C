@@ -22,12 +22,11 @@ public  class Cancion
 
     public int ArtistaCodigo { get; set; }
 
-    public int AlbumCodigo { get; set; }
+    public int? AlbumCodigo { get; set; }
 
     public virtual Album? Album{ get; set; }
 
-    [ForeignKey(nameof(ArtistaCodigo))] 
-    public virtual Usuario? ArtistaCodigoNavigation { get; set; } 
+    public virtual Usuario? Artista { get; set; } 
 
     public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; } 
 }

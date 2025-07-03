@@ -15,7 +15,11 @@ public class Usuario
 
     public string Password { get; set; }  
 
-    public string TipoUsuario { get; set; } 
+    public string TipoUsuario { get; set; }
+
+    public string? Bibliografia { get; set; }
+
+    public double Saldo { get; set; }
 
     public DateTime FechaRegistro { get; set; }
 

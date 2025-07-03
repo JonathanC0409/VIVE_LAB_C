@@ -11,8 +11,6 @@ public class Playlist
 
     public string Nombre { get; set; }
 
-    public DateTime FechaCreacion { get; set; }
-
     public int UsuarioCodigo { get; set; }
 
     public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; }

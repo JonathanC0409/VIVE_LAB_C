@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Vivelab.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250614145329_v01")]
+    [Migration("20250703044526_v01")]
     partial class v01
     {
         /// <inheritdoc />
@@ -60,7 +60,7 @@ namespace Vivelab.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
 
-                    b.Property<int>("AlbumCodigo")
+                    b.Property<int?>("AlbumCodigo")
                         .HasColumnType("integer");
 
                     b.Property<string>("ArchivoUrl")
@@ -68,9 +68,6 @@ namespace Vivelab.Api.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ArtistaCodigo")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ArtistaCodigoNavigationCodigo")
                         .HasColumnType("integer");
 
                     b.Property<TimeSpan>("Duracion")
@@ -90,7 +87,7 @@ namespace Vivelab.Api.Migrations
 
                     b.HasIndex("AlbumCodigo");
 
-                    b.HasIndex("ArtistaCodigoNavigationCodigo");
+                    b.HasIndex("ArtistaCodigo");
 
                     b.ToTable("Canciones");
                 });
@@ -149,9 +146,6 @@ namespace Vivelab.Api.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -237,6 +231,9 @@ namespace Vivelab.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
 
+                    b.Property<string>("Bibliografia")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -251,6 +248,9 @@ namespace Vivelab.Api.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("Saldo")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TipoUsuario")
                         .IsRequired()
@@ -299,17 +299,17 @@ namespace Vivelab.Api.Migrations
                 {
                     b.HasOne("Vivelab.Modelos.Album", "Album")
                         .WithMany("Canciones")
-                        .HasForeignKey("AlbumCodigo")
+                        .HasForeignKey("AlbumCodigo");
+
+                    b.HasOne("Vivelab.Modelos.Usuario", "Artista")
+                        .WithMany("Canciones")
+                        .HasForeignKey("ArtistaCodigo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vivelab.Modelos.Usuario", "ArtistaCodigoNavigation")
-                        .WithMany("Canciones")
-                        .HasForeignKey("ArtistaCodigoNavigationCodigo");
-
                     b.Navigation("Album");
 
-                    b.Navigation("ArtistaCodigoNavigation");
+                    b.Navigation("Artista");
                 });
 
             modelBuilder.Entity("Vivelab.Modelos.Playlist", b =>

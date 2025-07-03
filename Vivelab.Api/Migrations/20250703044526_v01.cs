@@ -52,6 +52,8 @@ namespace Vivelab.Api.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     TipoUsuario = table.Column<string>(type: "text", nullable: false),
+                    Bibliografia = table.Column<string>(type: "text", nullable: true),
+                    Saldo = table.Column<double>(type: "double precision", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -88,7 +90,6 @@ namespace Vivelab.Api.Migrations
                     Codigo = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nombre = table.Column<string>(type: "text", nullable: false),
-                    FechaCreacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UsuarioCodigo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -150,8 +151,7 @@ namespace Vivelab.Api.Migrations
                     FechaSubida = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     TotalReproducciones = table.Column<int>(type: "integer", nullable: false),
                     ArtistaCodigo = table.Column<int>(type: "integer", nullable: false),
-                    AlbumCodigo = table.Column<int>(type: "integer", nullable: false),
-                    ArtistaCodigoNavigationCodigo = table.Column<int>(type: "integer", nullable: true)
+                    AlbumCodigo = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,13 +160,13 @@ namespace Vivelab.Api.Migrations
                         name: "FK_Canciones_Albumes_AlbumCodigo",
                         column: x => x.AlbumCodigo,
                         principalTable: "Albumes",
+                        principalColumn: "Codigo");
+                    table.ForeignKey(
+                        name: "FK_Canciones_Usuarios_ArtistaCodigo",
+                        column: x => x.ArtistaCodigo,
+                        principalTable: "Usuarios",
                         principalColumn: "Codigo",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Canciones_Usuarios_ArtistaCodigoNavigationCodigo",
-                        column: x => x.ArtistaCodigoNavigationCodigo,
-                        principalTable: "Usuarios",
-                        principalColumn: "Codigo");
                 });
 
             migrationBuilder.CreateTable(
@@ -232,9 +232,9 @@ namespace Vivelab.Api.Migrations
                 column: "AlbumCodigo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Canciones_ArtistaCodigoNavigationCodigo",
+                name: "IX_Canciones_ArtistaCodigo",
                 table: "Canciones",
-                column: "ArtistaCodigoNavigationCodigo");
+                column: "ArtistaCodigo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlaylistCanciones_CancionCodigo",
