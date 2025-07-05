@@ -13,7 +13,6 @@
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Fecha de Creación</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -22,7 +21,6 @@
         {
             <tr>
                 <td>@playlist.Nombre</td>
-                <td>@playlist.FechaCreacion</td>
                 <td>
                     <a href="@Url.Action("Details", "PlayLists", new { id = playlist.Codigo })">Detalles</a> |
                     <a href="@Url.Action("Edit", "PlayLists", new { id = playlist.Codigo })">Editar</a> |
