@@ -4,6 +4,12 @@
     ViewData["Title"] = "Listado de Canciones";
 }
 
+<script>
+    const reproduccionesHoy = @ViewBag.ReproduccionesHoy;
+    const planCodigo = @ViewBag.PlanCodigo;
+</script>
+
+
 <h2>@ViewData["Title"]</h2>
 
 @if (ViewBag.Rol == "artista")
@@ -39,13 +45,9 @@
                         <code>audio</code>.
                     </audio>
                 </td>
-                <td>@item.Artista</td>
-                <td>@item.TotalReproducciones</td>
-
-
                 <td>@item.Artista.Nombre</td>
                 <td>@item.TotalReproducciones</td>
-                
+
             </tr>
         }
     </tbody>
@@ -53,30 +55,38 @@
 
 @section Scripts {
     <script>
-        // Seleccionamos todos los reproductores de audio
+        let reproduccionesActuales = reproduccionesHoy;
+
         document.querySelectorAll('.audio-player').forEach(audio => {
-            // Cuando se reproduce el audio, llamamos a la API para incrementar la reproducción
-            audio.addEventListener('play', function() {
-                const songId = this.getAttribute('data-id');  // Extraemos el ID de la canción desde el atributo 'data-id'
+            audio.addEventListener('play', function () {
+            if (planCodigo == 0 && reproduccionesActuales >= 10) {
+                this.pause();             // 🔴 Pausa el audio
+                this.currentTime = 0;     // 🔁 Lo regresa al inicio
+                alert("Ya alcanzaste tu límite diario de 10 reproducciones en el plan gratuito.");
+                return;
+            }
 
-                // Verificar si el evento 'play' se activa correctamente
-                console.log('Reproduciendo canción con ID: ' + songId);  // Esto debería aparecer en la consola al reproducir
+                const songId = this.getAttribute('data-id');
 
-                fetch(`https://localhost:7008/api/Canciones/${songId}/incrementar-reproduccion`, {
-                    method: 'POST',
-                })
-                .then(response => {
-                    console.log(response); // Agrega esto para ver el código de estado
-                    if (!response.ok) {
-                        console.error("Error incrementando las reproducciones");
-                    } else {
-                        console.log("Reproducción incrementada exitosamente");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error en la petición:", error);
+                // 1. Llama al endpoint en MVC para actualizar la sesión del usuario
+                fetch(`/Musica/IncrementarReproduccionUsuario`, {
+                    method: 'POST'
+                }).then(() => {
+                    // 2. Ahora sí llama al API de la canción (para estadísticas globales)
+                    fetch(`https://localhost:7008/api/Canciones/${songId}/incrementar-reproduccion`, {
+                        method: 'POST'
+                    }).then(response => {
+                        if (!response.ok) {
+                            console.error("Error incrementando en API");
+                        } else {
+                            console.log("Reproducción global incrementada");
+                        }
+                    });
+
+                    reproduccionesActuales++;
                 });
             });
         });
     </script>
 }
+

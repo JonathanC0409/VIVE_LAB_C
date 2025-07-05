@@ -33,6 +33,8 @@ namespace Vivelab.Presentacion_MVC_
             builder.Services.AddScoped<IPerfilService, PerfilService>();
 
             // Add services to the container.
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();  // ?? Habilita soporte para sesión
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddAuthentication("Cookies") //cokies
@@ -46,6 +48,7 @@ namespace Vivelab.Presentacion_MVC_
 
             var app = builder.Build();
 
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -53,6 +56,8 @@ namespace Vivelab.Presentacion_MVC_
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSession(); // ?? Activa la sesión
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
