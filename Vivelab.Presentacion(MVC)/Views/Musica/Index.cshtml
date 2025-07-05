@@ -21,6 +21,10 @@
     </p>
 }
 
+<div id="bannerAnuncio" class="alert alert-info text-center d-none" style="font-weight: bold;">
+    🎙️ Anuncio: Disfruta sin interrupciones con el Plan Premium. ¡Cámbiate ahora!
+</div>
+
 <table class="table table-striped align-middle">
     <thead>
         <tr>
@@ -56,37 +60,70 @@
 @section Scripts {
     <script>
         let reproduccionesActuales = reproduccionesHoy;
+        let anuncioCada = 3;
+        let contadorAnuncios = 0;
+        let reproduciendoAnuncio = false;
+
+        const banner = document.getElementById("bannerAnuncio");
 
         document.querySelectorAll('.audio-player').forEach(audio => {
+
             audio.addEventListener('play', function () {
-            if (planCodigo == 0 && reproduccionesActuales >= 10) {
-                this.pause();             // 🔴 Pausa el audio
-                this.currentTime = 0;     // 🔁 Lo regresa al inicio
-                alert("Ya alcanzaste tu límite diario de 10 reproducciones en el plan gratuito.");
-                return;
-            }
+                if (reproduciendoAnuncio) {
+                    this.pause(); // 🔒 Bloquea reanudar durante anuncio
+                    return;
+                }
+
+                if (planCodigo == 0 && reproduccionesActuales >= 10) {
+                    this.pause();
+                    this.currentTime = 0;
+                    alert("Ya alcanzaste tu límite diario de 10 reproducciones en el plan gratuito.");
+                    return;
+                }
+
+                if (planCodigo == 0 && contadorAnuncios % anuncioCada == 0 && contadorAnuncios !== 0) {
+                    this.pause();
+                    banner.classList.remove("d-none");
+                    reproduciendoAnuncio = true; // 🚫 Bloquea reanudar
+
+                    // Esperar 5 segundos, luego ocultar anuncio y reanudar
+                    setTimeout(() => {
+                        banner.classList.add("d-none");
+                        reproduciendoAnuncio = false; // ✅ Permitir reanudar
+                        this.play(); // Reanuda automáticamente
+                    }, 5000);
+
+                    contadorAnuncios++;
+                    return;
+                }
 
                 const songId = this.getAttribute('data-id');
 
-                // 1. Llama al endpoint en MVC para actualizar la sesión del usuario
                 fetch(`/Musica/IncrementarReproduccionUsuario`, {
                     method: 'POST'
                 }).then(() => {
-                    // 2. Ahora sí llama al API de la canción (para estadísticas globales)
                     fetch(`https://localhost:7008/api/Canciones/${songId}/incrementar-reproduccion`, {
                         method: 'POST'
                     }).then(response => {
                         if (!response.ok) {
                             console.error("Error incrementando en API");
-                        } else {
-                            console.log("Reproducción global incrementada");
                         }
                     });
 
                     reproduccionesActuales++;
+                    contadorAnuncios++;
                 });
+            });
+
+            // También bloquea si el usuario intenta reanudar durante el anuncio
+            audio.addEventListener('seeking', function () {
+                if (reproduciendoAnuncio) {
+                    this.pause();
+                    this.currentTime = 0;
+                }
             });
         });
     </script>
 }
+
 

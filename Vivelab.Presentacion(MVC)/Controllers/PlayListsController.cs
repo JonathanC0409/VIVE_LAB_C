@@ -22,6 +22,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     }
                 }
                 ViewBag.UsuarioCodigo = usuarioCodigo;
+                ViewBag.Plan = ObtenerPlan();
                 // Obtener todas las playlists usando el CRUD
                 var playlists = CRUD<Playlist>.GetBy("usuario", usuarioCodigo);
                 return View(playlists); // Mostrar todas las playlists
@@ -32,6 +33,31 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
+        }
+
+        private int ObtenerPlan()
+        {
+            int UsuarioId = 0;
+            foreach (var u in User.Claims)
+            {
+                if (u.Type == "UsuarioCodigo")
+                {
+                    UsuarioId = int.Parse(u.Value);
+                    break;
+                }
+            }
+
+            var usuario = CRUD<Usuario>.GetById(UsuarioId);
+            if (usuario != null)
+            {
+                if (usuario.Suscripcion == null)
+                {
+                    return 0; // No tiene plan
+                }
+                int plan = usuario.Suscripcion.Plan.Codigo;
+                return plan;
+            }
+            return 0;
         }
 
         // GET: PlayListsController/Details/5
