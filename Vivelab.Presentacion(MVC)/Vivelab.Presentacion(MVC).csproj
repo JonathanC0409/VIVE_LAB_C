@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Vivelab.Presentacion_MVC_</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vivelab.API.Consume\Vivelab.API.Consume.csproj" />
+    <ProjectReference Include="..\Vivelab.Modelos\Vivelab.Modelos.csproj" />
+    <ProjectReference Include="..\Vivelab.Servicios\Vivelab.Servicios.csproj" />
+  </ItemGroup>
+
+</Project>

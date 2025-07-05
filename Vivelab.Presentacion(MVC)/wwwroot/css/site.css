@@ -1,0 +1,61 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.btn-outline-lighty {
+    border-radius: 25px; /* Bordes redondeados */
+    border: 2px solid white; /* Borde blanco */
+    color: white; /* Texto blanco */
+}
+
+/* Campo de búsqueda más oscuro y redondeado */
+.busqueda {
+    width: 400px; /* Ajusta el tamaño del campo de búsqueda */
+    border-radius: 25px; /* Bordes redondeados */
+    background-color: #333; /* Fondo oscuro en el input */
+    color: white; /* Texto blanco en el input */
+    border: 1px solid #555; /* Borde gris oscuro */
+}
+
+.textoinicial {
+    font-weight:bold;
+}
+
+@media (min-width:768px) {
+    .ImagenContenido {
+        height: 14vw;
+    }
+    .Contenedornav {
+        display: grid;
+        grid-template-rows: 5fr;
+    }
+}
+@media (max-width:765px) {
+    .ImagenContenido {
+        height: 50vw;
+    }
+    
+}
+
+
+
+

@@ -1,0 +1,15 @@
+﻿.vs/
+*.user
+*.suo
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+**/publish/
+**/PublishProfiles/
+appsettings.Development.json
+secrets.json
+*.log
+.vscode/

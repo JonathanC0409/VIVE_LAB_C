@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vivelab</title>
+
+    <!-- Vinculación de Bootstrap -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Vinculación del archivo CSS personalizado -->
+   
+</head>
+<body>
+
+ 
+    <!-- Sección principal con bienvenida y recomendaciones -->
+    <div class="container my-5">
+        <div class="text-center">
+            <h1 class="display-4">Bienvenido a Vivelab 🎵</h1>
+            <p class="lead mt-3">Descubre tu música favorita y comparte tus canciones con el mundo.</p>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <h4 class="mt-3">¡Hola, @User.Identity.Name 👋</h4>
+                @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
+                {
+                    <p class="mt-3">
+                        <a href="@Url.Action("CambiarRolUsuario", "GestionarPerfil")" class="btn btn-success btn-lg">Regístrate como Artista</a>
+                    </p>
+                }
+            }
+        </div>
+
+        <!-- Recomendaciones de música -->
+        <h3 class="mt-5">Lo mejor de la música</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <img src="https://global-pop-magazine.com/wp-content/uploads/2023/02/POP_WEB.jpg" class="card-img ImagenContenido" alt="Música recomendada">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title" style="text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9), 0 0 25px #ff0000, 0 0 5px darkblue;">Música Pop</h5>
+                        <p class="card-text" style="text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 5px #ff0000;">Explora los éxitos del momento.</p>
+                        <a href="#" class="btn btn-outline-light">Escuchar ahora</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <img src="https://i.ytimg.com/vi/TBrt71Kcclc/maxresdefault.jpg" class="card-img ImagenContenido" alt="Música recomendada">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title" style="text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9), 0 0 25px #ff0000, 0 0 5px darkblue;">Música Electrónica</h5>
+                        <p class="card-text" style="text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 5px #ff0000;">Los mejores beats para tus fiestas.</p>
+                        <a href="#" class="btn btn-outline-light">Escuchar ahora</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <img src="https://www.ecuavisa.com/binrepository/1200x800/0c100/1200d600/none/11705/YXGL/whatsapp-image-2024-11-18-at-8-03_1861003_20241118200658.jpg" class="card-img ImagenContenido" alt="Música recomendada">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title" style="text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9), 0 0 25px #ff0000, 0 0 5px darkblue;">Música Indie</h5>
+                        <p class="card-text" style="text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 5px #ff0000;">Escucha los artistas más prometedores.</p>
+                        <a href="#" class="btn btn-outline-light">Escuchar ahora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+ 
