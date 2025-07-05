@@ -1,6 +1,11 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
+}
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Mensaje"]
+    </div>
 }
 
 <h1>Planes</h1>
@@ -17,9 +22,10 @@
                         <li><strong>Usuarios:</strong> @plan.CantidadUsuarios</li>
                         <li><strong>Precio:</strong> @plan.Precio.ToString("C")</li>
                     </ul>
-                    <a asp-action="Comprar" asp-route-id="@plan.Codigo" class="btn btn-primary mt-auto">
+                    <a asp-controller="Plan" asp-action="ComprarPlan" asp-route-id="@plan.Codigo" class="btn btn-primary mt-auto">
                         Comprar
                     </a>
+
                 </div>
             </div>
         </div>

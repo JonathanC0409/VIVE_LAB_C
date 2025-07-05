@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Vivelab.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250614145329_v01")]
-    partial class v01
+    [Migration("20250705154550_postgres")]
+    partial class postgres
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace Vivelab.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
 
-                    b.Property<int>("AlbumCodigo")
+                    b.Property<int?>("AlbumCodigo")
                         .HasColumnType("integer");
 
                     b.Property<string>("ArchivoUrl")
@@ -70,14 +70,14 @@ namespace Vivelab.Api.Migrations
                     b.Property<int>("ArtistaCodigo")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ArtistaCodigoNavigationCodigo")
-                        .HasColumnType("integer");
-
                     b.Property<TimeSpan>("Duracion")
                         .HasColumnType("interval");
 
                     b.Property<DateTime>("FechaSubida")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PortadaUrl")
+                        .HasColumnType("text");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
@@ -90,29 +90,9 @@ namespace Vivelab.Api.Migrations
 
                     b.HasIndex("AlbumCodigo");
 
-                    b.HasIndex("ArtistaCodigoNavigationCodigo");
+                    b.HasIndex("ArtistaCodigo");
 
                     b.ToTable("Canciones");
-                });
-
-            modelBuilder.Entity("Vivelab.Modelos.MetodoPago", b =>
-                {
-                    b.Property<int>("Codigo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PeiGoPaymentToken")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Codigo");
-
-                    b.ToTable("MetodoPagos");
                 });
 
             modelBuilder.Entity("Vivelab.Modelos.Plan", b =>
@@ -149,9 +129,6 @@ namespace Vivelab.Api.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -208,9 +185,6 @@ namespace Vivelab.Api.Migrations
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("MetodoPagoCodigo")
-                        .HasColumnType("integer");
-
                     b.Property<int>("PlanCodigo")
                         .HasColumnType("integer");
 
@@ -218,8 +192,6 @@ namespace Vivelab.Api.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Codigo");
-
-                    b.HasIndex("MetodoPagoCodigo");
 
                     b.HasIndex("PlanCodigo");
 
@@ -237,6 +209,9 @@ namespace Vivelab.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Codigo"));
 
+                    b.Property<string>("Bibliografia")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -251,6 +226,9 @@ namespace Vivelab.Api.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("Saldo")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TipoUsuario")
                         .IsRequired()
@@ -299,17 +277,17 @@ namespace Vivelab.Api.Migrations
                 {
                     b.HasOne("Vivelab.Modelos.Album", "Album")
                         .WithMany("Canciones")
-                        .HasForeignKey("AlbumCodigo")
+                        .HasForeignKey("AlbumCodigo");
+
+                    b.HasOne("Vivelab.Modelos.Usuario", "Artista")
+                        .WithMany("Canciones")
+                        .HasForeignKey("ArtistaCodigo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vivelab.Modelos.Usuario", "ArtistaCodigoNavigation")
-                        .WithMany("Canciones")
-                        .HasForeignKey("ArtistaCodigoNavigationCodigo");
-
                     b.Navigation("Album");
 
-                    b.Navigation("ArtistaCodigoNavigation");
+                    b.Navigation("Artista");
                 });
 
             modelBuilder.Entity("Vivelab.Modelos.Playlist", b =>
@@ -344,12 +322,6 @@ namespace Vivelab.Api.Migrations
 
             modelBuilder.Entity("Vivelab.Modelos.Suscripcion", b =>
                 {
-                    b.HasOne("Vivelab.Modelos.MetodoPago", "MetodoPago")
-                        .WithMany("Suscripciones")
-                        .HasForeignKey("MetodoPagoCodigo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Vivelab.Modelos.Plan", "Plan")
                         .WithMany("Suscripciones")
                         .HasForeignKey("PlanCodigo")
@@ -361,8 +333,6 @@ namespace Vivelab.Api.Migrations
                         .HasForeignKey("Vivelab.Modelos.Suscripcion", "UsuarioCodigo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MetodoPago");
 
                     b.Navigation("Plan");
 
@@ -396,11 +366,6 @@ namespace Vivelab.Api.Migrations
             modelBuilder.Entity("Vivelab.Modelos.Cancion", b =>
                 {
                     b.Navigation("PlaylistCanciones");
-                });
-
-            modelBuilder.Entity("Vivelab.Modelos.MetodoPago", b =>
-                {
-                    b.Navigation("Suscripciones");
                 });
 
             modelBuilder.Entity("Vivelab.Modelos.Plan", b =>

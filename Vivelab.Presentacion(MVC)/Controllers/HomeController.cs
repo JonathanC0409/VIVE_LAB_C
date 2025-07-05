@@ -5,7 +5,7 @@ using Vivelab.Presentacion_MVC_.Models;
 
 namespace Vivelab.Presentacion_MVC_.Controllers
 {
-   
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -34,7 +34,10 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cancion>>> GetCancion()
         {
-            return await _context.Canciones.ToListAsync();
+            var canciones = await _context.Canciones
+                .Include(c => c.Artista)
+                .ToListAsync();
+            return canciones;
         }
 
         // GET: api/Canciones/5
@@ -147,7 +150,7 @@ namespace Vivelab.Api.Controllers
         // En CancionesController.cs
         [HttpPost("{id}/incrementar-reproduccion")]
         public async Task<IActionResult> IncrementarReproduccion(int id)
-         {
+        {
             var cancion = await _context.Canciones.FindAsync(id);
             if (cancion == null)
             {

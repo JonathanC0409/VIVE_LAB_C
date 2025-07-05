@@ -39,6 +39,7 @@ namespace Vivelab.Servicios
                     {
                         var datosUsuario = new List<Claim>
                         {
+                            new Claim("UsuarioCodigo", usuario.Codigo.ToString()),
                             new Claim(ClaimTypes.Name, usuario.Nombre),
                             new Claim(ClaimTypes.Email, usuario.Email),
                             new Claim("TipoUsuario", usuario.TipoUsuario)
@@ -86,6 +87,6 @@ namespace Vivelab.Servicios
             }
         }
 
-      
+
     }
 }

@@ -20,6 +20,20 @@ namespace Vivelab.Api.Controllers
             _context = context;
         }
 
+        // GET: api/Playlists/usuario/{usuarioCodigo}
+        [HttpGet("usuario/{id}")]
+        public async Task<ActionResult<IEnumerable<Playlist>>> GetPlaylistsByUsuario(int id)
+        {
+            // Buscar las playlists por el UsuarioCodigo
+            var playlists = await _context.Playlists
+                .Where(p => p.UsuarioCodigo == id)  // Filtramos las playlists por UsuarioCodigo
+                .ToListAsync();
+
+
+
+            return playlists;
+        }
+
         // GET: api/Playlists
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Playlist>>> GetPlaylist()

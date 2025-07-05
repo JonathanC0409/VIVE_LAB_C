@@ -69,7 +69,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public async Task<IActionResult> RecuperarPassword(string email)
         {
             var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
-            if(usuario == null)
+            if (usuario == null)
             {
                 ViewBag.ErrorMessage = "El correo electrónico no está registrado.";
                 return View("Index");

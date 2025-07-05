@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Gestionar Perfil";
 }
 
@@ -14,6 +13,9 @@
 
 <!-- Mostrar el nombre del usuario actual -->
 <p><strong>Nombre:</strong> @User.Identity.Name</p>
+<p><strong>Correo Electrónico:</strong> @ViewBag.Email</p>
+<p><strong>Saldo: </strong> @ViewBag.Saldo</p>
+<p><strong>Plan: </strong> @ViewBag.Plan</p>
 
 <!-- Formulario para actualizar el nombre -->
 <form method="post" asp-action="ActualizarNombre">

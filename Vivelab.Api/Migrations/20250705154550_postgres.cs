@@ -7,25 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Vivelab.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class v01 : Migration
+    public partial class postgres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "MetodoPagos",
-                columns: table => new
-                {
-                    Codigo = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PeiGoPaymentToken = table.Column<string>(type: "text", nullable: false),
-                    FechaRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MetodoPagos", x => x.Codigo);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Planes",
                 columns: table => new
@@ -52,6 +38,8 @@ namespace Vivelab.Api.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     TipoUsuario = table.Column<string>(type: "text", nullable: false),
+                    Bibliografia = table.Column<string>(type: "text", nullable: true),
+                    Saldo = table.Column<double>(type: "double precision", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -88,7 +76,6 @@ namespace Vivelab.Api.Migrations
                     Codigo = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nombre = table.Column<string>(type: "text", nullable: false),
-                    FechaCreacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UsuarioCodigo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -112,18 +99,11 @@ namespace Vivelab.Api.Migrations
                     FechaFin = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Estado = table.Column<string>(type: "text", nullable: false),
                     PlanCodigo = table.Column<int>(type: "integer", nullable: false),
-                    MetodoPagoCodigo = table.Column<int>(type: "integer", nullable: false),
                     UsuarioCodigo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Suscripciones", x => x.Codigo);
-                    table.ForeignKey(
-                        name: "FK_Suscripciones_MetodoPagos_MetodoPagoCodigo",
-                        column: x => x.MetodoPagoCodigo,
-                        principalTable: "MetodoPagos",
-                        principalColumn: "Codigo",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Suscripciones_Planes_PlanCodigo",
                         column: x => x.PlanCodigo,
@@ -149,9 +129,9 @@ namespace Vivelab.Api.Migrations
                     ArchivoUrl = table.Column<string>(type: "text", nullable: false),
                     FechaSubida = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     TotalReproducciones = table.Column<int>(type: "integer", nullable: false),
+                    PortadaUrl = table.Column<string>(type: "text", nullable: true),
                     ArtistaCodigo = table.Column<int>(type: "integer", nullable: false),
-                    AlbumCodigo = table.Column<int>(type: "integer", nullable: false),
-                    ArtistaCodigoNavigationCodigo = table.Column<int>(type: "integer", nullable: true)
+                    AlbumCodigo = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,13 +140,13 @@ namespace Vivelab.Api.Migrations
                         name: "FK_Canciones_Albumes_AlbumCodigo",
                         column: x => x.AlbumCodigo,
                         principalTable: "Albumes",
+                        principalColumn: "Codigo");
+                    table.ForeignKey(
+                        name: "FK_Canciones_Usuarios_ArtistaCodigo",
+                        column: x => x.ArtistaCodigo,
+                        principalTable: "Usuarios",
                         principalColumn: "Codigo",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Canciones_Usuarios_ArtistaCodigoNavigationCodigo",
-                        column: x => x.ArtistaCodigoNavigationCodigo,
-                        principalTable: "Usuarios",
-                        principalColumn: "Codigo");
                 });
 
             migrationBuilder.CreateTable(
@@ -232,9 +212,9 @@ namespace Vivelab.Api.Migrations
                 column: "AlbumCodigo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Canciones_ArtistaCodigoNavigationCodigo",
+                name: "IX_Canciones_ArtistaCodigo",
                 table: "Canciones",
-                column: "ArtistaCodigoNavigationCodigo");
+                column: "ArtistaCodigo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlaylistCanciones_CancionCodigo",
@@ -250,11 +230,6 @@ namespace Vivelab.Api.Migrations
                 name: "IX_Playlists_UsuarioCodigo",
                 table: "Playlists",
                 column: "UsuarioCodigo");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Suscripciones_MetodoPagoCodigo",
-                table: "Suscripciones",
-                column: "MetodoPagoCodigo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Suscripciones_PlanCodigo",
@@ -298,9 +273,6 @@ namespace Vivelab.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Albumes");
-
-            migrationBuilder.DropTable(
-                name: "MetodoPagos");
 
             migrationBuilder.DropTable(
                 name: "Planes");

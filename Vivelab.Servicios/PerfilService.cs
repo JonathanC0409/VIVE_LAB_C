@@ -34,11 +34,11 @@ namespace Vivelab.Servicios
             var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
             if (usuario != null)
             {
-                if (BCrypt.Net.BCrypt.Verify(passwordActual,usuario.Password))
+                if (BCrypt.Net.BCrypt.Verify(passwordActual, usuario.Password))
                 {
-                    usuario.Password = passwordNuevo; 
+                    usuario.Password = passwordNuevo;
                     CRUD<Usuario>.Update(usuario.Codigo, usuario);
-                    Console.WriteLine($"Contraseña del usuario con email {email} cambiada exitosamente."); 
+                    Console.WriteLine($"Contraseña del usuario con email {email} cambiada exitosamente.");
                     return Task.FromResult(true); // Contraseña cambiada exitosamente
                 }
                 else
@@ -57,11 +57,11 @@ namespace Vivelab.Servicios
         public async Task<bool> CambiarRolUsuario(string email)
         {
             var usuarios = CRUD<Usuario>.GetAll();
-            foreach(var usuario in usuarios)
+            foreach (var usuario in usuarios)
             {
-                if(usuario.Email == email && usuario.TipoUsuario == "cliente")
+                if (usuario.Email == email && usuario.TipoUsuario == "cliente")
                 {
-                    usuario.TipoUsuario = "artista"; 
+                    usuario.TipoUsuario = "artista";
                     CRUD<Usuario>.Update(usuario.Codigo, usuario);
                     Console.WriteLine($"Rol del usuario con email {email} cambiado a artista.");
                     return true; // Rol cambiado exitosamente
@@ -70,13 +70,13 @@ namespace Vivelab.Servicios
 
             Console.WriteLine($"Usuario con email {email} no encontrado o ya es artista.");
             return false;
-                  
+
         }
 
         public Task<bool> EliminarCuenta(string email)
         {
-           var usuarios =  CRUD<Usuario>.GetAll();
-            foreach(var u in usuarios)
+            var usuarios = CRUD<Usuario>.GetAll();
+            foreach (var u in usuarios)
             {
                 if (u.Email == email)
                 {

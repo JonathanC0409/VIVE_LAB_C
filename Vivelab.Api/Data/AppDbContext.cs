@@ -16,7 +16,6 @@ public class AppDbContext : DbContext
 
     public DbSet<Vivelab.Modelos.Cancion> Canciones { get; set; } = default!;
 
-    public DbSet<Vivelab.Modelos.MetodoPago> MetodoPagos { get; set; } = default!;
 
     public DbSet<Vivelab.Modelos.Plan> Planes { get; set; } = default!;
 

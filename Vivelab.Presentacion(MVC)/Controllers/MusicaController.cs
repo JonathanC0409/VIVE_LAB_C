@@ -9,8 +9,23 @@ namespace Vivelab.Presentacion_MVC_.Controllers
     {
         public IActionResult Index()
         {
+
+            ViewBag.Rol = Rol();
             var lista = CRUD<Cancion>.GetAll();
             return View(lista);
+        }
+
+        private string Rol()
+        {
+            string rol = "";
+            foreach (var u in User.Claims)
+            {
+                if (u.Type == "TipoUsuario")
+                {
+                    rol = u.Value;
+                }
+            }
+            return rol;
         }
 
 

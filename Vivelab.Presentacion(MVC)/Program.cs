@@ -10,15 +10,15 @@ namespace Vivelab.Presentacion_MVC_
     {
         public static void Main(string[] args)
         {
-            CRUD<Cancion>.EndPoint = "https://localhost:7008/api/Canciones"; // Cambia la URL según tu configuración de API 
-            CRUD<Usuario>.EndPoint = "https://localhost:7008/api/Usuarios"; // Cambia la URL según tu configuración de API
-            CRUD<Plan>.EndPoint = "https://localhost:7008/api/Planes"; // Cambia la URL según tu configuración de API
-            CRUD<Suscripcion>.EndPoint = "https://localhost:7008/api/Suscripciones"; // Cambia la URL según tu configuración de API
+            CRUD<Cancion>.EndPoint = "https://localhost:7008/api/Canciones";
+            CRUD<Usuario>.EndPoint = "https://localhost:7008/api/Usuarios";
+            CRUD<Plan>.EndPoint = "https://localhost:7008/api/Planes";
+            CRUD<Suscripcion>.EndPoint = "https://localhost:7008/api/Suscripciones";
+            CRUD<Playlist>.EndPoint = "https://localhost:7008/api/Playlists";
             var builder = WebApplication.CreateBuilder(args);
 
             //Registrar Servicios
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddScoped<IMetodoPagoService, MetodoPagoService>();
             builder.Services.AddScoped<ISuscripcionService, SuscripcionService>();
             builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -32,7 +32,7 @@ namespace Vivelab.Presentacion_MVC_
                 .AddCookie("Cookies", options =>
                 {
                     options.LoginPath = "/Login/Index"; // Ruta de inicio de sesión
- 
+
 
                 });
             builder.Services.AddHttpContextAccessor(); // Para acceder al contexto HTTP en los servicios //cokies

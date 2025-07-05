@@ -1,0 +1,32 @@
+﻿@model List<Vivelab.Modelos.Playlist>
+
+@{
+    ViewData["Title"] = "Playlists";
+}
+
+<h2>Lista de Playlists</h2>
+
+<!-- Botón para crear una nueva playlist -->
+<a href="@Url.Action("Create", "PlayLists")" class="btn btn-primary mb-3">Crear Playlist</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var playlist in Model)
+        {
+            <tr>
+                <td>@playlist.Nombre</td>
+                <td>
+                    <a href="@Url.Action("Details", "PlayLists", new { id = playlist.Codigo })">Detalles</a> |
+                    <a href="@Url.Action("Edit", "PlayLists", new { id = playlist.Codigo })">Editar</a> |
+                    <a href="@Url.Action("Delete", "PlayLists", new { id = playlist.Codigo })">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

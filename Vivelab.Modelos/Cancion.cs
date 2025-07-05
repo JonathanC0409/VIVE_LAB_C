@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Vivelab.Modelos;
 
-public  class Cancion
+public class Cancion
 {
     [Key]
     public int Codigo { get; set; }
@@ -19,15 +19,15 @@ public  class Cancion
     public DateTime FechaSubida { get; set; }
 
     public int TotalReproducciones { get; set; }
+    public string? PortadaUrl { get; set; }
 
     public int ArtistaCodigo { get; set; }
 
-    public int AlbumCodigo { get; set; }
+    public int? AlbumCodigo { get; set; }
 
-    public virtual Album? Album{ get; set; }
+    public virtual Album? Album { get; set; }
 
-    [ForeignKey(nameof(ArtistaCodigo))] 
-    public virtual Usuario? ArtistaCodigoNavigation { get; set; } 
+    public virtual Usuario? Artista { get; set; }
 
-    public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; } 
+    public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; }
 }

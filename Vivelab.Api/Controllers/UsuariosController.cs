@@ -28,6 +28,7 @@ namespace Vivelab.Api.Controllers
             var usuarios = await _context.Usuarios
                 .Include(u => u.UsuariosSuscripciones) // Incluir la relación con UsuariosSuscripciones
                 .Include(u => u.Suscripcion) // Incluir la suscripción del usuario (si es el propietario)
+                .Include(u => u.Suscripcion.Plan) // Incluir el plan de la suscripción
                 .ToListAsync();
 
             return usuarios;
@@ -216,7 +217,7 @@ namespace Vivelab.Api.Controllers
                 Estado = "activo",
                 UsuarioCodigo = usuarioAdicional.Codigo,
                 PlanCodigo = 2,  // El nuevo plan seleccionado por el usuario
-                MetodoPagoCodigo = 1  // Método de pago utilizado
+
             };
 
             _context.Suscripciones.Add(nuevaSuscripcion);

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Vivelab.Modelos;
 
-public  class Plan
+public class Plan
 {
     [Key]
     public int Codigo { get; set; }
@@ -14,10 +14,9 @@ public  class Plan
 
     public double Precio { get; set; }
 
-    [Column("cantidadUsuarios")]
     public int CantidadUsuarios { get; set; }
 
-    public string Descripcion { get; set; } 
+    public string Descripcion { get; set; }
 
-    public virtual List<Suscripcion>? Suscripciones { get; set; } 
+    public virtual List<Suscripcion>? Suscripciones { get; set; }
 }

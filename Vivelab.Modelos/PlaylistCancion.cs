@@ -15,5 +15,5 @@ public class PlaylistCancion
 
     public virtual Cancion? Cancion { get; set; }
 
-    public virtual Playlist? Playlist { get; set; } 
+    public virtual Playlist? Playlist { get; set; }
 }

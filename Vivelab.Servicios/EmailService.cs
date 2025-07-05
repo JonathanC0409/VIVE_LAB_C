@@ -26,13 +26,13 @@ namespace Vivelab.Servicios
             {
                 var mensaje = new MimeMessage(); // Crear un nuevo mensaje MIME
                 mensaje.From.Add(new MailboxAddress("Vivelab", _fromEmail)); // Establecer el remitente
-                mensaje.To.Add(new MailboxAddress("",email)); // Establecer el destinatario
+                mensaje.To.Add(new MailboxAddress("", email)); // Establecer el destinatario
                 mensaje.Subject = "Bienvenido a Vivelab - Ingreso Exitoso"; // Asunto del correo electrónico
 
                 mensaje.Body = new TextPart("plain") // Cuerpo del correo electrónico
                 {
                     Text = $"Hola,\n\n¡Bienvenido a Vivelab! Tu ingreso ha sido exitoso.\n\nSaludos,\nEl equipo de Vivelab."
-                }; 
+                };
 
                 using (var cliente = new SmtpClient())
                 {

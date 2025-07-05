@@ -23,10 +23,50 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         public IActionResult Index()
         {
+            // Obtén el email del usuario desde los claims
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             ViewBag.Email = email;
+
+            // Busca al usuario por su correo electrónico
+            var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+
+            if (usuario != null)
+            {
+                // Asignar el saldo del usuario
+                ViewBag.Saldo = usuario.Saldo;
+
+                // Verifica si el usuario tiene una suscripción activa
+                if (usuario.Suscripcion != null)
+                {
+                    // Accede al plan de la suscripción
+                    var plan = usuario.Suscripcion.Plan;
+
+                    if (plan != null)
+                    {
+                        // Si el plan está asociado, muestra el nombre del plan
+                        ViewBag.Plan = plan.Nombre;
+                    }
+                    else
+                    {
+                        // Si no hay plan asociado a la suscripción
+                        ViewBag.Plan = "No hay asociacion";
+                    }
+                }
+                else
+                {
+                    ViewBag.Plan = "No suscipcion"; // Si no hay suscripción activa
+                }
+            }
+            else
+            {
+                ViewBag.Saldo = 0; // Si no se encuentra el usuario, asignar un saldo por defecto
+                ViewBag.Plan = "No Usuario"; // Si no se encuentra el usuario, asignar como "No suscrito"
+            }
+
             return View("Index");
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> ActualizarNombre(string email, string nombre)
@@ -44,6 +84,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     // 3. Crear una nueva identidad de Claims con el nuevo nombre
                     var datosUsuario = new List<Claim>
                     {
+                        new Claim("UsuarioCodigo", usuario.Codigo.ToString()), // Código del usuario
                         new Claim(ClaimTypes.Name, usuario.Nombre), // Nombre actualizado
                         new Claim(ClaimTypes.Email, usuario.Email), // Correo electrónico (sin cambios)
                         new Claim("TipoUsuario", usuario.TipoUsuario) // Tipo de usuario (sin cambios)
@@ -95,14 +136,34 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             var resultado = await _perfilService.CambiarRolUsuario(email);
             if (resultado)
             {
-                ViewBag.Mensaje = "Rol de usuario cambiado exitosamente.";
-                return RedirectToAction("Index");
+                // 2. Obtener el usuario actualizado desde la base de datos
+                var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+
+                if (usuario != null)
+                {
+                    // 3. Crear una nueva identidad de Claims con el nuevo nombre
+                    var datosUsuario = new List<Claim>
+                    {
+                        new Claim("UsuarioCodigo", usuario.Codigo.ToString()), // Código del usuario
+                        new Claim(ClaimTypes.Name, usuario.Nombre), // Nombre actualizado
+                        new Claim(ClaimTypes.Email, usuario.Email), // Correo electrónico (sin cambios)
+                        new Claim("TipoUsuario", usuario.TipoUsuario) // Tipo de usuario (sin cambios)
+                    };
+
+                    var credencialesActualizadas = new ClaimsIdentity(datosUsuario, "Cookies");
+                    var usuarioAutenticado = new ClaimsPrincipal(credencialesActualizadas);
+
+                    // 4. Actualizar los claims en la sesión activa
+                    await _httpContextAccessor.HttpContext.SignInAsync("Cookies", usuarioAutenticado);
+
+                    ViewBag.Mensaje = "Rol de usuario cambiado exitosamente.";
+                    return RedirectToAction("Index");
+                }
             }
-            else
-            {
-                ViewBag.Mensaje = "Error al cambiar el rol del usuario. Por favor, inténtelo de nuevo.";
-                return RedirectToAction("Index");
-            }
+
+            ViewBag.Mensaje = "Error al cambiar el rol del usuario. Por favor, inténtelo de nuevo.";
+            return RedirectToAction("Index");
+
         }
 
         [HttpPost]
@@ -125,5 +186,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
 
         }
+
+
     }
 }
