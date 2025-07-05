@@ -107,7 +107,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 return View();
             }
         }
-        [Authorize]
+      
         [Authorize]
         public IActionResult ComprarPlan(int id)
         {
