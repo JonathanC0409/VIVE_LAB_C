@@ -34,7 +34,10 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cancion>>> GetCancion()
         {
-            return await _context.Canciones.ToListAsync();
+            var canciones = await _context.Canciones
+                .Include(c => c.ArtistaCodigo)
+                .ToListAsync();
+            return canciones;
         }
 
         // GET: api/Canciones/5
