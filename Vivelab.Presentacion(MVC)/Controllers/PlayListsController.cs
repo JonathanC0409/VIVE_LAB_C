@@ -57,6 +57,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             var usuarioCodigo = 0;
             foreach (var u in User.Claims)
             {
+                if (u.Type == "UsuarioCodigo")
                 {
                     usuarioCodigo = int.Parse(u.Value);
                 }

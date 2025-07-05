@@ -27,7 +27,10 @@ public class Cancion
 
     public virtual Album? Album { get; set; }
 
-    public virtual Usuario? Artista { get; set; }
+
+
+    public virtual Usuario? Artista { get; set; } 
+
 
     public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; }
 }

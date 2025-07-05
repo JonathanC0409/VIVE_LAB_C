@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Vivelab.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250705154550_postgres")]
+    [Migration("20250705160417_postgres")]
     partial class postgres
     {
         /// <inheritdoc />
