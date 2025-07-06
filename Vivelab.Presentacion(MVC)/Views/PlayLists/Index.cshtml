@@ -4,6 +4,13 @@
     ViewData["Title"] = "Playlists";
 }
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning text-center">
+        @TempData["Mensaje"]
+    </div>
+}
+
 @if (ViewBag.Plan != 0)
 {
     <h2 class="mb-4">🎵 Tus Playlists</h2>
@@ -51,6 +58,6 @@ else
     <div class="text-center mt-5">
         <h2>🚫 Función no disponible</h2>
         <p class="lead">Esta opción solo está disponible para usuarios con un plan activo.</p>
-        <a href="@Url.Action("Index","Plan")" class="btn btn-primary mt-3">Actualizar Plan</a>
+        <a href="@Url.Action("Index", "Plan")" class="btn btn-primary mt-3">Actualizar Plan</a>
     </div>
 }

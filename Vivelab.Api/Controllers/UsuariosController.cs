@@ -39,7 +39,11 @@ namespace Vivelab.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Usuarios
+                .Where(u => u.Codigo == id)
+                .Include(u => u.Suscripcion)
+                .ThenInclude(u => u.Plan)
+                .FirstAsync();
 
             if (usuario == null)
             {

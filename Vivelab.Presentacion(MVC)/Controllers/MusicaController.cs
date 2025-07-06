@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using System.Security.Claims;
 using Vivelab.API.Consume;
 using Vivelab.Modelos;
@@ -8,6 +9,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 {
     public class MusicaController : Controller
     {
+
         public IActionResult Index()
         {
             ViewBag.Rol = Rol();
@@ -20,16 +22,37 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             {
                 string key = $"Reproducciones_{usuarioId}_{DateTime.UtcNow:yyyyMMdd}";
                 int reproducciones = HttpContext.Session.GetInt32(key) ?? 0;
+
                 ViewBag.ReproduccionesHoy = reproducciones;
+                ViewBag.MostrarAnuncios = true;
+                ViewBag.PuedeReproducir = reproducciones < 10;
             }
             else
             {
                 ViewBag.ReproduccionesHoy = -1;
+                ViewBag.PuedeReproducir = true;
             }
+
+            // Descargas
+            string dkey = $"Descargas_{usuarioId}_{DateTime.UtcNow:yyyyMMdd}";
+            int descargasHoy = HttpContext.Session.GetInt32(dkey) ?? 0;
+            int limite = planCodigo switch
+            {
+                0 => 0,
+                1 => 1,
+                2 => 10,
+                3 => 100,
+                _ => 0
+            };
+
+            ViewBag.DescargasHoy = descargasHoy;
+            ViewBag.LimiteDescargas = limite;
 
             var lista = CRUD<Cancion>.GetAll();
             return View(lista);
         }
+
+
 
 
         private string Rol()
@@ -48,17 +71,17 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         private int ObtenerPlan()
         {
             int UsuarioId = 0;
-            foreach(var u in User.Claims)
+            foreach (var u in User.Claims)
             {
-                if(u.Type == "UsuarioCodigo")
+                if (u.Type == "UsuarioCodigo")
                 {
                     UsuarioId = int.Parse(u.Value);
                     break;
                 }
             }
-            
+
             var usuario = CRUD<Usuario>.GetById(UsuarioId);
-            if(usuario != null)
+            if (usuario != null)
             {
                 if (usuario.Suscripcion == null)
                 {
@@ -106,7 +129,43 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Descargar(int cancionId)
+        {
+            int usuarioId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0");
+            int plan = ObtenerPlan();
+
+            string key = $"Descargas_{usuarioId}_{DateTime.UtcNow:yyyyMMdd}";
+            int descargasHoy = HttpContext.Session.GetInt32(key) ?? 0;
+
+            int limite = plan switch
+            {
+                0 => 0,
+                1 => 1,
+                2 => 10,
+                3 => 100,
+                _ => 0
+            };
+
+            if (plan == 0)
+                return BadRequest("Tu plan no permite descargas.");
+
+            if (descargasHoy >= limite)
+                return BadRequest("Has alcanzado el límite diario de descargas.");
+
+            var cancion = CRUD<Cancion>.GetById(cancionId);
+            if (cancion == null) return NotFound();
+
+            var httpClient = new HttpClient();
+            var archivoBytes = await httpClient.GetByteArrayAsync(cancion.ArchivoUrl);
+
+            HttpContext.Session.SetInt32(key, descargasHoy + 1);
+
+            return File(archivoBytes, "audio/mpeg", $"{cancion.Titulo}.mp3");
+        }
+
     }
 }
 
-    
+
+

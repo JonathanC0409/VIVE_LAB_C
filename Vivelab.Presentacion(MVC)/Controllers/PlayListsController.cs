@@ -80,14 +80,15 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         // GET: PlayListsController/Create
         public ActionResult Create()
         {
-            var usuarioCodigo = 0;
-            foreach (var u in User.Claims)
+            int plan = ObtenerPlan();
+
+            if (plan == 0)
             {
-                if (u.Type == "UsuarioCodigo")
-                {
-                    usuarioCodigo = int.Parse(u.Value);
-                }
+                TempData["Mensaje"] = "Tu plan no permite crear playlists. Actualiza tu plan para acceder.";
+                return RedirectToAction("Index", "Plan");
             }
+
+            int usuarioCodigo = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0");
             ViewBag.UsuarioCodigo = usuarioCodigo;
             return View();
         }
