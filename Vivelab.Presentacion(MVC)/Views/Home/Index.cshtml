@@ -16,7 +16,6 @@
 </head>
 <body>
 
-
     <!-- Sección principal con bienvenida y recomendaciones -->
     <div class="container my-5">
         <div class="text-center">
@@ -31,7 +30,31 @@
                     <p class="mt-3">
                         <a href="@Url.Action("CambiarRolUsuario", "GestionarPerfil")" class="btn btn-success btn-lg">Regístrate como Artista</a>
                     </p>
+                    <p class="mt-3">
+                        <a href="@Url.Action("RecargarSaldo","Usuario")" class="btn btn-success btn-lg">Recargar Saldo</a>
+                    </p>
                 }
+
+                @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
+                {
+                    <p class="mt-3">
+                        <a href="@Url.Action("Subir", "Musica")" class="btn btn-success btn-lg">Subir una canción</a>
+                    </p>
+    
+                }
+
+                @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "administrador"))
+                {
+                    <p class="mt-3">
+                        <a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn btn-success btn-lg">Ver Usuarios</a>
+                    </p>
+
+                    <p class="mt-3">
+                        <a href="@Url.Action("BloquearUsuario", "Usuario")" class="btn btn-success btn-lg">Bloquear Usuario</a>
+                    </p>
+
+                }
+                
             }
         </div>
 

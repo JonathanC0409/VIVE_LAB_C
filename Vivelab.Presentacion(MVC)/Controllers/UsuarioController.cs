@@ -110,5 +110,57 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
             return RedirectToAction("Index", "Home"); // o a donde quieras volver
         }
+
+        // GET: UsuarioController/Usuarios
+        public ActionResult ListaUsuarios()
+        {
+            // Obtener todos los usuarios
+            var usuarios = CRUD<Usuario>.GetAll(); // Asegúrate de que GetAll() obtenga todos los usuarios de la base de datos
+
+            // Pasar los usuarios a la vista
+            return View(usuarios);
+        }
+
+        public ActionResult UsuarioBloqueado()
+        {
+            return View();
+        }
+
+
+        // GET: UsuarioController/BloquearUsuario
+        public ActionResult BloquearUsuario()
+        {
+            // Obtener todos los usuarios (o aplicar filtros según tu necesidad)
+            var usuarios = CRUD<Usuario>.GetAll(); // Asegúrate de que GetAll() obtenga todos los usuarios de la base de datos
+
+            // Pasar la lista de usuarios a la vista
+            return View(usuarios);
+        }
+
+
+        // POST: UsuarioController/BloquearUsuario
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BloquearUsuario(int usuarioId)
+        {
+            // Verificar si el usuario existe
+            var usuario = CRUD<Usuario>.GetById(usuarioId);
+            if (usuario == null)
+            {
+                return NotFound();  // Si el usuario no se encuentra, devuelve un error 404
+            }
+
+            // Marcar al usuario como bloqueado
+            usuario.TipoUsuario = "bloqueado";  // Asegúrate de que el modelo Usuario tenga esta propiedad
+            CRUD<Usuario>.Update(usuarioId, usuario); // Actualizar el usuario en la base de datos
+
+            // Redirigir a la lista de usuarios
+            return RedirectToAction("ListaUsuarios", "Usuario");
+        }
+
+
+
+
+
     }
 }
