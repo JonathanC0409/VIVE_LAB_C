@@ -2,13 +2,18 @@
 
 @{
     ViewData["Title"] = "Listado de Canciones";
+    var plan = ViewBag.PlanCodigo ?? 0;
+    var reproducciones = ViewBag.ReproduccionesHoy ?? 0;
+    var descargasHoy = ViewBag.DescargasHoy ?? 0;
+    var limiteDescargas = ViewBag.LimiteDescargas ?? 0;
 }
 
 <script>
-    const reproduccionesHoy = @ViewBag.ReproduccionesHoy;
-    const planCodigo = @ViewBag.PlanCodigo;
+    const reproduccionesHoy = @reproducciones;
+    const planCodigo = @plan;
+    let descargasHoy = @descargasHoy;
+    const limiteDescargas = @limiteDescargas;
 </script>
-
 
 <h2>@ViewData["Title"]</h2>
 
@@ -42,16 +47,25 @@
                 <td>@item.Titulo</td>
                 <td>@item.Duracion.ToString(@"hh\:mm\:ss")</td>
                 <td>
-                    @* Reproductor de audio *@
                     <audio controls class="audio-player" data-id="@item.Codigo" style="max-width:200px;">
                         <source src="@item.ArchivoUrl" />
                         Tu navegador no soporta el elemento
                         <code>audio</code>.
                     </audio>
+                    @if (plan != 0)
+                    {
+                        bool puedeDescargar = descargasHoy < limiteDescargas;
+                        <button type="button"
+                                class="btn btn-outline-success btn-sm download-btn"
+                                data-id="@item.Codigo"
+                                @(puedeDescargar ? "" : "disabled")
+                                title="@(puedeDescargar ? "Descargar canción" : "Límite alcanzado")">
+                            <i class="bi bi-download"></i> Descargar
+                        </button>
+                    }
                 </td>
                 <td>@item.Artista.Nombre</td>
                 <td>@item.TotalReproducciones</td>
-
             </tr>
         }
     </tbody>
@@ -59,22 +73,19 @@
 
 @section Scripts {
     <script>
-        let reproduccionesActuales = reproduccionesHoy;
-        let anuncioCada = 3;
+        const banner = document.getElementById("bannerAnuncio");
         let contadorAnuncios = 0;
+        let anuncioCada = 3;
         let reproduciendoAnuncio = false;
 
-        const banner = document.getElementById("bannerAnuncio");
-
         document.querySelectorAll('.audio-player').forEach(audio => {
-
             audio.addEventListener('play', function () {
                 if (reproduciendoAnuncio) {
-                    this.pause(); // 🔒 Bloquea reanudar durante anuncio
+                    this.pause();
                     return;
                 }
 
-                if (planCodigo == 0 && reproduccionesActuales >= 10) {
+                if (planCodigo == 0 && reproduccionesHoy >= 10) {
                     this.pause();
                     this.currentTime = 0;
                     alert("Ya alcanzaste tu límite diario de 10 reproducciones en el plan gratuito.");
@@ -84,13 +95,12 @@
                 if (planCodigo == 0 && contadorAnuncios % anuncioCada == 0 && contadorAnuncios !== 0) {
                     this.pause();
                     banner.classList.remove("d-none");
-                    reproduciendoAnuncio = true; // 🚫 Bloquea reanudar
+                    reproduciendoAnuncio = true;
 
-                    // Esperar 5 segundos, luego ocultar anuncio y reanudar
                     setTimeout(() => {
                         banner.classList.add("d-none");
-                        reproduciendoAnuncio = false; // ✅ Permitir reanudar
-                        this.play(); // Reanuda automáticamente
+                        reproduciendoAnuncio = false;
+                        this.play();
                     }, 5000);
 
                     contadorAnuncios++;
@@ -104,18 +114,12 @@
                 }).then(() => {
                     fetch(`https://localhost:7008/api/Canciones/${songId}/incrementar-reproduccion`, {
                         method: 'POST'
-                    }).then(response => {
-                        if (!response.ok) {
-                            console.error("Error incrementando en API");
-                        }
-                    });
-
-                    reproduccionesActuales++;
+                    }).catch(() => console.error("Error incrementando en API"));
+                    reproduccionesHoy++;
                     contadorAnuncios++;
                 });
             });
 
-            // También bloquea si el usuario intenta reanudar durante el anuncio
             audio.addEventListener('seeking', function () {
                 if (reproduciendoAnuncio) {
                     this.pause();
@@ -123,8 +127,42 @@
                 }
             });
         });
+
+        document.querySelectorAll(".download-btn").forEach(btn => {
+            btn.addEventListener("click", async function () {
+                const id = this.getAttribute("data-id");
+
+                if (descargasHoy >= limiteDescargas) {
+                    alert("Has alcanzado tu límite diario de descargas.");
+                    this.disabled = true;
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/Musica/Descargar?cancionId=${id}`);
+                    if (!response.ok) {
+                        const msg = await response.text();
+                        alert("Error: " + msg);
+                        return;
+                    }
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `cancion_${id}.mp3`;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+
+                    descargasHoy++;
+                    if (descargasHoy >= limiteDescargas) {
+                        document.querySelectorAll(".download-btn").forEach(b => b.disabled = true);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Error al intentar descargar.");
+                }
+            });
+        });
     </script>
 }
-
-
-
