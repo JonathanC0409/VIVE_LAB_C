@@ -15,7 +15,7 @@ public class Usuario
 
     public string Password { get; set; }
 
-    public string TipoUsuario { get; set; }
+    public string Rol { get; set; }
 
     public string? Bibliografia { get; set; }
 

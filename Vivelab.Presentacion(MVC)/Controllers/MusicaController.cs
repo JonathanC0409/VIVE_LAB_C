@@ -12,6 +12,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         public IActionResult Index()
         {
+            
             ViewBag.Rol = Rol();
             int planCodigo = ObtenerPlan();
             ViewBag.PlanCodigo = planCodigo;

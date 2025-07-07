@@ -59,9 +59,9 @@ namespace Vivelab.Servicios
             var usuarios = CRUD<Usuario>.GetAll();
             foreach (var usuario in usuarios)
             {
-                if (usuario.Email == email && usuario.TipoUsuario == "cliente")
+                if (usuario.Email == email && usuario.Rol == "cliente")
                 {
-                    usuario.TipoUsuario = "artista";
+                    usuario.Rol = "artista";
                     CRUD<Usuario>.Update(usuario.Codigo, usuario);
                     Console.WriteLine($"Rol del usuario con email {email} cambiado a artista.");
                     return true; // Rol cambiado exitosamente

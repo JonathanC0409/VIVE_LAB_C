@@ -143,7 +143,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
 
                 // Verifica si el usuario está intentando cambiar de un plan más barato a uno más caro
-                if (planActivo.Nombre == "Free" && (plan.Nombre == "Premium" || plan.Nombre == "Familiar" || plan.Nombre == "Empresarial"))
+                if (planActivo.Nombre == "Free" && (plan.Nombre == "Premium Individual" || plan.Nombre == "Familiar" || plan.Nombre == "Empresarial"))
                 {
                     // Verificar si tiene saldo suficiente para el nuevo plan
                     if (usuario.Saldo < plan.Precio)
