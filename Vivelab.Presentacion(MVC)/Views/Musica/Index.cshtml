@@ -9,10 +9,15 @@
 }
 
 <script>
-    const reproduccionesHoy = @reproducciones;
-    const planCodigo = @plan;
+    let reproduccionesHoy = @reproducciones;
+    let planCodigo = @plan;
     let descargasHoy = @descargasHoy;
-    const limiteDescargas = @limiteDescargas;
+    let limiteDescargas = @limiteDescargas;
+
+    console.log('Plan del usuario:', planCodigo);
+    console.log('Reproducciones hoy:', reproduccionesHoy);
+    console.log('Descargas hoy:', descargasHoy);
+    console.log('Límite de descargas:', limiteDescargas);
 </script>
 
 <h2>@ViewData["Title"]</h2>
@@ -38,6 +43,7 @@
             <th>Reproducción</th>
             <th>Artista</th>
             <th>Reproducciones</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -66,6 +72,7 @@
                 </td>
                 <td>@item.Artista.Nombre</td>
                 <td>@item.TotalReproducciones</td>
+
             </tr>
         }
     </tbody>
@@ -81,11 +88,11 @@
         document.querySelectorAll('.audio-player').forEach(audio => {
             audio.addEventListener('play', function () {
                 if (reproduciendoAnuncio) {
-                    this.pause();
+                    this.pause(); // 🔒 Bloquea reanudar durante anuncio
                     return;
                 }
 
-                if (planCodigo == 0 && reproduccionesHoy >= 10) {
+                if (planCodigo == 0 && reproduccionesActuales >= 10) {
                     this.pause();
                     this.currentTime = 0;
                     alert("Ya alcanzaste tu límite diario de 10 reproducciones en el plan gratuito.");
@@ -93,11 +100,13 @@
                 }
 
                 if (planCodigo == 0 && contadorAnuncios % anuncioCada == 0 && contadorAnuncios !== 0) {
+                    console.log("Mostrando anuncio...");
                     this.pause();
                     banner.classList.remove("d-none");
                     reproduciendoAnuncio = true;
 
                     setTimeout(() => {
+                        console.log("Anuncio terminado, reanudando reproducción...");
                         banner.classList.add("d-none");
                         reproduciendoAnuncio = false;
                         this.play();
@@ -122,29 +131,15 @@
 
             audio.addEventListener('seeking', function () {
                 if (reproduciendoAnuncio) {
+                    console.log("Intento de buscar durante anuncio, pausando...");
                     this.pause();
                     this.currentTime = 0;
                 }
             });
         });
+    </script>
+}
 
-        document.querySelectorAll(".download-btn").forEach(btn => {
-            btn.addEventListener("click", async function () {
-                const id = this.getAttribute("data-id");
-
-                if (descargasHoy >= limiteDescargas) {
-                    alert("Has alcanzado tu límite diario de descargas.");
-                    this.disabled = true;
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`/Musica/Descargar?cancionId=${id}`);
-                    if (!response.ok) {
-                        const msg = await response.text();
-                        alert("Error: " + msg);
-                        return;
-                    }
 
                     const blob = await response.blob();
                     const url = window.URL.createObjectURL(blob);
@@ -154,15 +149,3 @@
                     a.click();
                     window.URL.revokeObjectURL(url);
 
-                    descargasHoy++;
-                    if (descargasHoy >= limiteDescargas) {
-                        document.querySelectorAll(".download-btn").forEach(b => b.disabled = true);
-                    }
-                } catch (err) {
-                    console.error(err);
-                    alert("Error al intentar descargar.");
-                }
-            });
-        });
-    </script>
-}
