@@ -58,6 +58,10 @@
                         Tu navegador no soporta el elemento
                         <code>audio</code>.
                     </audio>
+                </td>
+                <td>@item.Artista.Nombre</td>
+                <td>@item.TotalReproducciones</td>
+                <td>
                     @if (plan != 0)
                     {
                         bool puedeDescargar = descargasHoy < limiteDescargas;
@@ -70,9 +74,6 @@
                         </button>
                     }
                 </td>
-                <td>@item.Artista.Nombre</td>
-                <td>@item.TotalReproducciones</td>
-
             </tr>
         }
     </tbody>
@@ -88,11 +89,13 @@
         document.querySelectorAll('.audio-player').forEach(audio => {
             audio.addEventListener('play', function () {
                 if (reproduciendoAnuncio) {
-                    this.pause(); // 🔒 Bloquea reanudar durante anuncio
+                    console.log("Anuncio ya en curso, pausing reproducción...");
+                    this.pause();
                     return;
                 }
 
-                if (planCodigo == 0 && reproduccionesActuales >= 10) {
+                if (planCodigo == 0 && reproduccionesHoy >= 10) {
+                    console.log("Límite de reproducciones alcanzado, pausing...");
                     this.pause();
                     this.currentTime = 0;
                     alert("Ya alcanzaste tu límite diario de 10 reproducciones en el plan gratuito.");
@@ -137,9 +140,26 @@
                 }
             });
         });
-    </script>
-}
 
+        document.querySelectorAll(".download-btn").forEach(btn => {
+            btn.addEventListener("click", async function () {
+                const id = this.getAttribute("data-id");
+
+                if (descargasHoy >= limiteDescargas) {
+                    console.log("Límite de descargas alcanzado");
+                    alert("Has alcanzado tu límite diario de descargas.");
+                    this.disabled = true; // Deshabilitar el botón de descarga
+                    return;
+                }
+
+                try {
+                    console.log("Iniciando descarga para canción con ID: " + id);
+                    const response = await fetch(`/Musica/Descargar?cancionId=${id}`);
+                    if (!response.ok) {
+                        const msg = await response.text();
+                        alert("Error: " + msg);
+                        return;
+                    }
 
                     const blob = await response.blob();
                     const url = window.URL.createObjectURL(blob);
@@ -148,4 +168,18 @@
                     a.download = `cancion_${id}.mp3`;
                     a.click();
                     window.URL.revokeObjectURL(url);
+
+                    descargasHoy++;
+                    console.log(`Descargas hoy: ${descargasHoy}`);
+                    if (descargasHoy >= limiteDescargas) {
+                        document.querySelectorAll(".download-btn").forEach(b => b.disabled = true); // Deshabilitar todos los botones de descarga
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Error al intentar descargar.");
+                }
+            });
+        });
+    </script>
+}
 
