@@ -1,0 +1,33 @@
+﻿@model Vivelab.Modelos.Playlist
+
+@{
+    ViewData["Title"] = "Editar Playlist";
+}
+
+<h2>Editar Playlist: @Model.Nombre</h2>
+
+<form method="post" asp-action="Edit" asp-controller="PlayLists">
+    <input type="hidden" name="id" value="@Model.Codigo" />
+
+    <div>
+        <label for="Canciones">Seleccionar Canciones:</label>
+        <div>
+            @foreach (var cancion in ViewBag.AllSongs)
+            {
+                <div>
+                    <input type="checkbox" name="Canciones" value="@cancion.Codigo"
+                           @if (Model.PlaylistCanciones != null && Model.PlaylistCanciones.Any(pc => pc.CancionCodigo == cancion.Codigo))
+                           {
+                               @:checked
+                           }
+     />
+                    <label>@cancion.Titulo</label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+    </div>
+</form>

@@ -109,14 +109,29 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 return View();
             }
         }
-
         // GET: PlayListsController/Edit/5
+        [HttpGet]
         public ActionResult Edit(int id)
         {
             try
             {
                 // Obtener la playlist a editar usando el CRUD
                 var playlist = CRUD<Playlist>.GetById(id);
+
+                if (playlist == null)
+                {
+                    return NotFound();
+                }
+
+                // Cargar las canciones asociadas a la playlist desde la relación PlaylistCancion
+                var playlistCanciones = CRUD<PlaylistCancion>.GetBy("playlist", id);  // Esto obtiene las canciones asociadas a la playlist
+
+                // Obtener las canciones de la playlist
+                var cancionesEnPlaylist = playlistCanciones.Select(pc => pc.Cancion).ToList();
+
+                // Pasar las canciones disponibles a la vista
+                ViewBag.AllSongs = cancionesEnPlaylist; // Mostrar las canciones asociadas a la playlist en la vista
+
                 return View(playlist); // Mostrar la vista de edición con los datos de la playlist
             }
             catch (Exception ex)
@@ -125,24 +140,84 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
-
         }
 
-        // POST: PlayListsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Playlist playlist)
+        public ActionResult Edit(int id, List<int> Canciones)
         {
             try
             {
-                CRUD<Playlist>.Update(id, playlist); // Actualizar una playlist existente usando el CRUD
-                return RedirectToAction(nameof(Index));
+                Console.WriteLine($"Inicio del proceso para editar la playlist con ID: {id}");
+
+                // Obtener la playlist a editar usando el CRUD
+                var playlist = CRUD<Playlist>.GetById(id);
+                Console.WriteLine($"Playlist obtenida: {playlist?.Nombre}");
+
+                if (playlist == null)
+                {
+                    Console.WriteLine("Playlist no encontrada.");
+                    return NotFound(); // Si la playlist no existe
+                }
+
+                // Verificar que PlaylistCanciones no sea null
+                if (playlist.PlaylistCanciones == null)
+                {
+                    playlist.PlaylistCanciones = new List<PlaylistCancion>(); // Inicializar como lista vacía si es null
+                    Console.WriteLine("PlaylistCanciones estaba vacío, inicializando como lista vacía.");
+                }
+
+                // Obtener las canciones actuales asociadas con la playlist
+                var currentSongs = playlist.PlaylistCanciones.Select(pc => pc.CancionCodigo).ToList();
+                Console.WriteLine($"Canciones actuales en la playlist: {string.Join(", ", currentSongs)}");
+
+                // Eliminar canciones que ya no están seleccionadas
+                var songsToRemove = currentSongs.Except(Canciones).ToList();
+                Console.WriteLine($"Canciones a eliminar: {string.Join(", ", songsToRemove)}");
+
+                foreach (var songId in songsToRemove)
+                {
+                    var songToRemove = playlist.PlaylistCanciones.First(pc => pc.CancionCodigo == songId);
+                    CRUD<PlaylistCancion>.Delete(songToRemove.Codigo); // Eliminar la relación de la base de datos
+                    Console.WriteLine($"Canción con ID {songId} eliminada de la playlist.");
+                }
+
+                // Agregar canciones nuevas que no están en la lista actual
+                var songsToAdd = Canciones.Except(currentSongs).ToList();
+                Console.WriteLine($"Canciones a agregar: {string.Join(", ", songsToAdd)}");
+
+                foreach (var songId in songsToAdd)
+                {
+                    var playlistCancion = new PlaylistCancion
+                    {
+                        PlaylistCodigo = playlist.Codigo,
+                        CancionCodigo = songId
+                    };
+                    CRUD<PlaylistCancion>.Create(playlistCancion); // Crear la relación en la base de datos
+                    Console.WriteLine($"Canción con ID {songId} agregada a la playlist.");
+                }
+
+                // Guardar los cambios
+                Console.WriteLine("Guardando cambios...");
+                // Aquí podrías llamar a tu servicio o lógica de persistencia para guardar los cambios
+
+                // Redirigir a la página de detalles de la playlist
+                Console.WriteLine("Redirigiendo a la página de detalles de la playlist.");
+                return RedirectToAction(nameof(Details), new { id = playlist.Codigo });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Capturar el error y mostrar un mensaje
+                Console.WriteLine($"Error ocurrido: {ex.Message}");
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error"); // Redirigir a una página de error si falla
             }
         }
+
+
+
+
+
 
         // GET: PlayListsController/Delete/5
         public ActionResult Delete(int id)

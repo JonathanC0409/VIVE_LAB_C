@@ -1,0 +1,35 @@
+﻿@model Vivelab.Modelos.Playlist
+
+@{
+    ViewData["Title"] = "Playlist Details";
+}
+
+<h2>@Model.Nombre</h2>
+
+<div>
+    <h4>Canciones:</h4>
+    @if (Model.PlaylistCanciones != null && Model.PlaylistCanciones.Count > 0)
+    {
+        <ul>
+            @foreach (var playlistCancion in Model.PlaylistCanciones)
+            {
+                <li>
+                    <strong>@playlistCancion.Cancion.Titulo</strong>
+                    <!-- Add player for each song -->
+                    <audio controls>
+                        <source src="@playlistCancion.Cancion.ArchivoUrl" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No hay canciones en esta playlist.</p>
+    }
+</div>
+
+<div>
+    <a href="@Url.Action("Edit", "PlayLists", new { id = Model.Codigo })" class="btn btn-warning">Editar Playlist</a>
+</div>
