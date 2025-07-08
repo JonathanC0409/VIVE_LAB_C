@@ -140,7 +140,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         // POST: UsuarioController/BloquearUsuario
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult BloquearUsuario(int usuarioId)
         {
             // Verificar si el usuario existe

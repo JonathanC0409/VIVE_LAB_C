@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Vivelab.API.Consume;
 using Vivelab.Modelos;
 using Vivelab.Servicios.Interfaces;
@@ -28,6 +29,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             {
                 // Enviar correo electrónico de bienvenida
                 await _emailService.enviarEmailBienvenida(email);
+
                 // Redirigir a la página principal o dashboard
                 return RedirectToAction("Index", "Home");
             }
