@@ -23,13 +23,13 @@ public class Usuario
 
     public DateTime FechaRegistro { get; set; }
 
-    public virtual List<Album>? Albums { get; set; }
+    public  List<Album>? Albums { get; set; }
 
-    public virtual List<Cancion>? Canciones { get; set; }
+    public  List<Cancion>? Canciones { get; set; }
 
-    public virtual List<Playlist>? Playlists { get; set; }
+    public  List<Playlist>? Playlists { get; set; }
 
-    public virtual Suscripcion? Suscripcion { get; set; }
+    public  Suscripcion? Suscripcion { get; set; }
 
-    public virtual List<UsuarioSuscripcion>? UsuariosSuscripciones { get; set; }
+    public  List<UsuarioSuscripcion>? UsuariosSuscripciones { get; set; }
 }

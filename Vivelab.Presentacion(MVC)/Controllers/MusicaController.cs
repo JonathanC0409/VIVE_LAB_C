@@ -54,8 +54,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         }
 
 
-
-
         private string Rol()
         {
             string rol = "";
@@ -81,15 +79,26 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
             }
 
+            // Obtener el usuario principal (logueado)
             var usuario = CRUD<Usuario>.GetById(UsuarioId);
             if (usuario != null)
             {
-                if (usuario.Suscripcion == null)
+                // Si tiene una suscripción activa, se retorna el plan
+                if (usuario.Suscripcion != null)
                 {
-                    return 0; // No tiene plan
+                    return usuario.Suscripcion.Plan.Codigo;
                 }
-                int plan = usuario.Suscripcion.Plan.Codigo;
-                return plan;
+
+                // Si no tiene una suscripción activa, se busca en las suscripciones de otros usuarios si lo tienen vinculado
+                var usuarioSubcripciones = CRUD<UsuarioSuscripcion>.GetAll();
+                foreach (var u in usuarioSubcripciones)
+                {
+                    if (usuario.Codigo == u.UsuarioCodigo)
+                    {
+                        return u.Suscripcion.PlanCodigo;
+                    }
+                }
+
             }
             return 0;
         }
@@ -134,20 +143,19 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public async Task<IActionResult> Descargar(int cancionId)
         {
             int usuarioId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0");
-            int plan = ObtenerPlan();
+            int plan = ObtenerPlan();  // Aquí ya estamos obteniendo el plan, incluso si el usuario está vinculado.
 
             string key = $"Descargas_{usuarioId}_{DateTime.UtcNow:yyyyMMdd}";
             int descargasHoy = HttpContext.Session.GetInt32(key) ?? 0;
 
             int limite = plan switch
             {
-                0 => 0,
-                1 => 1,
-                2 => 10,
-                3 => 100,
+                0 => 0,  // No tiene plan
+                1 => 1,  // Límite para plan básico
+                2 => 10, // Límite para plan estándar
+                3 => 100, // Límite para plan premium
                 _ => 0
             };
-
             if (plan == 0)
                 return BadRequest("Tu plan no permite descargas.");
 

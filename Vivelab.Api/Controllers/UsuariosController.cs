@@ -137,99 +137,71 @@ namespace Vivelab.Api.Controllers
             return _context.Usuarios.Any(e => e.Codigo == id);
         }
 
-        // GET: Verificar si un usuario está asociado a una suscripción
-        [HttpGet("VerificarSuscripcionUsuario/{usuarioId}")]
-        public async Task<ActionResult> VerificarSuscripcionUsuario(int usuarioId)
-        {
-            // Buscar al usuario
-            var usuario = await _context.Usuarios
-                .Include(u => u.Suscripcion)  // Incluir la suscripción del usuario (solo si es el propietario)
-                .FirstOrDefaultAsync(u => u.Codigo == usuarioId);
 
-            // Si no encontramos al usuario, respondemos con un error
-            if (usuario == null)
+        [HttpGet("VincularUsuarios")]
+        public async Task<IActionResult> VincularUsuarios(string email, string emailLogeado)
+        {
+            if (email == emailLogeado)
             {
-                return NotFound("Usuario no encontrado.");
+                return BadRequest("No puedes vincularte a ti mismo.");
             }
 
-            // Si el usuario tiene una suscripción directamente asociada (es propietario)
-            if (usuario.Suscripcion != null)
+            // Verificar si el correo del usuario a vincular es válido
+            if (string.IsNullOrEmpty(email))
             {
-                return Ok(new
+                return BadRequest("El correo del usuario a vincular no puede estar vacío.");
+            }
+
+            // Obtener el correo del usuario logueado y verificar su suscripción activa
+            var usuarioLogueado = await _context.Usuarios
+                .Include(u => u.Suscripcion) // Incluir suscripción
+                .Include(u => u.UsuariosSuscripciones)
+                .FirstOrDefaultAsync(u => u.Email == emailLogeado);
+
+            if (usuarioLogueado == null || usuarioLogueado.Suscripcion == null || usuarioLogueado.Suscripcion.FechaFin <= DateTime.UtcNow)
+            {
+                return BadRequest("El usuario logueado no tiene una suscripción activa.");
+            }
+
+            // Verificar si el usuario a vincular existe y no tiene una suscripción activa
+            var usuarioVincular = await _context.Usuarios
+                .Include(u => u.Suscripcion) // Incluir suscripción
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuarioVincular == null)
+            {
+                return BadRequest("El usuario a vincular no existe.");
+            }
+
+            var usarios = await _context.UsuariosSuscripciones
+                .ToListAsync();
+
+            foreach (var u in usarios)
+            {
+                if (u.UsuarioCodigo == usuarioVincular.Codigo && u.SuscripcionCodigo == usuarioLogueado.Suscripcion.Codigo)
                 {
-                    usuarioId = usuarioId,
-                    suscripcionCodigo = usuario.Suscripcion.Codigo,
-                    estadoSuscripcion = usuario.Suscripcion.Estado,
-                    fechaInicio = usuario.Suscripcion.FechaInicio,
-                    fechaFin = usuario.Suscripcion.FechaFin,
-                    esPropietario = true // Indicar que el usuario es el propietario
-                });
+                    return BadRequest("El usuario ya está vinculado a esta suscripción.");
+                }
             }
 
-            // Si el usuario no es el propietario, verificamos si es un usuario adicional
-            var usuarioSuscripcion = await _context.UsuariosSuscripciones
-                .Include(us => us.Suscripcion) // Incluir la suscripción asociada
-                .FirstOrDefaultAsync(us => us.UsuarioCodigo == usuarioId);
-
-            // Si no se encuentra ninguna relación, significa que el usuario no está asociado a ninguna suscripción
-            if (usuarioSuscripcion == null)
+            if (usuarioVincular.Suscripcion != null && usuarioVincular.Suscripcion.FechaFin > DateTime.UtcNow)
             {
-                return NotFound("El usuario no está asociado a ninguna suscripción.");
+                return BadRequest("El usuario a vincular ya tiene una suscripción activa.");
             }
 
-            // Si es un usuario adicional, obtenemos la suscripción relacionada
-            var suscripcion = usuarioSuscripcion.Suscripcion;
-            return Ok(new
+            // Realizar el vínculo
+            var usuarioSuscripcion = new UsuarioSuscripcion
             {
-                usuarioId = usuarioId,
-                suscripcionCodigo = suscripcion.Codigo,
-                estadoSuscripcion = suscripcion.Estado,
-                fechaInicio = suscripcion.FechaInicio,
-                fechaFin = suscripcion.FechaFin,
-                esPropietario = false // Indicar que el usuario es un usuario adicional
-            });
-        }
-
-        [HttpPost("ComprarSuscripcion/{usuarioId}")]
-        public async Task<ActionResult> ComprarSuscripcion(int usuarioId)
-        {
-            // Obtener al usuario adicional y su suscripción actual
-            var usuarioAdicional = await _context.Usuarios
-                .Include(u => u.Suscripcion)
-                .FirstOrDefaultAsync(u => u.Codigo == usuarioId);
-
-            if (usuarioAdicional == null || usuarioAdicional.Suscripcion != null)
-            {
-                return NotFound("El usuario no tiene una suscripción compartida.");
-            }
-
-            // Eliminar la relación en la tabla UsuarioSuscripcion entre el usuario adicional y la suscripción compartida
-            var usuarioSuscripcion = await _context.UsuariosSuscripciones
-                .FirstOrDefaultAsync(us => us.UsuarioCodigo == usuarioId);
-
-            if (usuarioSuscripcion != null)
-            {
-                _context.UsuariosSuscripciones.Remove(usuarioSuscripcion);
-                await _context.SaveChangesAsync();
-            }
-
-            // Crear una nueva suscripción para el usuario adicional (independiente)
-            var nuevaSuscripcion = new Suscripcion
-            {
-                FechaInicio = DateTime.UtcNow,  // Usamos UTC en lugar de Local
-                FechaFin = DateTime.UtcNow.AddMonths(1),  // Usamos UTC también aquí
-                Estado = "activo",
-                UsuarioCodigo = usuarioAdicional.Codigo,
-                PlanCodigo = 2,  // El nuevo plan seleccionado por el usuario
-
+                UsuarioCodigo = usuarioVincular.Codigo,
+                SuscripcionCodigo = usuarioLogueado.Suscripcion.Codigo
             };
 
-            _context.Suscripciones.Add(nuevaSuscripcion);
+            _context.UsuariosSuscripciones.Add(usuarioSuscripcion);
+
+            // Guardar los cambios
             await _context.SaveChangesAsync();
 
-
-
-            return Ok("El usuario ha comprado su propia suscripción.");
+            return Ok("Usuario vinculado correctamente.");
         }
 
 

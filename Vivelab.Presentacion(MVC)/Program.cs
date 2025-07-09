@@ -16,6 +16,7 @@ namespace Vivelab.Presentacion_MVC_
             CRUD<Suscripcion>.EndPoint = "https://localhost:7008/api/Suscripciones"; 
             CRUD<Playlist>.EndPoint = "https://localhost:7008/api/Playlists";
             CRUD<PlaylistCancion>.EndPoint = "https://localhost:7008/api/PlaylistCanciones";
+            CRUD<UsuarioSuscripcion>.EndPoint = "https://localhost:7008/api/UsuariosSuscripciones";
             var builder = WebApplication.CreateBuilder(args);
 
             //Registrar Servicios

@@ -24,7 +24,13 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Suscripcion>>> GetSuscripcion()
         {
-            return await _context.Suscripciones.ToListAsync();
+            var susbcripciones = await _context.Suscripciones
+                 .Include(s => s.UsuarioPrincipal)
+                 .Include(s => s.UsuariosAdicionales)
+                 .Include(s => s.Plan)
+                 .ToListAsync();
+
+            return susbcripciones;
         }
 
         // GET: api/Suscripciones/5
@@ -34,6 +40,7 @@ namespace Vivelab.Api.Controllers
             var suscripcion = await _context.Suscripciones
                 .Where(s => s.Codigo == id)
                 .Include(s => s.Plan)
+                .Include(s => s.UsuariosAdicionales)
                 .FirstAsync();
 
             if (suscripcion == null)
