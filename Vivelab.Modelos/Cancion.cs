@@ -19,6 +19,7 @@ public class Cancion
     public DateTime FechaSubida { get; set; }
 
     public int TotalReproducciones { get; set; }
+
     public string? PortadaUrl { get; set; }
 
     public int ArtistaCodigo { get; set; }
@@ -27,10 +28,7 @@ public class Cancion
 
     public virtual Album? Album { get; set; }
 
-
-
     public virtual Usuario? Artista { get; set; } 
-
 
     public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; }
 }

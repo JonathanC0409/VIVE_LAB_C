@@ -154,7 +154,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             CRUD<Usuario>.Update(usuarioId, usuario); // Actualizar el usuario en la base de datos
 
             // Redirigir a la lista de usuarios
-            return RedirectToAction("ListaUsuarios", "Usuario");
+            return RedirectToAction("Index", "Home");
         }
 
 

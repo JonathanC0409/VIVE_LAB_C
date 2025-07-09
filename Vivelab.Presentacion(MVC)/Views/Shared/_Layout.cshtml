@@ -54,9 +54,8 @@
 
                         @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "bloqueado"))
                         {
-                            <script>
-                                window.location.href = '@Url.Action("UsuarioBloqueado", "Usuario")';
-                            </script>
+                            <a class="btn btn-outline-light me-3" href="@Url.Action("UsuarioBloqueado","Usuario")">Ver Bloqueo</a>
+
                         }
 
                          <a class="btn btn-outline-light me-3" href="@Url.Action("Logout", "Login")">Cerrar Sesión</a> <!-- Modificado: me-3 -->
