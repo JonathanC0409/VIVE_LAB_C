@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Vincular Usuario";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="VincularUsuario">
+    <div class="form-group">
+        <label for="EmailUsuarioVincular">Correo del Usuario a Vincular</label>
+        <input type="email" class="form-control" id="EmailUsuarioVincular" name="emailUsuarioVincular" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Vincular Usuario</button>
+</form>
+
+<!-- Mostrar mensaje de error con ViewBag -->
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <strong>¡Ups!</strong> @ViewBag.ErrorMessage
+    </div>
+}

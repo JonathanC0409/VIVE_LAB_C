@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text;
 using Vivelab.API.Consume;
 using Vivelab.Modelos;
 
@@ -110,5 +113,46 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
             return RedirectToAction("Index", "Home"); // o a donde quieras volver
         }
+
+        public ActionResult VincularUsuario()
+        {
+            return View();
+        }
+
+        //Metodo vincular 
+        [HttpPost]
+        public async Task<IActionResult> VincularUsuario(string emailUsuarioVincular)
+        {
+            var emailUsuarioLogueado = "";
+            foreach (var user in User.Claims)
+            {
+                if (user.Type == ClaimTypes.Email)
+                {
+                    emailUsuarioLogueado = user.Value;
+                }
+            }
+            // Verificar si el correo del usuario a vincular no está vacío
+            if (string.IsNullOrEmpty(emailUsuarioVincular))
+            {
+                ViewBag.ErrorMessage = "El correo del usuario a vincular no puede estar vacío.";
+                return View();  // Regresar a la vista con el error
+            }
+
+            // Llamar al método del CRUD para vincular el usuario
+            var resultado = await CRUD<Usuario>.VincularUsuarioASuscripcion(emailUsuarioVincular, emailUsuarioLogueado);
+
+            if (resultado == "Usuario vinculado correctamente.")
+            {
+                return RedirectToAction("Index", "Home");  // Redirigir a la página principal si todo es exitoso
+            }
+            else
+            {
+                // Si hubo un error, mostrar el mensaje de error de la API
+                ViewBag.ErrorMessage = resultado;  // El mensaje de error de la API se pasa a ViewBag
+                return View();  // Volver a mostrar la vista con el mensaje de error
+            }
+        }
+
+
     }
 }

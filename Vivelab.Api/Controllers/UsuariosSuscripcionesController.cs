@@ -24,7 +24,12 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UsuarioSuscripcion>>> GetUsuarioSuscripcion()
         {
-            return await _context.UsuariosSuscripciones.ToListAsync();
+            var data = await _context.UsuariosSuscripciones
+                .Include(u => u.Usuario)
+                .Include(u => u.Suscripcion)
+                .ToListAsync();
+
+            return data;
         }
 
         // GET: api/UsuariosSuscripciones/5

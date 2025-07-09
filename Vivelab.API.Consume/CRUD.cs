@@ -27,6 +27,8 @@ namespace Vivelab.API.Consume
 
         }
 
+
+
         public static List<T> GetBy(string campo, int id)
         {
             using (var client = new HttpClient())
@@ -121,13 +123,13 @@ namespace Vivelab.API.Consume
         }
 
         public static T UploadWithFile(
-    string titulo,
-    Stream fileStream,
-    string fileName,
-    string contentType,
-    TimeSpan duracion,
-    int artistaCodigo,
-    int albumCodigo)
+                                        string titulo,
+                                        Stream fileStream,
+                                        string fileName,
+                                        string contentType,
+                                        TimeSpan duracion,
+                                        int artistaCodigo,
+                                        int albumCodigo)
         {
             using var client = new HttpClient();
             // prepara multipart/form-data
@@ -150,5 +152,48 @@ namespace Vivelab.API.Consume
             var json = resp.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<T>(json)!;
         }
+
+        public static async Task<string> VincularUsuarioASuscripcion(string emailUsuarioVincular, string emailLogeado)
+        {
+            // Verificar que el correo no sea nulo o vacío
+            if (string.IsNullOrEmpty(emailUsuarioVincular))
+            {
+                return "Error: El correo del usuario no es válido.";
+            }
+
+            // Asegurarse de que el EndPoint esté correctamente configurado
+            string url = $"{EndPoint}/VincularUsuarios?email={emailUsuarioVincular}&emailLogeado={emailLogeado}";  // Se pasa el correo en la URL
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    // Realizar la solicitud GET
+                    var response = await client.GetAsync(url);  // Realizamos un GET, ya que los datos irán en la URL
+
+                    // Verificar si la solicitud fue exitosa
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Si la vinculación fue exitosa, devolver un mensaje
+                        return "Usuario vinculado correctamente.";
+                    }
+                    else
+                    {
+                        // Si hubo un error, devolver el mensaje de error
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+
+                        // Extraer solo el mensaje de la API y eliminar el prefijo BadRequest o similar
+                        var errorParts = errorMessage.Split(" - ");
+                        return errorParts.Length > 1 ? errorParts[1] : errorMessage; // Devolver solo el mensaje sin el código
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Capturar cualquier excepción y devolver el error
+                return $"Error al enviar la solicitud: {ex.Message}";
+            }
+        }
+
     }
 }
