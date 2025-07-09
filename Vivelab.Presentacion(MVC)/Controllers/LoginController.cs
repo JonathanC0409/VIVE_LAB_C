@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Vivelab.API.Consume;
 using Vivelab.Modelos;
 using Vivelab.Servicios.Interfaces;
@@ -24,20 +25,32 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+
             if (await _authService.Login(email, password))
             {
-                // Enviar correo electrónico de bienvenida
-                await _emailService.enviarEmailBienvenida(email);
-                // Redirigir a la página principal o dashboard
-                return RedirectToAction("Index", "Home");
+
+                var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+
+                if (usuario != null)
+                {
+
+                    if (usuario.Rol.Equals("bloqueado", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("UsuarioBloqueado", "Usuario");
+                    }
+                    else
+                    {
+                        await _emailService.enviarEmailBienvenida(email);
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
             }
-            else
-            {
-                // Mostrar mensaje de error
-                ViewBag.ErrorMessage = "Email o contraseña incorrectos.";
-                return View("Index");
-            }
+
+            ViewBag.ErrorMessage = "Email o contraseña incorrectos.";
+            return View("Index");
         }
+
+
 
         [HttpGet]
         public IActionResult Register()
