@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Vivelab.Modelos.Usuario>
+
+@{
+    ViewData["Title"] = "Lista Usuarios";
+}
+
+<h2>Lista de Usuarios</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Saldo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.Email</td>
+                <td>@usuario.Saldo</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Usuario", new { id = usuario.Codigo })">Editar</a> |
+                    <a href="@Url.Action("Delete", "Usuario", new { id = usuario.Codigo })">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

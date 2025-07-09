@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Vivelab.Modelos.Usuario>
+
+@{
+    ViewData["Title"] = "Bloquear Usuario";
+}
+
+<h2>Selecciona un Usuario para Bloquear</h2>
+
+<form method="post" action="@Url.Action("BloquearUsuario", "Usuario")">
+    <div class="form-group">
+        <label for="usuarioId">Usuario</label>
+        <select id="usuarioId" name="usuarioId" class="form-control">
+            <option value="">Selecciona un usuario</option>
+            @foreach (var usuario in Model)
+            {
+                <option value="@usuario.Codigo">@usuario.Nombre</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-danger">Bloquear Usuario</button>
+</form>
+
+<a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn btn-primary">Volver a la lista de usuarios</a>
