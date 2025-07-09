@@ -23,8 +23,7 @@
                 <td>@usuario.Email</td>
                 <td>@usuario.Saldo</td>
                 <td>
-                    <a href="@Url.Action("Edit", "Usuario", new { id = usuario.Codigo })">Editar</a> |
-                    <a href="@Url.Action("Delete", "Usuario", new { id = usuario.Codigo })">Eliminar</a>
+                    <a href="@Url.Action("BloquearUsuario", "Usuario", new { id = usuario.Codigo })">Bloquear</a>
                 </td>
             </tr>
         }
