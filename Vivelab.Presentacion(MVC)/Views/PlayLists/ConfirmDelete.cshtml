@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Confirmar Eliminación";
+}
+
+<h2>¿Estás seguro de que quieres eliminar la canción de la playlist?</h2>
+
+<p><strong>@ViewBag.Cancion.Titulo</strong></p>
+<p>Playlist: <strong>@ViewBag.Playlist.Nombre</strong></p>
+
+<form method="post" asp-action="DeleteConfirmed" asp-route-playlistId="@ViewBag.Playlist.Codigo" asp-route-songId="@ViewBag.Cancion.Codigo">
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="@Url.Action("Details", "PlayLists", new { id = ViewBag.Playlist.Codigo })" class="btn btn-secondary">No, volver</a>
+</form>

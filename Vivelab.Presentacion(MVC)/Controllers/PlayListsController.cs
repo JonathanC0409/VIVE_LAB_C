@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Vivelab.API.Consume;
 using Vivelab.Modelos;
 
@@ -10,7 +11,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         // GET: PlayListsController
         public ActionResult Index()
         {
-
             try
             {
                 var usuarioCodigo = 0;
@@ -23,13 +23,11 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
                 ViewBag.UsuarioCodigo = usuarioCodigo;
                 ViewBag.Plan = ObtenerPlan();
-                // Obtener todas las playlists usando el CRUD
                 var playlists = CRUD<Playlist>.GetBy("usuario", usuarioCodigo);
                 return View(playlists); // Mostrar todas las playlists
             }
             catch (Exception ex)
             {
-                // Si ocurre un error, mostrar mensaje
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
@@ -65,13 +63,99 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
             try
             {
-                // Obtener los detalles de una playlist usando el CRUD
+                Console.WriteLine($"Inicio del proceso para obtener los detalles de la playlist con ID: {id}");
+
                 var playlist = CRUD<Playlist>.GetById(id);
-                return View(playlist); // Mostrar detalles de la playlist
+
+                if (playlist == null)
+                {
+                    Console.WriteLine($"Playlist con ID {id} no encontrada.");
+                    return NotFound();
+                }
+
+                Console.WriteLine($"Playlist obtenida: {playlist.Nombre}");
+
+                // Hacer una llamada a la API para obtener las canciones asociadas a esta playlist
+                string apiUrl = $"https://localhost:7008/api/PlaylistCanciones/playlist/{id}";
+                var playlistCanciones = new List<PlaylistCancion>();
+
+                using (var client = new HttpClient())
+                {
+                    var response = client.GetAsync(apiUrl).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = response.Content.ReadAsStringAsync().Result;
+                        playlistCanciones = JsonConvert.DeserializeObject<List<PlaylistCancion>>(json);
+                        Console.WriteLine($"Canciones encontradas en la playlist {playlist.Nombre}:");
+
+                        foreach (var playlistCancion in playlistCanciones)
+                        {
+                            Console.WriteLine($"Canción ID: {playlistCancion.CancionCodigo} - Nombre: {playlistCancion.Cancion.Titulo}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error al obtener canciones de la API. Estado: {response.StatusCode}");
+                    }
+                }
+
+                ViewBag.PlaylistCanciones = playlistCanciones;
+
+                return View(playlist);
             }
             catch (Exception ex)
             {
-                // Si ocurre un error, mostrar mensaje
+                Console.WriteLine($"Error ocurrido: {ex.Message}");
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        // GET: PlayListsController/ConfirmDelete/{playlistId}/{songId}
+        public ActionResult ConfirmDelete(int playlistId, int songId)
+        {
+            try
+            {
+                var playlist = CRUD<Playlist>.GetById(playlistId);
+                var cancion = CRUD<Cancion>.GetById(songId);
+
+                if (playlist == null || cancion == null)
+                {
+                    return NotFound();
+                }
+
+                ViewBag.Playlist = playlist;
+                ViewBag.Cancion = cancion;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        // POST: PlayListsController/DeleteConfirmed
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int playlistId, int songId)
+        {
+            try
+            {
+                var playlistCancion = CRUD<PlaylistCancion>.GetBy("playlist", playlistId)
+                                                          .FirstOrDefault(pc => pc.CancionCodigo == songId);
+
+                if (playlistCancion != null)
+                {
+                    CRUD<PlaylistCancion>.Delete(playlistCancion.Codigo);
+                    Console.WriteLine($"Canción con ID {songId} eliminada de la playlist {playlistId}.");
+                }
+
+                return RedirectToAction(nameof(Details), new { id = playlistId });
+            }
+            catch (Exception ex)
+            {
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
@@ -100,8 +184,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
             try
             {
-
-                CRUD<Playlist>.Create(playlist); // Crear una nueva playlist usando el CRUD
+                CRUD<Playlist>.Create(playlist);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -109,13 +192,12 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 return View();
             }
         }
+
         // GET: PlayListsController/Edit/5
-        [HttpGet]
         public ActionResult Edit(int id)
         {
             try
             {
-                // Obtener la playlist a editar usando el CRUD
                 var playlist = CRUD<Playlist>.GetById(id);
 
                 if (playlist == null)
@@ -123,40 +205,30 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     return NotFound();
                 }
 
-                // Cargar las canciones asociadas a la playlist desde la relación PlaylistCancion
-                var playlistCanciones = CRUD<PlaylistCancion>.GetBy("playlist", id);  // Esto obtiene las canciones asociadas a la playlist
+                var allSongs = CRUD<Cancion>.GetAll();
+                ViewBag.AllSongs = allSongs;
 
-                // Obtener las canciones de la playlist
-                var cancionesEnPlaylist = playlistCanciones.Select(pc => pc.Cancion).ToList();
-
-                // Pasar las canciones disponibles a la vista
-                ViewBag.AllSongs = cancionesEnPlaylist; // Mostrar las canciones asociadas a la playlist en la vista
-
-                return View(playlist); // Mostrar la vista de edición con los datos de la playlist
+                return View(playlist);
             }
             catch (Exception ex)
             {
-                // Si ocurre un error, mostrar mensaje
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
         }
 
+        // POST: PlayListsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, List<int> Canciones)
         {
             try
             {
-                Console.WriteLine($"Inicio del proceso para editar la playlist con ID: {id}");
-
                 // Obtener la playlist a editar usando el CRUD
                 var playlist = CRUD<Playlist>.GetById(id);
-                Console.WriteLine($"Playlist obtenida: {playlist?.Nombre}");
 
                 if (playlist == null)
                 {
-                    Console.WriteLine("Playlist no encontrada.");
                     return NotFound(); // Si la playlist no existe
                 }
 
@@ -164,28 +236,27 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 if (playlist.PlaylistCanciones == null)
                 {
                     playlist.PlaylistCanciones = new List<PlaylistCancion>(); // Inicializar como lista vacía si es null
-                    Console.WriteLine("PlaylistCanciones estaba vacío, inicializando como lista vacía.");
                 }
 
                 // Obtener las canciones actuales asociadas con la playlist
                 var currentSongs = playlist.PlaylistCanciones.Select(pc => pc.CancionCodigo).ToList();
-                Console.WriteLine($"Canciones actuales en la playlist: {string.Join(", ", currentSongs)}");
 
-                // Eliminar canciones que ya no están seleccionadas
-                var songsToRemove = currentSongs.Except(Canciones).ToList();
-                Console.WriteLine($"Canciones a eliminar: {string.Join(", ", songsToRemove)}");
-
-                foreach (var songId in songsToRemove)
+                // Comprobar si alguna de las canciones seleccionadas ya está en la playlist
+                foreach (var songId in Canciones)
                 {
-                    var songToRemove = playlist.PlaylistCanciones.First(pc => pc.CancionCodigo == songId);
-                    CRUD<PlaylistCancion>.Delete(songToRemove.Codigo); // Eliminar la relación de la base de datos
-                    Console.WriteLine($"Canción con ID {songId} eliminada de la playlist.");
+
+                    // Verificamos si la canción ya está en la lista actual
+                    if (currentSongs.Contains(songId))
+                    {
+                        TempData["Mensaje"] = $"La canción con ID {songId} ya está agregada a esta playlist.";
+
+                        // Redirigir a la vista de detalles de la playlist con el mensaje de duplicado
+                        return RedirectToAction(nameof(Details), new { id = playlist.Codigo });
+                    }
                 }
 
                 // Agregar canciones nuevas que no están en la lista actual
                 var songsToAdd = Canciones.Except(currentSongs).ToList();
-                Console.WriteLine($"Canciones a agregar: {string.Join(", ", songsToAdd)}");
-
                 foreach (var songId in songsToAdd)
                 {
                     var playlistCancion = new PlaylistCancion
@@ -194,15 +265,9 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                         CancionCodigo = songId
                     };
                     CRUD<PlaylistCancion>.Create(playlistCancion); // Crear la relación en la base de datos
-                    Console.WriteLine($"Canción con ID {songId} agregada a la playlist.");
                 }
 
-                // Guardar los cambios
-                Console.WriteLine("Guardando cambios...");
-                // Aquí podrías llamar a tu servicio o lógica de persistencia para guardar los cambios
-
-                // Redirigir a la página de detalles de la playlist
-                Console.WriteLine("Redirigiendo a la página de detalles de la playlist.");
+                // Redirigir al detalle de la playlist después de realizar cambios
                 return RedirectToAction(nameof(Details), new { id = playlist.Codigo });
             }
             catch (Exception ex)
@@ -210,10 +275,9 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 // Capturar el error y mostrar un mensaje
                 Console.WriteLine($"Error ocurrido: {ex.Message}");
                 ViewBag.ErrorMessage = ex.Message;
-                return View("Error"); // Redirigir a una página de error si falla
+                return View("Error");
             }
         }
-
 
 
 
@@ -224,17 +288,14 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
             try
             {
-                // Obtener la playlist a eliminar usando el CRUD
                 var playlist = CRUD<Playlist>.GetById(id);
-                return View(playlist); // Mostrar la vista de confirmación de eliminación
+                return View(playlist);
             }
             catch (Exception ex)
             {
-                // Si ocurre un error, mostrar mensaje
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
-
         }
 
         // POST: PlayListsController/Delete/5
@@ -244,8 +305,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
             try
             {
-                CRUD<Playlist>.Delete(id); // Eliminar una playlist usando el CRUD
-
+                CRUD<Playlist>.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
