@@ -106,9 +106,55 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (usuario == null) return NotFound();
 
             usuario.Saldo += monto;
-            CRUD<Usuario>.Update(id, usuario); // o el método que estés usando para guardar
+            CRUD<Usuario>.Update(id, usuario); 
 
-            return RedirectToAction("Index", "Home"); // o a donde quieras volver
+            return RedirectToAction("Index", "Home"); 
         }
+
+        // GET: UsuarioController/Usuarios
+        public ActionResult ListaUsuarios()
+        {
+            // Obtener todos los usuarios
+            var usuarios = CRUD<Usuario>.GetAll(); 
+
+            // Pasar los usuarios a la vista
+            return View(usuarios);
+        }
+
+        public ActionResult UsuarioBloqueado()
+        {
+            return View();
+        }
+
+
+        // GET: UsuarioController/BloquearUsuario
+        public ActionResult BloquearUsuario()
+        {
+            var usuarios = CRUD<Usuario>.GetAll(); 
+
+            // Pasar la lista de usuarios a la vista
+            return View(usuarios);
+        }
+
+
+        // POST: UsuarioController/BloquearUsuario
+        [HttpPost]
+        public IActionResult BloquearUsuario(int usuarioId)
+        {
+            // Verificar si el usuario existe
+            var usuario = CRUD<Usuario>.GetById(usuarioId);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+          
+            usuario.Rol = "bloqueado"; 
+            CRUD<Usuario>.Update(usuarioId, usuario);
+
+            // Redirigir a la lista de usuarios
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
