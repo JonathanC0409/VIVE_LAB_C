@@ -176,13 +176,19 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 {
                     emailUsuarioLogueado = user.Value;
                 }
-                if(user.Type == "UsuarioCodigo")
+                if (user.Type == "UsuarioCodigo")
                 {
                     userId = int.Parse(user.Value);
                 }
 
             }
             var usuario = CRUD<Usuario>.GetById(userId);
+
+            if (usuario.Suscripcion == null)
+            {
+                ViewBag.ErrorMessage = "Usuario no tiene subcripcion";
+                return View();
+            }
             var SubId = usuario.Suscripcion.Codigo;
             var Subcripcion = CRUD<Suscripcion>.GetById(SubId);
             // Verificar si el correo del usuario a vincular no está vacío
