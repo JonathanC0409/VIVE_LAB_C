@@ -524,7 +524,12 @@ public async Task<IActionResult> CrearAlbum(Album nuevoAlbum)
             {
                 return NotFound();
             }
-
+            // Verificar si la canción ya está asociada a otro álbum
+            if (cancion.AlbumCodigo != null)
+            {
+                TempData["ErrorMessage"] = "La canción ya está asociada a otro álbum.";  // Usamos TempData para almacenar el error
+                return RedirectToAction("VerCanciones", new { albumId = albumId });  // Redirigir a la vista de canciones del álbum
+            }
             // Asociar la canción con el álbum
             album.Canciones.Add(cancion);
 
