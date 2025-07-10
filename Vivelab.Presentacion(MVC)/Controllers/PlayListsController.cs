@@ -45,18 +45,30 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
             }
 
+            // Obtener el usuario principal (logueado)
             var usuario = CRUD<Usuario>.GetById(UsuarioId);
             if (usuario != null)
             {
-                if (usuario.Suscripcion == null)
+                // Si tiene una suscripción activa, se retorna el plan
+                if (usuario.Suscripcion != null)
                 {
-                    return 0; // No tiene plan
+                    return usuario.Suscripcion.Plan.Codigo;
                 }
-                int plan = usuario.Suscripcion.Plan.Codigo;
-                return plan;
+
+                // Si no tiene una suscripción activa, se busca en las suscripciones de otros usuarios si lo tienen vinculado
+                var usuarioSubcripciones = CRUD<UsuarioSuscripcion>.GetAll();
+                foreach (var u in usuarioSubcripciones)
+                {
+                    if (usuario.Codigo == u.UsuarioCodigo)
+                    {
+                        return u.Suscripcion.PlanCodigo;
+                    }
+                }
+
             }
             return 0;
         }
+
 
         // GET: PlayListsController/Details/5
         public ActionResult Details(int id)
@@ -278,9 +290,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 return View("Error");
             }
         }
-
-
-
 
 
         // GET: PlayListsController/Delete/5

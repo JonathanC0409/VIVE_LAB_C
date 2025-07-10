@@ -25,12 +25,12 @@ public class Cancion
 
     public int? AlbumCodigo { get; set; }
 
-    public virtual Album? Album { get; set; }
+    public  Album? Album { get; set; }
 
 
 
-    public virtual Usuario? Artista { get; set; } 
+    public  Usuario? Artista { get; set; } 
 
 
-    public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; }
+    public  List<PlaylistCancion>? PlaylistCanciones { get; set; }
 }

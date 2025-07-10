@@ -46,7 +46,8 @@
                         @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
                         {
                             <a class="btn btn-outline-light me-3" href="@Url.Action("Index","GestionarPerfil")">Perfil</a> <!-- Modificado: me-3 -->
-                            <a class="btn btn-outline-light me-3" href="@Url.Action("VincularUsuario","Usuario")">Agregar Usuario</a>
+                            <a class="btn btn-outline-light me-3" href="@Url.Action("MisAlbumes","Usuario")">Mis Albumes</a>
+                            <a class="btn btn-outline-light me-3" href="@Url.Action("MisCanciones","Usuario")">Mis Canciones</a>
 
                         }
 

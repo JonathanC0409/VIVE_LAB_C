@@ -1,0 +1,62 @@
+﻿@model Vivelab.Modelos.Album
+
+@{
+    ViewData["Title"] = "Editar Álbum";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Editar Álbum</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="EditarAlbum" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Código del Álbum (oculto) -->
+            <div class="form-group">
+                <input asp-for="Codigo" type="hidden" value="@Model.Codigo" />
+            </div>
+
+            <!-- Nombre del Álbum -->
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label">Nombre del Álbum</label>
+                <input asp-for="Nombre" class="form-control" value="@Model.Nombre" required />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <!-- Fecha de Creación (no editable) -->
+            <div class="form-group">
+                <input asp-for="FechaCreacion" type="hidden" value="@Model.FechaCreacion.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <!-- Portada del Álbum (opcional) -->
+            <div class="form-group">
+                <label asp-for="PortadaUrl" class="control-label">Portada del Álbum (Imagen)</label>
+                <input asp-for="PortadaUrl" class="form-control" type="file" accept="image/*" />
+                @if (!string.IsNullOrEmpty(Model.PortadaUrl))
+                {
+                    <div>
+                        <h5>Portada Actual:</h5>
+                        <img src="@Model.PortadaUrl" alt="Portada" style="width: 100px; height: 100px; object-fit: cover;" />
+                    </div>
+                }
+                <span asp-validation-for="PortadaUrl" class="text-danger"></span>
+            </div>
+
+            <!-- Artista Código (oculto) -->
+            <div class="form-group">
+                <input asp-for="ArtistaCodigo" type="hidden" value="@Model.ArtistaCodigo" />
+            </div>
+
+            <!-- Botón de Guardar -->
+            <div class="form-group">
+                <input type="submit" value="Guardar Cambios" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="MisAlbumes" class="btn btn-secondary">Volver a la lista</a>
+</div>

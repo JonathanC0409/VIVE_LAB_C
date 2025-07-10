@@ -1,0 +1,52 @@
+﻿@model Vivelab.Modelos.Album
+
+@{
+    ViewData["Title"] = "Crear Álbum";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Crear un nuevo álbum</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="CrearAlbum" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Nombre del Álbum -->
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label">Nombre del Álbum</label>
+                <input asp-for="Nombre" class="form-control" required />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <!-- Fecha de Creación (predeterminada a la fecha actual) -->
+            <div class="form-group">
+                
+                <input asp-for="FechaCreacion" class="form-control" type="hidden" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+            </div>
+
+            <!-- Portada del Álbum -->
+            <div class="form-group">
+                <label asp-for="PortadaUrl" class="control-label">Portada del Álbum (Imagen)</label>
+                <input asp-for="PortadaUrl" class="form-control" type="file" accept="image/*" />
+                <span asp-validation-for="PortadaUrl" class="text-danger"></span>
+            </div>
+
+            <!-- Artista Código (autoasignado) -->
+            <div class="form-group">
+                <input asp-for="ArtistaCodigo" type="hidden" value="@User.FindFirst("UsuarioCodigo")?.Value" />
+            </div>
+
+            <!-- Botón de Crear -->
+            <div class="form-group">
+                <input type="submit" value="Crear Álbum" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a la lista</a>
+</div>
