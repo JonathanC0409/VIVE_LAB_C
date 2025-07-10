@@ -418,7 +418,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             {
                 return View();
             }
-        }
+            }
 
         // GET: UsuarioController/CrearAlbum
         public ActionResult CrearAlbum()
@@ -531,11 +531,31 @@ public async Task<IActionResult> CrearAlbum(Album nuevoAlbum)
                 return RedirectToAction("VerCanciones", new { albumId = albumId });  // Redirigir a la vista de canciones del álbum
             }
             // Asociar la canción con el álbum
-            album.Canciones.Add(cancion);
+            cancion.AlbumCodigo = albumId;
 
-            CRUD<Album>.Update(albumId, album);  // Actualizar el álbum con la nueva canción
+            CRUD<Cancion>.Update(cancionId, cancion);  // Actualizar el álbum con la nueva canción
 
             return RedirectToAction("VerCanciones", new { albumId = albumId });  // Redirigir a la vista de canciones del álbum
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarCancionDelAlbum(int albumId, int cancionId)
+        {
+            var album = CRUD<Album>.GetById(albumId);  // Obtener el álbum
+            var cancion = CRUD<Cancion>.GetById(cancionId);  // Obtener la canción seleccionada
+
+            if (album == null || cancion == null)
+            {
+                return NotFound();  // Si el álbum o la canción no existen, devolver 404
+            }
+
+            cancion.AlbumCodigo = null;
+            CRUD<Cancion>.Update(cancionId, cancion);
+            return RedirectToAction("VerCanciones", new { albumId = albumId });
+            
+
+   
         }
 
 

@@ -10,6 +10,7 @@
     </div>
 }
 
+
 <!-- Mostrar las canciones existentes en el álbum -->
 <table class="table">
     <thead>
@@ -26,8 +27,12 @@
                 <td>@cancion.Titulo</td>
                 <td>@cancion.Duracion</td>
                 <td>
-                    <!-- Aquí puedes agregar botones para eliminar canciones del álbum si es necesario -->
-                    <a href="@Url.Action("EliminarCancionDelAlbum", new { albumId = cancion.AlbumCodigo, cancionId = cancion.Codigo })" class="btn btn-danger">Eliminar Canción</a>
+                    <!-- Botón para eliminar la canción del álbum -->
+                    <form asp-action="EliminarCancionDelAlbum" method="post" style="display:inline;">
+                        <input type="hidden" name="albumId" value="@ViewBag.AlbumId" />
+                        <input type="hidden" name="cancionId" value="@cancion.Codigo" />
+                        <button type="submit" class="btn btn-danger">Eliminar Canción</button>
+                    </form>
                 </td>
             </tr>
         }
