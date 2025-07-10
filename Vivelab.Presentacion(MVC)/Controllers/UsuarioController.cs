@@ -161,6 +161,10 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         public ActionResult VincularUsuario()
         {
+
+            // Obtener los usuarios vinculados a la suscripción
+            var usuariosVinculados = CRUD<UsuarioSuscripcion>.GetAll();
+            ViewBag.UsuariosVinculados = usuariosVinculados;
             return View();
         }
 
@@ -191,6 +195,9 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
             var SubId = usuario.Suscripcion.Codigo;
             var Subcripcion = CRUD<Suscripcion>.GetById(SubId);
+
+            
+
             // Verificar si el correo del usuario a vincular no está vacío
             if (string.IsNullOrEmpty(emailUsuarioVincular))
             {

@@ -1,64 +1,47 @@
-﻿@model IEnumerable<Vivelab.Modelos.Cancion>
+﻿@{
+    ViewData["Title"] = "Vincular Usuario";
+}
 
-<h2>Canciones del Álbum</h2>
+<h2>@ViewData["Title"]</h2>
 
-<!-- Mostrar mensaje de error si existe -->
-@if (TempData["ErrorMessage"] != null)
+<form method="post" asp-action="VincularUsuario">
+    <div class="form-group">
+        <label for="EmailUsuarioVincular">Correo del Usuario a Vincular</label>
+        <input type="email" class="form-control" id="EmailUsuarioVincular" name="emailUsuarioVincular" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Vincular Usuario</button>
+</form>
+
+<!-- Mostrar mensaje de error con ViewBag -->
+@if (ViewBag.ErrorMessage != null)
 {
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <strong>¡Ups!</strong> @ViewBag.ErrorMessage
     </div>
 }
 
-
-<!-- Mostrar las canciones existentes en el álbum -->
-<table class="table">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Duración</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var cancion in Model)
+<!-- Mostrar los usuarios vinculados como tarjetas estilizadas -->
+@if (ViewBag.UsuariosVinculados != null)
+{
+    <h3 class="mt-5">Usuarios Vinculados:</h3>
+    <div class="row">
+        @foreach (var usuarioSuscripcion in ViewBag.UsuariosVinculados)
         {
-            <tr>
-                <td>@cancion.Titulo</td>
-                <td>@cancion.Duracion</td>
-                <td>
-                    <!-- Botón para eliminar la canción del álbum -->
-                    <form asp-action="EliminarCancionDelAlbum" method="post" style="display:inline;">
-                        <input type="hidden" name="albumId" value="@ViewBag.AlbumId" />
-                        <input type="hidden" name="cancionId" value="@cancion.Codigo" />
-                        <button type="submit" class="btn btn-danger">Eliminar Canción</button>
-                    </form>
-                </td>
-            </tr>
+            <!-- Aquí calculamos la inicial del nombre -->
+            @* Usamos la primera letra del nombre para mostrarla en el círculo *@
+            var initial = usuarioSuscripcion.Usuario.Nombre.Substring(0, 1).ToUpper();
+            <div class="col-md-4 mb-4">
+                <div class="card user-card">
+                    <div class="card-body text-center">
+                        <!-- Círculo con la inicial del nombre -->
+                        <div class="user-initial mb-3">
+                            @initial
+                        </div>
+                        <!-- Nombre del usuario -->
+                        <h5 class="card-title">@usuarioSuscripcion.Usuario.Nombre</h5>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
-
-<!-- Agregar Canción -->
-<h4>Agregar Canción al Álbum</h4>
-<form asp-action="AgregarCancion" method="post">
-    <!-- Campo oculto para el ID del álbum -->
-    <input type="hidden" name="albumId" value="@ViewBag.AlbumId" />
-
-    <div class="form-group">
-        <label for="cancion">Selecciona una canción:</label>
-        <select id="cancion" name="cancionId" class="form-control">
-            @foreach (var cancion in ViewBag.CancionesDisponibles)
-            {
-                <option value="@cancion.Codigo">@cancion.Titulo</option>
-            }
-        </select>
     </div>
-
-    <div class="form-group">
-        <input type="submit" value="Agregar Canción" class="btn btn-primary" />
-    </div>
-</form>
-
-<!-- Volver a los álbumes -->
-<a href="@Url.Action("MisAlbumes")" class="btn btn-secondary">Volver a Mis Álbumes</a>
+}
