@@ -1,0 +1,52 @@
+﻿@model Vivelab.Modelos.Album
+
+@{
+    ViewData["Title"] = "Eliminar Álbum";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>¿Estás seguro de que deseas eliminar este álbum?</h3>
+
+<div>
+    <h4>Detalles del Álbum</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Codigo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Codigo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaCreacion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FechaCreacion)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ArtistaCodigo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ArtistaCodigo)
+        </dd>
+    </dl>
+
+    <!-- Formulario para eliminar el álbum -->
+    <form asp-action="EliminarAlbum" method="post">
+        <!-- Campo oculto para enviar el ID del álbum -->
+        <input type="hidden" asp-for="Codigo" />
+
+        <div class="form-group">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a asp-action="MisAlbumes" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+    </form>
+</div>

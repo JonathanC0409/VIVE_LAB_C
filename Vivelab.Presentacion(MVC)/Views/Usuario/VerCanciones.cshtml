@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Vivelab.Modelos.Cancion>
+
+<h2>Canciones del Álbum</h2>
+
+<!-- Mostrar mensaje de error si existe -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<!-- Mostrar las canciones existentes en el álbum -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Duración</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cancion in Model)
+        {
+            <tr>
+                <td>@cancion.Titulo</td>
+                <td>@cancion.Duracion</td>
+                <td>
+                    <!-- Aquí puedes agregar botones para eliminar canciones del álbum si es necesario -->
+                    <a href="@Url.Action("EliminarCancionDelAlbum", new { albumId = cancion.AlbumCodigo, cancionId = cancion.Codigo })" class="btn btn-danger">Eliminar Canción</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Agregar Canción -->
+<h4>Agregar Canción al Álbum</h4>
+<form asp-action="AgregarCancion" method="post">
+    <!-- Campo oculto para el ID del álbum -->
+    <input type="hidden" name="albumId" value="@ViewBag.AlbumId" />
+
+    <div class="form-group">
+        <label for="cancion">Selecciona una canción:</label>
+        <select id="cancion" name="cancionId" class="form-control">
+            @foreach (var cancion in ViewBag.CancionesDisponibles)
+            {
+                <option value="@cancion.Codigo">@cancion.Titulo</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Agregar Canción" class="btn btn-primary" />
+    </div>
+</form>
+
+<!-- Volver a los álbumes -->
+<a href="@Url.Action("MisAlbumes")" class="btn btn-secondary">Volver a Mis Álbumes</a>

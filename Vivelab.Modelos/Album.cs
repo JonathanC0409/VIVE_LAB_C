@@ -17,7 +17,7 @@ public class Album
 
     public int ArtistaCodigo { get; set; }
 
-    public virtual Usuario? Artista { get; set; }
+    public  Usuario? Artista { get; set; }
 
-    public virtual List<Cancion>? Canciones { get; set; }
+    public  List<Cancion>? Canciones { get; set; }
 }

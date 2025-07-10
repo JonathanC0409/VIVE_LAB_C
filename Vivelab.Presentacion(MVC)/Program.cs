@@ -10,13 +10,14 @@ namespace Vivelab.Presentacion_MVC_
     {
         public static void Main(string[] args)
         {
-
             CRUD<Cancion>.EndPoint = "https://localhost:7008/api/Canciones";
             CRUD<Usuario>.EndPoint = "https://localhost:7008/api/Usuarios";
             CRUD<Plan>.EndPoint = "https://localhost:7008/api/Planes";
             CRUD<Suscripcion>.EndPoint = "https://localhost:7008/api/Suscripciones";
             CRUD<Playlist>.EndPoint = "https://localhost:7008/api/Playlists";
+            CRUD<PlaylistCancion>.EndPoint = "https://localhost:7008/api/PlaylistCanciones";
             CRUD<UsuarioSuscripcion>.EndPoint = "https://localhost:7008/api/UsuariosSuscripciones";
+            CRUD<Album>.EndPoint = "https://localhost:7008/api/Albumes";
             var builder = WebApplication.CreateBuilder(args);
 
             //Registrar Servicios
@@ -29,13 +30,13 @@ namespace Vivelab.Presentacion_MVC_
 
             // Add services to the container.
             builder.Services.AddDistributedMemoryCache();
-            builder.Services.AddSession();  // ?? Habilita soporte para sesión
+            builder.Services.AddSession();  // ?? Habilita soporte para sesi?n
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddAuthentication("Cookies") //cokies
                 .AddCookie("Cookies", options =>
                 {
-                    options.LoginPath = "/Login/Index"; // Ruta de inicio de sesión
+                    options.LoginPath = "/Login/Index"; // Ruta de inicio de sesi?n
 
 
                 });
@@ -52,12 +53,12 @@ namespace Vivelab.Presentacion_MVC_
                 app.UseHsts();
             }
 
-            app.UseSession(); // ?? Activa la sesión
+            app.UseSession(); // ?? Activa la sesi?n
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseAuthentication(); // Habilitar autenticación antes de usar routing//cookies
+            app.UseAuthentication(); // Habilitar autenticaci?n antes de usar routing//cookies
 
             app.UseRouting();
 

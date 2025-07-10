@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Vivelab.Modelos.Cancion>
+
+<h2>Mis Canciones</h2>
+<p>
+    <a asp-action="Subir" asp-controller="Musica" class="btn btn-primary">
+        <i class="bi bi-upload"></i> Subir nueva canción
+    </a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Duracion</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cancion in Model)
+        {
+            <tr>
+                <td>@cancion.Titulo</td>
+                <td>@cancion.Duracion</td>
+                <td>
+                    <a href="@Url.Action("EditarCancion", new { id = cancion.Codigo })" class="btn btn-warning">Editar</a>
+                    <a href="@Url.Action("EliminarCancion", new { id = cancion.Codigo })" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

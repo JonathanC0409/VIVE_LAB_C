@@ -42,6 +42,8 @@ namespace Vivelab.Api.Controllers
         {
             var usuario = await _context.Usuarios
                 .Where(u => u.Codigo == id)
+                .Include(u => u.Canciones)
+                .Include(u => u.Albums)
                 .Include(u => u.Suscripcion)
                 .ThenInclude(u => u.Plan)
                 .FirstAsync();
