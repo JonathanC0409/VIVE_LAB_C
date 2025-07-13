@@ -1,5 +1,10 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
+    var artistas = ViewBag.Artistas as IEnumerable<Vivelab.Modelos.Usuario>;
+    var albumes = ViewBag.Albumes as IEnumerable<Vivelab.Modelos.Album>;
+    var canciones = ViewBag.Canciones as IEnumerable<Vivelab.Modelos.Cancion>;
+     var topCanciones = ViewBag.TopCanciones as IEnumerable<Vivelab.Modelos.Cancion>;
 }
 
 <!DOCTYPE html>
@@ -8,14 +13,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Vivelab</title>
+    <link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true"/>
 
-    <!-- Vinculación de Bootstrap -->
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Vinculación del archivo CSS personalizado -->
 
 </head>
 <body>
-
 
     <!-- Sección principal con bienvenida y recomendaciones -->
     <div class="container my-5">
@@ -64,49 +66,134 @@
             
         </div>
         
-        
-        <!-- Recomendaciones de música -->
-        <h3 class="mt-5">Lo mejor de la música</h3>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://global-pop-magazine.com/wp-content/uploads/2023/02/POP_WEB.jpg" class="card-img ImagenContenido" alt="Música recomendada">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title" style="text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9), 0 0 25px #ff0000, 0 0 5px darkblue;">Música Pop</h5>
-                        <p class="card-text" style="text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 5px #ff0000;">Explora los éxitos del momento.</p>
-                        <a href="#" class="btn btn-outline-light">Escuchar ahora</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://i.ytimg.com/vi/TBrt71Kcclc/maxresdefault.jpg" class="card-img ImagenContenido" alt="Música recomendada">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title" style="text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9), 0 0 25px #ff0000, 0 0 5px darkblue;">Música Electrónica</h5>
-                        <p class="card-text" style="text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 5px #ff0000;">Los mejores beats para tus fiestas.</p>
-                        <a href="#" class="btn btn-outline-light">Escuchar ahora</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://www.ecuavisa.com/binrepository/1200x800/0c100/1200d600/none/11705/YXGL/whatsapp-image-2024-11-18-at-8-03_1861003_20241118200658.jpg" class="card-img ImagenContenido" alt="Música recomendada">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title" style="text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9), 0 0 25px #ff0000, 0 0 5px darkblue;">Música Indie</h5>
-                        <p class="card-text" style="text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 5px #ff0000;">Escucha los artistas más prometedores.</p>
-                        <a href="#" class="btn btn-outline-light">Escuchar ahora</a>
-                    </div>
-                </div>
-            </div>
-            </div>
-        
+    <h2>Artistas</h2>
+    <div class="contenedor-tarjetas">
+        @foreach (var a in artistas)
+        {
+            var inicial = !string.IsNullOrEmpty(a.Nombre)
+                    ? a.Nombre.Substring(0,1).ToUpper()
+                    : "?";
+            <div class="tarjeta">
+            @* <div class="imagen-tarjeta"> Se implementara cuadno se incluya la foto del usuario(artista)
+              @if (!string.IsNullOrEmpty(a.Foto))
+              {
+                <img src="@Url.Content(a.RutaImagen)" alt="@a.NombreUsuario" />
+              }
+              else
+              {
+                <div class="avatar">@inicial</div>
+              }
+            </div> *@
+             <div class="imagen-tarjeta">
+             <div class="avatar">
+                 @inicial
+             </div>
+         </div>
+        <p class="titulo-tarjeta">@a.Nombre</p>
+      </div>
+      }
     </div>
+        
+    <h2>Álbumes</h2>
+<div class="contenedor-tarjetas">
+  @foreach(var alb in albumes)
+  {
+      // Calcula la inicial si no hay imagen
+      var inicial = !string.IsNullOrEmpty(alb.Nombre)
+                    ? alb.Nombre.Substring(0,1).ToUpper()
+                    : "?";
+
+      <div class="tarjeta">
+        <div class="imagen-tarjeta">
+          @if (!string.IsNullOrEmpty(alb.PortadaUrl))
+          {
+            <img src="@Url.Content(alb.PortadaUrl)" alt="@alb.Nombre" />
+          }
+          else
+          {
+            <div class="avatar">@inicial</div>
+          }
+        </div>
+        <p class="titulo-tarjeta">@alb.Nombre</p>
+      </div>
+  }
+</div>
+
+<h2>Canciones</h2>
+<div class="contenedor-tarjetas">
+  @foreach (var c in canciones)
+  {
+      var inicial = !string.IsNullOrEmpty(c.Titulo)
+                    ? c.Titulo.Substring(0,1).ToUpper()
+                    : "?";
+      <div class="tarjeta">
+        <div class="imagen-tarjeta">
+          @if (!string.IsNullOrEmpty(c.PortadaUrl))
+          {
+            <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+          }
+          else
+          {
+            <div class="avatar">@inicial</div>
+          }
+        </div>
+        <p class="titulo-tarjeta">@c.Titulo</p>
+      </div>
+  }
+</div>
+
+<h2>Canciones más escuchadas (Top 5)</h2>
+<ol class="lista-top-canciones">
+  @{
+      int indice = 1;
+  }
+  @foreach(var c in topCanciones)
+  {
+      var inicial = !string.IsNullOrEmpty(c.Titulo)
+                    ? c.Titulo.Substring(0,1).ToUpper()
+                    : "?";
+      <li class="item-lista">
+        <span class="numero-lista">@indice.</span>
+
+        @* Avatar o imagen *@
+        @if (!string.IsNullOrEmpty(c.PortadaUrl))
+        {
+          <img class="avatar-lista" src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+        }
+        else
+        {
+          <div class="avatar-lista">@inicial</div>
+        }
+
+        @* Info y reproducciones *@
+        <div class="info-lista">
+          <p class="titulo-lista">@c.Titulo</p>
+          <p class="reproducciones-lista">@c.TotalReproducciones reproducciones</p>
+        </div>
+
+        @* Duración *@
+        <span class="duracion-lista">@c.Duracion.ToString(@"mm\:ss")</span>
+
+        @* Botón play con data-attributes *@
+    
+<a href="@Url.Action("Player","Home", new { id = c.Codigo })" 
+   class="boton-reproducir" title="Reproducir">
+  <!-- SVG play -->
+  <svg viewBox="0 0 16 16" fill="currentColor">
+    <path d="M4 4l8 4-8 4z"/>
+  </svg>
+</a>
+
+      </li>
+      indice++;
+  }
+</ol>
+
 
 
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/player.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
