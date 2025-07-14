@@ -13,8 +13,8 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow mb-3 ">
             <div class="container-fluid">
                 <!-- Logo a la izquierda -->
-                <a class="navbar-brand" href="#"  style="color: aliceblue">
-                    <img src="~/images/logo.png" alt="Vivelab Logo" style="width: 50px; height: 50px;" />
+                <a class="navbar-brand" href="@Url.Action("Index")"  style="color: aliceblue">
+                    <img src="~/portadas/logo.jpg" alt="Vivelab Logo" style="width: 50px; height: 50px;" />
                     Vivelab
                 </a>
 
@@ -64,9 +64,9 @@
     </header>
 
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
     </div>
 
 

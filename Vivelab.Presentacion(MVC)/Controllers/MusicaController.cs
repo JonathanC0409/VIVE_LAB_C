@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using System.Security.Claims;
 using Vivelab.API.Consume;
@@ -9,7 +10,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 {
     public class MusicaController : Controller
     {
-
+        [Authorize]
         public IActionResult Index()
         {
             

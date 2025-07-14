@@ -15,10 +15,12 @@ html {
 html {
   position: relative;
   min-height: 100%;
+
 }
 
 body {
   margin-bottom: 60px;
+
 }
 
 .btn-outline-lighty {
@@ -56,49 +58,6 @@ body {
     
 }
 
-/* Lista Top 5 Canciones */
-.lista-top-canciones {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
+.contenido-ajustado {
+    transform: translateX(30px); /* Puedes cambiar 30px por lo que quieras */
 }
-
-    .lista-top-canciones .item-lista {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .lista-top-canciones .numero-lista {
-        font-weight: bold;
-        width: 2rem;
-        text-align: center;
-        margin-right: 0.5rem;
-    }
-
-    .lista-top-canciones .avatar-lista,
-    .lista-top-canciones img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 0.5rem;
-        object-fit: cover;
-    }
-
-    .lista-top-canciones .info-lista {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .lista-top-canciones .titulo-lista {
-        margin: 0;
-        font-size: 1rem;
-    }
-
-    .lista-top-canciones .reproducciones-lista {
-        margin: 0;
-        font-size: 0.85rem;
-        color: #666;
-    }
-
