@@ -1,4 +1,4 @@
-﻿@functions {
+﻿ @functions {
     private static readonly Random rnd = new Random();
 
     public string GetRandomColorClass()
@@ -6,8 +6,6 @@
         return $"avatar-color{rnd.Next(1, 7)}";
     }
 }
-
-<link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
 
 @{
     ViewData["Title"] = "Home";
@@ -17,50 +15,64 @@
     var topCanciones = ViewBag.TopCanciones as IEnumerable<Vivelab.Modelos.Cancion>;
 }
 
-<div class="container my-5 text-white">
+<link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
 
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">Bienvenido a Vivelab 🎵</h1>
-        <p class="lead">Descubre y comparte tu música favorita.</p>
+<!-- Background animation -->
+<div class="background-animation" id="backgroundAnimation"></div>
 
-        @if (User.Identity.IsAuthenticated)
-        {
-            <h4 class="mt-3">¡Hola, @User.Identity.Name! 👋</h4>
-
-            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Vivelab 🎵</h1>
+            <p class="hero-subtitle">Descubre y comparte tu música favorita</p>
+            
+            @if (User.Identity.IsAuthenticated)
             {
-                <a href="@Url.Action("CambiarRolUsuario", "GestionarPerfil")" class="btn btn-success m-2">Regístrate como Artista</a>
-                <a href="@Url.Action("RecargarSaldo", "Usuario")" class="btn btn-success m-2">Recargar Saldo</a>
+                <div class="welcome-message">¡Hola, @User.Identity.Name! 👋</div>
+                
+                <div class="action-buttons">
+                    @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
+                    {
+                        <a href="@Url.Action("CambiarRolUsuario", "GestionarPerfil")" class="btn-modern">
+                            🎤 Regístrate como Artista
+                        </a>
+                        <a href="@Url.Action("RecargarSaldo", "Usuario")" class="btn-modern">
+                            💳 Recargar Saldo
+                        </a>
+                    }
+                    @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
+                    {
+                        <a href="@Url.Action("Subir", "Musica")" class="btn-modern">
+                            ⬆️ Subir Canción
+                        </a>
+                    }
+                    @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "administrador"))
+                    {
+                        <a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn-modern">
+                            👥 Ver Usuarios
+                        </a>
+                        <a href="@Url.Action("BloquearUsuario", "Usuario")" class="btn-modern btn-danger-modern">
+                            ⚠️ Bloquear Usuario
+                        </a>
+                    }
+                </div>
             }
-            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
-            {
-                <a href="@Url.Action("Subir", "Musica")" class="btn btn-success m-2">Subir Canción</a>
-            }
-            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "administrador"))
-            {
-                <a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn btn-success m-2">Ver Usuarios</a>
-                <a href="@Url.Action("BloquearUsuario", "Usuario")" class="btn btn-danger m-2">Bloquear Usuario</a>
-            }
-        }
+        </div>
     </div>
+</div>
 
-    <h2>🎤 Artistas Populares</h2>
-    <div class="carrusel-artistas">
+<!-- Main Content -->
+<div class="container">
+    <!-- Artists Section -->
+    <h2 class="section-title scroll-animation">🎤 Artistas Populares</h2>
+    <div class="carrusel-artistas scroll-animation">
         @foreach (var a in artistas)
         {
             var inicial = !string.IsNullOrEmpty(a.Nombre) ? a.Nombre.Substring(0, 1).ToUpper() : "?";
             <div class="tarjeta-artista">
-                <div class="imagen">
-                    @* @if (!string.IsNullOrEmpty(a.RutaImagen))
-                    {
-                        <img src="@Url.Content(a.RutaImagen)" alt="@a.Nombre" />
-                    }
-                    else
-                    { *@
-                    <div class="avatar @GetRandomColorClass()">
-                        @inicial
-                    </div>
-                    @*  } *@
+                <div class="avatar @GetRandomColorClass()">
+                    @inicial
                 </div>
                 <p class="nombre">@a.Nombre</p>
                 <p class="rol">Artista</p>
@@ -68,51 +80,46 @@
         }
     </div>
 
-
-    <h2>💿 Álbumes y sencillos populares</h2>
-    <div class="carrusel-albumes">
+    <!-- Albums Section -->
+    <h2 class="section-title scroll-animation">💿 Álbumes y sencillos populares</h2>
+    <div class="carrusel-albumes scroll-animation">
         @foreach (var alb in albumes)
         {
             <div class="tarjeta-album">
-                <div class="imagen">
-                    @if (!string.IsNullOrEmpty(alb.PortadaUrl))
-                    {
-                        <img src="@Url.Content(alb.PortadaUrl)" alt="@alb.Nombre" />
-                    }
-                    else
-                    {
-                        <div class="avatar-album @GetRandomColorClass()">
-                            @alb.Nombre.Substring(0, 1).ToUpper()
-                        </div>
-                    }
-                </div>
+                @if (!string.IsNullOrEmpty(alb.PortadaUrl))
+                {
+                    <img src="@Url.Content(alb.PortadaUrl)" alt="@alb.Nombre" />
+                }
+                else
+                {
+                    <div class="avatar-album @GetRandomColorClass()">
+                        @alb.Nombre.Substring(0, 1).ToUpper()
+                    </div>
+                }
                 <div class="info">
                     <p class="titulo">@alb.Nombre</p>
                     <p class="artista">@alb.Artista.Nombre</p>
                 </div>
             </div>
-
         }
     </div>
 
-
-    <h2>🎶 Canciones en tendencia</h2>
-    <div class="carrusel-canciones">
+    <!-- Songs Section -->
+    <h2 class="section-title scroll-animation">🎶 Canciones en tendencia</h2>
+    <div class="carrusel-canciones scroll-animation">
         @foreach (var c in canciones)
         {
             <div class="tarjeta-cancion">
-                <div class="imagen">
-                    @if (!string.IsNullOrEmpty(c.PortadaUrl))
-                    {
-                        <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
-                    }
-                    else
-                    {
-                        <div class="avatar-cancion @GetRandomColorClass()">
-                            @c.Titulo.Substring(0, 1).ToUpper()
-                        </div>
-                    }
-                </div>
+                @if (!string.IsNullOrEmpty(c.PortadaUrl))
+                {
+                    <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                }
+                else
+                {
+                    <div class="avatar-cancion @GetRandomColorClass()">
+                        @c.Titulo.Substring(0, 1).ToUpper()
+                    </div>
+                }
                 <div class="info">
                     <p class="titulo">@c.Titulo</p>
                     <p class="artista">@c.Artista?.Nombre</p>
@@ -126,10 +133,9 @@
         }
     </div>
 
-
-
-    <h2>🔥 Top 5 Canciones</h2>
-    <ol class="lista-top-5">
+    <!-- Top 5 Section -->
+    <h2 class="section-title scroll-animation">🔥 Top 5 Canciones</h2>
+    <ol class="lista-top-5 scroll-animation">
         @{
             int pos = 1;
         }
@@ -137,7 +143,6 @@
         {
             <li class="item-top">
                 <span class="posicion">@pos</span>
-
                 <div class="portada">
                     @if (!string.IsNullOrEmpty(c.PortadaUrl))
                     {
@@ -145,19 +150,16 @@
                     }
                     else
                     {
-                        <div style="width:100%;height:100%;background:#1db954;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
+                        <div class="@GetRandomColorClass()" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;border-radius:12px;">
                             @c.Titulo.Substring(0, 1).ToUpper()
                         </div>
                     }
                 </div>
-
                 <div class="info">
                     <p class="titulo">@c.Titulo</p>
                     <p class="reproducciones">@c.TotalReproducciones reproducciones</p>
                 </div>
-
                 <span class="duracion">@c.Duracion.ToString(@"mm\:ss")</span>
-
                 <a href="@Url.Action("Player", "Home", new { id = c.Codigo })" class="boton-play" title="Reproducir">
                     <svg viewBox="0 0 16 16" fill="currentColor">
                         <path d="M4 4l8 4-8 4z" />
@@ -167,10 +169,10 @@
             pos++;
         }
     </ol>
-
-
 </div>
 
 @section Scripts {
-    <script src="~/js/player.js"></script>
+    <script src="~/js/cardHome.js" asp-append-version="true"></script>
+    <script src="~/js/player.js" asp-append-version="true"></script>
 }
+
