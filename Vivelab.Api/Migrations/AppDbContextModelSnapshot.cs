@@ -224,12 +224,12 @@ namespace Vivelab.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Saldo")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("TipoUsuario")
+                    b.Property<string>("Rol")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("Saldo")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Codigo");
 

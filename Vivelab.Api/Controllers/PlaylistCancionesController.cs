@@ -103,5 +103,22 @@ namespace Vivelab.Api.Controllers
         {
             return _context.PlaylistCanciones.Any(e => e.Codigo == id);
         }
+        // GET: api/PlaylistCanciones/playlist/5
+        [HttpGet("playlist/{id}")]
+        public async Task<ActionResult<IEnumerable<PlaylistCancion>>> GetPlaylistCancionesByPlaylistId(int id)
+        {
+            // Buscar las canciones asociadas a la playlist
+            var playlistCanciones = await _context.PlaylistCanciones
+                .Where(pc => pc.PlaylistCodigo == id)
+                .Include(pc => pc.Cancion) // Incluir la canción asociada
+                .ToListAsync();
+
+            if (playlistCanciones == null || playlistCanciones.Count == 0)
+            {
+                return NotFound(); // Si no hay canciones asociadas, devolver un 404
+            }
+
+            return playlistCanciones; // Devolver la lista de PlaylistCancion
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace Vivelab.Servicios
                             new Claim("UsuarioCodigo", usuario.Codigo.ToString()),
                             new Claim(ClaimTypes.Name, usuario.Nombre),
                             new Claim(ClaimTypes.Email, usuario.Email),
-                            new Claim("TipoUsuario", usuario.TipoUsuario)
+                            new Claim("TipoUsuario", usuario.Rol)
                         };
                         var credencialDigital = new ClaimsIdentity(datosUsuario, "Cookies");
                         var usuarioAutenticado = new ClaimsPrincipal(credencialDigital);
@@ -74,7 +74,7 @@ namespace Vivelab.Servicios
                     Email = email,
                     Password = password, // Aquí deberías aplicar un hash a la contraseña antes de guardarla
                     Nombre = nombre,
-                    TipoUsuario = "cliente",
+                    Rol = "cliente",
                     FechaRegistro = DateTime.UtcNow
                 });
                 return true; // Registro exitoso

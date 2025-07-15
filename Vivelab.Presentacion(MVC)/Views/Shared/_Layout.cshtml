@@ -6,20 +6,22 @@
     <title>@ViewData["Title"] - Vivelab.Presentacion_MVC_</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
 </head>
 <body style="background-color: #121212; color: white;">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow mb-3 ">
             <div class="container-fluid">
                 <!-- Logo a la izquierda -->
-                <a class="navbar-brand" href="#"  style="color: aliceblue">
-                    <img src="~/images/logo.png" alt="Vivelab Logo" style="width: 50px; height: 50px;" />
+                <a class="navbar-brand" href="@Url.Action("Index")" style="color: aliceblue">
+                    <img src="~/portadas/logo.jpg" alt="Vivelab Logo" style="width: 50px; height: 50px;" />
                     Vivelab
                 </a>
 
                 <!-- Buscador en el centro -->
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <form class="d-flex ms-4" action="#" method="get"> <!-- Modificado: ms-4 -->
+                    <form class="d-flex ms-4" action="#" method="get">
+                        <!-- Modificado: ms-4 -->
                         <input class="busqueda" type="search" placeholder="¿Qué quieres reproducir?" aria-label="Search" />
                         <button class="btn btn-outline-light ms-3" type="submit">Buscar</button> <!-- Modificado: me-3 -->
                     </form>
@@ -32,34 +34,26 @@
                     <a class="btn btn-outline-light me-3" href="@Url.Action("Index","Home")">🏠</a> <!-- Modificado: me-3 -->
                     <a class="btn btn-outline-light me-3" href="@Url.Action("Index","Plan")">Premium</a> <!-- Modificado: me-3 -->
                     <a class="btn btn-outline-light me-3" href="@Url.Action("Index","Musica")">Musica</a> <!-- Modificado: me-3 -->
-                    
-
                     <!-- Botón de inicio de sesión -->
                     @if (User.Identity.IsAuthenticated)
                     {
 
                         @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
                         {
-                            
-                         <a class="btn btn-outline-light me-3" href="@Url.Action("Index","PlayLists")">Mi Biblioteca</a>
-                         <a class="btn btn-outline-light me-3" href="@Url.Action("Index","GestionarPerfil")">Perfil</a> <!-- Modificado: me-3 -->
 
-                        }
-
-                        @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
-                        {
                             <a class="btn btn-outline-light me-3" href="@Url.Action("Index","PlayLists")">Mi Biblioteca</a>
                             <a class="btn btn-outline-light me-3" href="@Url.Action("Index","GestionarPerfil")">Perfil</a> <!-- Modificado: me-3 -->
                         }
 
-                        @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "bloqueado"))
+                        @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
                         {
-                            <a class="btn btn-outline-light me-3" href="@Url.Action("UsuarioBloqueado","Usuario")">Ver Bloqueo</a>
+                            <a class="btn btn-outline-light me-3" href="@Url.Action("Index","GestionarPerfil")">Perfil</a> <!-- Modificado: me-3 -->
+                            <a class="btn btn-outline-light me-3" href="@Url.Action("MisAlbumes","Usuario")">Mis Albumes</a>
+                            <a class="btn btn-outline-light me-3" href="@Url.Action("MisCanciones","Usuario")">Mis Canciones</a>
 
                         }
 
-                         <a class="btn btn-outline-light me-3" href="@Url.Action("Logout", "Login")">Cerrar Sesión</a> <!-- Modificado: me-3 -->
-
+                        <a class="btn btn-outline-light me-3" href="@Url.Action("Logout", "Login")">Cerrar Sesión</a> <!-- Modificado: me-3 -->
                     }
                     else
                     {

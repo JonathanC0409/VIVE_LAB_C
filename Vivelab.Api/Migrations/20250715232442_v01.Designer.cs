@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Vivelab.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250705191121_v01")]
+    [Migration("20250715232442_v01")]
     partial class v01
     {
         /// <inheritdoc />
@@ -227,12 +227,12 @@ namespace Vivelab.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Saldo")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("TipoUsuario")
+                    b.Property<string>("Rol")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("Saldo")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Codigo");
 

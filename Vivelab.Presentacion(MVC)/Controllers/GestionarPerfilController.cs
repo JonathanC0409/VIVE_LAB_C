@@ -54,13 +54,12 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
                 else
                 {
-                    ViewBag.Plan = "No suscipcion"; // Si no hay suscripción activa
+                    ViewBag.Plan = "Free"; // Si no hay suscripción activa
                 }
             }
             else
             {
                 ViewBag.Saldo = 0; // Si no se encuentra el usuario, asignar un saldo por defecto
-                ViewBag.Plan = "No Usuario"; // Si no se encuentra el usuario, asignar como "No suscrito"
             }
 
             return View("Index");
@@ -87,7 +86,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                         new Claim("UsuarioCodigo", usuario.Codigo.ToString()), // Código del usuario
                         new Claim(ClaimTypes.Name, usuario.Nombre), // Nombre actualizado
                         new Claim(ClaimTypes.Email, usuario.Email), // Correo electrónico (sin cambios)
-                        new Claim("TipoUsuario", usuario.TipoUsuario) // Tipo de usuario (sin cambios)
+                        new Claim("TipoUsuario", usuario.Rol) // Tipo de usuario (sin cambios)
                     };
 
                     var credencialesActualizadas = new ClaimsIdentity(datosUsuario, "Cookies");
@@ -147,7 +146,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                         new Claim("UsuarioCodigo", usuario.Codigo.ToString()), // Código del usuario
                         new Claim(ClaimTypes.Name, usuario.Nombre), // Nombre actualizado
                         new Claim(ClaimTypes.Email, usuario.Email), // Correo electrónico (sin cambios)
-                        new Claim("TipoUsuario", usuario.TipoUsuario) // Tipo de usuario (sin cambios)
+                        new Claim("TipoUsuario", usuario.Rol) // Tipo de usuario (sin cambios)
                     };
 
                     var credencialesActualizadas = new ClaimsIdentity(datosUsuario, "Cookies");

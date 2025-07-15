@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Vincular Usuario";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="VincularUsuario">
+    <div class="form-group">
+        <label for="EmailUsuarioVincular">Correo del Usuario a Vincular</label>
+        <input type="email" class="form-control" id="EmailUsuarioVincular" name="emailUsuarioVincular" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Vincular Usuario</button>
+</form>
+
+<!-- Mostrar mensaje de error con ViewBag -->
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <strong>¡Ups!</strong> @ViewBag.ErrorMessage
+    </div>
+}
+
+<!-- Mostrar los usuarios vinculados como tarjetas estilizadas -->
+@if (ViewBag.UsuariosVinculados != null)
+{
+    <h3 class="mt-5">Usuarios Vinculados:</h3>
+    <div class="row">
+        @foreach (var usuarioSuscripcion in ViewBag.UsuariosVinculados)
+        {
+            <!-- Aquí calculamos la inicial del nombre -->
+            @* Usamos la primera letra del nombre para mostrarla en el círculo *@
+            var initial = usuarioSuscripcion.Usuario.Nombre.Substring(0, 1).ToUpper();
+            <div class="col-md-4 mb-4">
+                <div class="card user-card">
+                    <div class="card-body text-center">
+                        <!-- Círculo con la inicial del nombre -->
+                        <div class="user-initial mb-3">
+                            @initial
+                        </div>
+                        <!-- Nombre del usuario -->
+                        <h5 class="card-title">@usuarioSuscripcion.Usuario.Nombre</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

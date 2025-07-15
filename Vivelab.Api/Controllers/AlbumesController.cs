@@ -24,14 +24,20 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Album>>> GetAlbum()
         {
-            return await _context.Albumes.ToListAsync();
+            return await _context.Albumes
+               .Include(a => a.Artista)
+               .ToListAsync();
         }
 
         // GET: api/Albumes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Album>> GetAlbum(int id)
         {
-            var album = await _context.Albumes.FindAsync(id);
+            var album = await _context.Albumes
+               .Where(a => a.Codigo == id)
+               .Include(a => a.Canciones)
+               .FirstAsync();
+
 
             if (album == null)
             {

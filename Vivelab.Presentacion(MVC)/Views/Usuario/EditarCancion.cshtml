@@ -1,0 +1,18 @@
+﻿@model Vivelab.Modelos.Cancion
+
+@{
+    ViewData["Title"] = "Editar Canción";
+}
+
+
+<h3>Editar Canción</h3>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Titulo">Título:</label>
+        <input type="text" class="form-control" id="Titulo" name="Titulo" value="@Model.Titulo" required />
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a href="@Url.Action("MisCanciones")" class="btn btn-secondary">Cancelar</a>
+</form>

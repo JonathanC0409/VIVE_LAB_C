@@ -37,7 +37,7 @@ namespace Vivelab.Api.Migrations
                     Nombre = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    TipoUsuario = table.Column<string>(type: "text", nullable: false),
+                    Rol = table.Column<string>(type: "text", nullable: false),
                     Bibliografia = table.Column<string>(type: "text", nullable: true),
                     Saldo = table.Column<double>(type: "double precision", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)

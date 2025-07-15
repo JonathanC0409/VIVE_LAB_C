@@ -1,0 +1,41 @@
+﻿@model Vivelab.Modelos.Playlist
+
+@{
+    ViewData["Title"] = "Playlist Details";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<h2>@Model.Nombre</h2>
+
+<div>
+    <h4>Canciones:</h4>
+    @if (ViewBag.PlaylistCanciones != null && ((List<Vivelab.Modelos.PlaylistCancion>)ViewBag.PlaylistCanciones).Count > 0)
+    {
+        <ul>
+            @foreach (var playlistCancion in ViewBag.PlaylistCanciones)
+            {
+                <li>
+                    <strong>@playlistCancion.Cancion.Titulo</strong>
+                    <!-- Add player for each song -->
+                    <audio controls>
+                        <source src="@playlistCancion.Cancion.ArchivoUrl" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <div>
+                        <a href="@Url.Action("ConfirmDelete", "PlayLists", new { playlistId = Model.Codigo, songId = playlistCancion.CancionCodigo })" class="btn btn-warning">Eliminar Canción de la Playlist</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No hay canciones en esta playlist.</p>
+    }
+</div>
