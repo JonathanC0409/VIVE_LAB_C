@@ -1,0 +1,56 @@
+﻿@model Vivelab.Modelos.Cancion
+@{
+    Layout = null;
+    ViewBag.Title = "Reproduciendo: " + Model.Titulo;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/css/play.css" asp-append-version="true" />
+</head>
+<body>
+    <div id="player-overlay">
+        <!-- Luces animadas dentro del fondo negro -->
+        <div class="animated-lights">
+            <div class="light light1"></div>
+            <div class="light light2"></div>
+            <div class="light light3"></div>
+        </div>
+
+        <button class="close-btn" title="Volver"
+                onclick="location.href='@Url.Action("Index", "Home")'">
+            &times;
+        </button>
+
+        <div class="player-box">
+            <div class="disc">
+                @if (!string.IsNullOrEmpty(Model.PortadaUrl))
+                {
+                    <img src="@Url.Content(Model.PortadaUrl)" alt="@Model.Titulo" />
+                }
+                else
+                {
+                    <span class="initial">
+                        @Model.Titulo.Substring(0, 1).ToUpper()
+                    </span>
+                }
+            </div>
+
+            <h2 class="song-title">@Model.Titulo</h2>
+
+            <audio class="audio-player" controls autoplay
+                   src="@Url.Content(Model.ArchivoUrl)">
+                Tu navegador no soporta audio.
+            </audio>
+
+            <div class="info">
+                <span>Duración: @Model.Duracion.ToString(@"mm\:ss")</span>
+                <span>@Model.TotalReproducciones reproducciones</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

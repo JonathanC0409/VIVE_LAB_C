@@ -1,0 +1,165 @@
+﻿﻿ /* reset mínimo y altura completa */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* overlay negro estático */
+#player-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Luces animadas detrás del player-box */
+.animated-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    overflow: hidden;
+}
+
+.light {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+}
+
+/* Tres luces con distintos colores, posiciones y duraciones */
+.light1 {
+    background: radial-gradient(circle, rgba(255,255,0,0.5) 0%, transparent 70%);
+    top: 10%;
+    left: 20%;
+    animation-duration: 6s;
+}
+
+.light2 {
+    background: radial-gradient(circle, rgba(0,255,255,0.5) 0%, transparent 70%);
+    top: 50%;
+    left: 70%;
+    animation-duration: 8s;
+}
+
+.light3 {
+    background: radial-gradient(circle, rgba(255,0,255,0.5) 0%, transparent 70%);
+    top: 80%;
+    left: 40%;
+    animation-duration: 10s;
+}
+
+/* Animación de flotación */
+@keyframes float {
+    0% {
+        transform: translate(0,0) scale(1);
+    }
+
+    50% {
+        transform: translate(20px,-20px) scale(1.2);
+    }
+
+    100% {
+        transform: translate(0,0) scale(1);
+    }
+}
+
+/* Caja blanca centrada */
+.player-box {
+    position: relative;
+    z-index: 12;
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Botón cerrar */
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    z-index: 13;
+}
+
+/* Disco con portada o inicial */
+.disc {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    animation: disc-spin 4s linear infinite;
+    margin: 0 auto;
+}
+
+    .disc img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .disc .initial {
+        font-size: 4rem;
+        color: #333;
+    }
+
+/* Nombre de la canción */
+.song-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #111;
+}
+
+/* Reproductor nativo */
+.audio-player {
+    width: 100%;
+    outline: none;
+}
+
+/* Info adicional */
+.info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Gira el “disco” */
+@keyframes disc-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
