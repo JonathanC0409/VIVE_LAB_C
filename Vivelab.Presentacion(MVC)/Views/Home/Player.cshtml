@@ -3,6 +3,10 @@
     Layout = null;
     ViewBag.Title = "Reproduciendo: " + Model.Titulo;
 }
+<script>
+    window.songId = @Model.Codigo;
+</script>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -53,4 +57,7 @@
         </div>
     </div>
 </body>
+
+<script src="~/js/player.js"></script>
+
 </html>

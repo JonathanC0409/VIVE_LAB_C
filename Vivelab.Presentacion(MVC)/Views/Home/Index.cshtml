@@ -1,167 +1,176 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@functions {
+    private static readonly Random rnd = new Random();
+
+    public string GetRandomColorClass()
+    {
+        return $"avatar-color{rnd.Next(1, 7)}";
+    }
+}
+
+<link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "Home";
     var artistas = ViewBag.Artistas as IEnumerable<Vivelab.Modelos.Usuario>;
     var albumes = ViewBag.Albumes as IEnumerable<Vivelab.Modelos.Album>;
     var canciones = ViewBag.Canciones as IEnumerable<Vivelab.Modelos.Cancion>;
     var topCanciones = ViewBag.TopCanciones as IEnumerable<Vivelab.Modelos.Cancion>;
 }
 
+<div class="container my-5 text-white">
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Vivelab</title>
-    <link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Bienvenido a Vivelab 🎵</h1>
+        <p class="lead">Descubre y comparte tu música favorita.</p>
 
-</head>
-<body>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <h4 class="mt-3">¡Hola, @User.Identity.Name! 👋</h4>
 
-
-    <!-- Sección principal con bienvenida y recomendaciones -->
-    <div class="container my-5">
-        <div class="text-center">
-            <h1 class="display-4">Bienvenido a Vivelab 🎵</h1>
-            <p class="lead mt-3">Descubre tu música favorita y comparte tus canciones con el mundo.</p>
-
-            @if (User.Identity.IsAuthenticated)
+            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
             {
-                <h4 class="mt-3">¡Hola, @User.Identity.Name 👋</h4>
-                @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
-                {
-                    <p class="mt-3">
-                        <a href="@Url.Action("CambiarRolUsuario", "GestionarPerfil")" class="btn btn-success btn-lg">Regístrate como Artista</a>
-                    </p>
-                }
+                <a href="@Url.Action("CambiarRolUsuario", "GestionarPerfil")" class="btn btn-success m-2">Regístrate como Artista</a>
+                <a href="@Url.Action("RecargarSaldo", "Usuario")" class="btn btn-success m-2">Recargar Saldo</a>
             }
-        </div>
-        <h2>Artistas</h2>
-        <div class="contenedor-tarjetas">
-            @foreach (var a in artistas)
+            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
             {
-                var inicial = !string.IsNullOrEmpty(a.Nombre)
-                ? a.Nombre.Substring(0, 1).ToUpper()
-                : "?";
-                <div class="tarjeta">
-                    @* <div class="imagen-tarjeta"> Se implementara cuadno se incluya la foto del usuario(artista)
-              @if (!string.IsNullOrEmpty(a.Foto))
-              {
-                <img src="@Url.Content(a.RutaImagen)" alt="@a.NombreUsuario" />
-              }
-              else
-              {
-                <div class="avatar">@inicial</div>
-              }
-            </div> *@
-                    <div class="imagen-tarjeta">
-                        <div class="avatar">
-                            @inicial
-                        </div>
-                    </div>
-                    <p class="titulo-tarjeta">@a.Nombre</p>
-                </div>
+                <a href="@Url.Action("Subir", "Musica")" class="btn btn-success m-2">Subir Canción</a>
             }
-        </div>
-
-        <h2>Álbumes</h2>
-        <div class="contenedor-tarjetas">
-            @foreach (var alb in albumes)
+            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "administrador"))
             {
-                // Calcula la inicial si no hay imagen
-                var inicial = !string.IsNullOrEmpty(alb.Nombre)
-                ? alb.Nombre.Substring(0, 1).ToUpper()
-                : "?";
-
-                <div class="tarjeta">
-                    <div class="imagen-tarjeta">
-                        @if (!string.IsNullOrEmpty(alb.PortadaUrl))
-                        {
-                            <img src="@Url.Content(alb.PortadaUrl)" alt="@alb.Nombre" />
-                        }
-                        else
-                        {
-                            <div class="avatar">@inicial</div>
-                        }
-                    </div>
-                    <p class="titulo-tarjeta">@alb.Nombre</p>
-                </div>
+                <a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn btn-success m-2">Ver Usuarios</a>
+                <a href="@Url.Action("BloquearUsuario", "Usuario")" class="btn btn-danger m-2">Bloquear Usuario</a>
             }
-        </div>
+        }
+    </div>
 
-        <h2>Canciones</h2>
-        <div class="contenedor-tarjetas">
-            @foreach (var c in canciones)
-            {
-                var inicial = !string.IsNullOrEmpty(c.Titulo)
-                ? c.Titulo.Substring(0, 1).ToUpper()
-                : "?";
-                <div class="tarjeta">
-                    <div class="imagen-tarjeta">
-                        @if (!string.IsNullOrEmpty(c.PortadaUrl))
-                        {
-                            <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
-                        }
-                        else
-                        {
-                            <div class="avatar">@inicial</div>
-                        }
-                    </div>
-                    <p class="titulo-tarjeta">@c.Titulo</p>
-                </div>
-            }
-        </div>
-
-        <h2>Canciones más escuchadas (Top 5)</h2>
-        <ol class="lista-top-canciones">
-            @{
-                int indice = 1;
-            }
-            @foreach (var c in topCanciones)
-            {
-                var inicial = !string.IsNullOrEmpty(c.Titulo)
-                ? c.Titulo.Substring(0, 1).ToUpper()
-                : "?";
-                <li class="item-lista">
-                    <span class="numero-lista">@indice.</span>
-
-                    @* Avatar o imagen *@
-                    @if (!string.IsNullOrEmpty(c.PortadaUrl))
+    <h2>🎤 Artistas Populares</h2>
+    <div class="carrusel-artistas">
+        @foreach (var a in artistas)
+        {
+            var inicial = !string.IsNullOrEmpty(a.Nombre) ? a.Nombre.Substring(0, 1).ToUpper() : "?";
+            <div class="tarjeta-artista">
+                <div class="imagen">
+                    @* @if (!string.IsNullOrEmpty(a.RutaImagen))
                     {
-                        <img class="avatar-lista" src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                        <img src="@Url.Content(a.RutaImagen)" alt="@a.Nombre" />
+                    }
+                    else
+                    { *@
+                    <div class="avatar @GetRandomColorClass()">
+                        @inicial
+                    </div>
+                    @*  } *@
+                </div>
+                <p class="nombre">@a.Nombre</p>
+                <p class="rol">Artista</p>
+            </div>
+        }
+    </div>
+
+
+    <h2>💿 Álbumes y sencillos populares</h2>
+    <div class="carrusel-albumes">
+        @foreach (var alb in albumes)
+        {
+            <div class="tarjeta-album">
+                <div class="imagen">
+                    @if (!string.IsNullOrEmpty(alb.PortadaUrl))
+                    {
+                        <img src="@Url.Content(alb.PortadaUrl)" alt="@alb.Nombre" />
                     }
                     else
                     {
-                        <div class="avatar-lista">@inicial</div>
+                        <div class="avatar-album @GetRandomColorClass()">
+                            @alb.Nombre.Substring(0, 1).ToUpper()
+                        </div>
                     }
+                </div>
+                <div class="info">
+                    <p class="titulo">@alb.Nombre</p>
+                    <p class="artista">@alb.Artista.Nombre</p>
+                </div>
+            </div>
 
-                    @* Info y reproducciones *@
-                    <div class="info-lista">
-                        <p class="titulo-lista">@c.Titulo</p>
-                        <p class="reproducciones-lista">@c.TotalReproducciones reproducciones</p>
-                    </div>
+        }
+    </div>
 
-                    @* Duración *@
-                    <span class="duracion-lista">@c.Duracion.ToString(@"mm\:ss")</span>
 
-                    @* Botón play con data-attributes *@
+    <h2>🎶 Canciones en tendencia</h2>
+    <div class="carrusel-canciones">
+        @foreach (var c in canciones)
+        {
+            <div class="tarjeta-cancion">
+                <div class="imagen">
+                    @if (!string.IsNullOrEmpty(c.PortadaUrl))
+                    {
+                        <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                    }
+                    else
+                    {
+                        <div class="avatar-cancion @GetRandomColorClass()">
+                            @c.Titulo.Substring(0, 1).ToUpper()
+                        </div>
+                    }
+                </div>
+                <div class="info">
+                    <p class="titulo">@c.Titulo</p>
+                    <p class="artista">@c.Artista?.Nombre</p>
+                </div>
+                <a href="@Url.Action("Player", "Home", new { id = c.Codigo })" class="boton-play" title="Reproducir">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 4l8 4-8 4z" />
+                    </svg>
+                </a>
+            </div>
+        }
+    </div>
 
-                    <a href="@Url.Action("Player", "Home", new { id = c.Codigo })"
-                       class="boton-reproducir" title="Reproducir">
-                        <!-- SVG play -->
-                        <svg viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M4 4l8 4-8 4z" />
-                        </svg>
-                    </a>
 
-                </li>
-                indice++;
-            }
-        </ol>
 
-        <!-- Scripts -->
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/js/player.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <h2>🔥 Top 5 Canciones</h2>
+    <ol class="lista-top-5">
+        @{
+            int pos = 1;
+        }
+        @foreach (var c in topCanciones)
+        {
+            <li class="item-top">
+                <span class="posicion">@pos</span>
+
+                <div class="portada">
+                    @if (!string.IsNullOrEmpty(c.PortadaUrl))
+                    {
+                        <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                    }
+                    else
+                    {
+                        <div style="width:100%;height:100%;background:#1db954;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
+                            @c.Titulo.Substring(0, 1).ToUpper()
+                        </div>
+                    }
+                </div>
+
+                <div class="info">
+                    <p class="titulo">@c.Titulo</p>
+                    <p class="reproducciones">@c.TotalReproducciones reproducciones</p>
+                </div>
+
+                <span class="duracion">@c.Duracion.ToString(@"mm\:ss")</span>
+
+                <a href="@Url.Action("Player", "Home", new { id = c.Codigo })" class="boton-play" title="Reproducir">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 4l8 4-8 4z" />
+                    </svg>
+                </a>
+            </li>
+            pos++;
+        }
+    </ol>
+
+
+</div>
+
+@section Scripts {
+    <script src="~/js/player.js"></script>
+}

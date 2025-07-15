@@ -1,94 +1,304 @@
-﻿﻿ /* Contenedor de tarjetas en fila y scroll horizontal */
-.contenedor-tarjetas {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding: 1rem 0;
+﻿body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Tarjeta individual */
-.tarjeta {
-    flex: 0 0 auto;
-    width: 140px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    padding: 0.5rem;
+.lista-top-5 {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 2rem;
 }
 
-/* Bloque para la imagen o avatar */
-.imagen-tarjeta {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 0.5rem;
-    position: relative;
-}
-
-    .imagen-tarjeta img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
+    .lista-top-5 .item-top {
+        display: flex;
+        align-items: center;
+        background: #181818;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+        transition: background 0.3s;
     }
 
-/* Avatar circular con inicial */
+        .lista-top-5 .item-top:hover {
+            background: #282828;
+        }
+
+    .lista-top-5 .posicion {
+        font-weight: bold;
+        width: 2rem;
+        text-align: center;
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+    }
+
+    .lista-top-5 .portada {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-right: 1rem;
+    }
+
+        .lista-top-5 .portada img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .lista-top-5 .info {
+        flex: 1;
+    }
+
+    .lista-top-5 .titulo {
+        font-weight: bold;
+        margin: 0;
+        font-size: 1rem;
+        color: white;
+    }
+
+    .lista-top-5 .reproducciones {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #aaa;
+    }
+
+    .lista-top-5 .duracion {
+        margin-right: 1rem;
+        font-size: 0.9rem;
+        color: #ccc;
+    }
+
+.boton-play {
+    background: transparent;
+    border: none;
+    color: #1db954;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+    .boton-play:hover {
+        transform: scale(1.2);
+    }
+
+    .boton-play svg {
+        width: 1rem;
+        height: 1rem;
+    }
+
+
+.carrusel-artistas {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 1rem 2rem;
+    scroll-snap-type: x mandatory;
+}
+
+.tarjeta-artista {
+    flex: 0 0 auto;
+    width: 160px;
+    text-align: center;
+    scroll-snap-align: start;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+    .tarjeta-artista:hover {
+        transform: scale(1.05);
+    }
+
+    .tarjeta-artista .imagen {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 0.5rem;
+        border: 2px solid #1db954;
+    }
+
+        .tarjeta-artista .imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .tarjeta-artista .nombre {
+        font-weight: bold;
+        margin: 0.5rem 0 0;
+    }
+
+    .tarjeta-artista .rol {
+        font-size: 0.85rem;
+        color: #aaa;
+    }
+
+.carrusel-canciones {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 2rem;
+    scroll-snap-type: x mandatory;
+}
+
+.tarjeta-cancion {
+    flex: 0 0 auto;
+    width: 160px;
+    background: #181818;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    scroll-snap-align: start;
+    cursor: pointer;
+}
+
+    .tarjeta-cancion:hover {
+        transform: scale(1.05);
+    }
+
+    .tarjeta-cancion .imagen {
+        width: 100%;
+        height: 160px;
+        overflow: hidden;
+    }
+
+        .tarjeta-cancion .imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .tarjeta-cancion .info {
+        padding: 0.5rem;
+    }
+
+    .tarjeta-cancion .titulo {
+        font-weight: bold;
+        font-size: 1rem;
+        margin: 0;
+        color: white;
+    }
+
+    .tarjeta-cancion .artista {
+        font-size: 0.85rem;
+        color: #aaa;
+        margin: 0.2rem 0 0;
+    }
+
+.avatar-cancion {
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: gray; /* Este será sobrescrito por la clase aleatoria */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+
+.carrusel-albumes {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 2rem;
+    scroll-snap-type: x mandatory;
+}
+
+.tarjeta-album {
+    flex: 0 0 auto;
+    width: 160px;
+    background: #181818;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    scroll-snap-align: start;
+    cursor: pointer;
+}
+
+    .tarjeta-album:hover {
+        transform: scale(1.05);
+    }
+
+    .tarjeta-album .imagen {
+        width: 100%;
+        height: 160px;
+        overflow: hidden;
+    }
+
+        .tarjeta-album .imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .tarjeta-album .info {
+        padding: 0.5rem;
+    }
+
+    .tarjeta-album .titulo {
+        font-weight: bold;
+        font-size: 1rem;
+        margin: 0;
+        color: white;
+    }
+
+    .tarjeta-album .artista {
+        font-size: 0.85rem;
+        color: #aaa;
+        margin: 0.2rem 0 0;
+    }
+
+.avatar-album {
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: gray; /* este se sobrescribe con las clases aleatorias */
+}
+
+
+.avatar-color1 {
+    background: #1db954;
+}
+
+.avatar-color2 {
+    background: #3e8ef7;
+}
+
+.avatar-color3 {
+    background: #f39c12;
+}
+
+.avatar-color4 {
+    background: #e74c3c;
+}
+
+.avatar-color5 {
+    background: #9b59b6;
+}
+
+.avatar-color6 {
+    background: #27ae60;
+}
+
 .avatar {
     width: 100%;
     height: 100%;
-    background: #6c757d;
-    color: #fff;
+    color: white;
     font-size: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
 }
-
-/* Título dentro de la tarjeta */
-.titulo-tarjeta {
-    font-size: 1rem;
-    margin: 0;
-}
-
-/* Ajustes para que el texto principal se expanda y empuje duración y botón */
-.lista-top-canciones .info-lista {
-    flex: 1;
-}
-
-/* Estilo de la duración, junto al botón */
-.lista-top-canciones .duracion-lista {
-    font-size: 0.85rem;
-    color: #666;
-    margin-right: 1rem;
-}
-
-/* Botón reproducir */
-.lista-top-canciones .boton-reproducir {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.85rem;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Botón con icono play */
-.boton-reproducir {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
-    color: #007bff; /* el color del icono */
-}
-
-    /* Ajusta el SVG dentro del botón */
-    .boton-reproducir svg {
-        width: 1.2rem;
-        height: 1.2rem;
-    }

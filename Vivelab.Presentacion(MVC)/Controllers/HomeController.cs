@@ -63,6 +63,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Player(int id)
         {
             var cancion = CRUD<Cancion>.GetById(id);
