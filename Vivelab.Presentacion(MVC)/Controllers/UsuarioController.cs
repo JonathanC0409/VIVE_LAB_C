@@ -132,6 +132,9 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         public ActionResult VincularUsuario()
         {
+            // Obtener los usuarios vinculados a la suscripción
+            var usuariosVinculados = CRUD<UsuarioSuscripcion>.GetAll();
+            ViewBag.UsuariosVinculados = usuariosVinculados;
             return View();
         }
 

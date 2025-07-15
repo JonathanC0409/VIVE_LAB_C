@@ -56,6 +56,38 @@ body {
     
 }
 
+/* Estilo de las tarjetas */
+.user-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+    .user-card:hover {
+        transform: translateY(-10px); /* Efecto de elevación al pasar el mouse */
+    }
+
+    .user-card .card-body {
+        padding: 20px;
+    }
+
+    .user-card .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff; /* Azul para el nombre */
+    }
+
+    .user-card .card-text {
+        color: #555;
+    }
+
+    .user-card i {
+        font-size: 50px; /* Tamaño del ícono */
+        color: #007bff;
+    }
+
 
 
 
