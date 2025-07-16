@@ -87,50 +87,12 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         
 
-        // GET: UsuarioController/Usuarios
-        public ActionResult ListaUsuarios()
-        {
-            // Obtener todos los usuarios
-            var usuarios = CRUD<User>.GetAll();
-
-            // Pasar los usuarios a la vista
-            return View(usuarios);
-        }
+        
 
         public ActionResult UsuarioBloqueado()
         {
             return View();
-        }
-
-
-        // GET: UsuarioController/BloquearUsuario
-        public ActionResult BloquearUsuario()
-        {
-            var usuarios = CRUD<User>.GetAll();
-
-            // Pasar la lista de usuarios a la vista
-            return View(usuarios);
-        }
-
-
-        // POST: UsuarioController/BloquearUsuario
-        [HttpPost]
-        public IActionResult BloquearUsuario(int usuarioId)
-        {
-            // Verificar si el usuario existe
-            var usuario = CRUD<User>.GetById(usuarioId);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-
-            usuario.Role = "bloqueado";
-            CRUD<User>.Update(usuarioId, usuario);
-
-            // Redirigir a la lista de usuarios
-            return RedirectToAction("Index", "Home");
-        }
+        }    
 
         public ActionResult VincularUsuario()
         {

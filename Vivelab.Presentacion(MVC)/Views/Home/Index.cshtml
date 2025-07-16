@@ -49,10 +49,10 @@
                     }
                     @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "administrador"))
                     {
-                        <a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn-modern">
+                        <a href="@Url.Action("ViewUser", "Administrator")" class="btn-modern">
                             👥 Ver Usuarios
                         </a>
-                        <a href="@Url.Action("BloquearUsuario", "Usuario")" class="btn-modern btn-danger-modern">
+                        <a href="@Url.Action("BlockUser", "Administrator")" class="btn-modern btn-danger-modern">
                             ⚠️ Bloquear Usuario
                         </a>
                     }
