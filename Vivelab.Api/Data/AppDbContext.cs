@@ -12,20 +12,19 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<Vivelab.Modelos.Album> Albumes { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.Album> Albums { get; set; } = default!;
 
-    public DbSet<Vivelab.Modelos.Cancion> Canciones { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.Song> Songs { get; set; } = default!;
 
-
-    public DbSet<Vivelab.Modelos.Plan> Planes { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.Plan> Plans { get; set; } = default!;
 
     public DbSet<Vivelab.Modelos.Playlist> Playlists { get; set; } = default!;
 
-    public DbSet<Vivelab.Modelos.PlaylistCancion> PlaylistCanciones { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.PlaylistSong> PlaylistSongs { get; set; } = default!;
 
-    public DbSet<Vivelab.Modelos.Suscripcion> Suscripciones { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.Subscription> Subscriptions { get; set; } = default!;
 
-    public DbSet<Vivelab.Modelos.Usuario> Usuarios { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.User> Users { get; set; } = default!;
 
-    public DbSet<Vivelab.Modelos.UsuarioSuscripcion> UsuariosSuscripciones { get; set; } = default!;
+    public DbSet<Vivelab.Modelos.UserSubscription> UsersSubscriptions { get; set; } = default!;
 }

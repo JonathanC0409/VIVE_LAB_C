@@ -27,17 +27,17 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm bg-dark text-white border-light">
                         <div class="card-body">
-                            <h5 class="card-title">@playlist.Nombre</h5>
+                            <h5 class="card-title">@playlist.Name</h5>
                             <p class="card-text">🎧 Disfruta de tu selección personalizada.</p>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-transparent border-top-0">
-                            <a href="@Url.Action("Details", "PlayLists", new { id = playlist.Codigo })" class="btn btn-outline-light btn-sm">
+                            <a href="@Url.Action("Details", "PlayLists", new { id = playlist.Code })" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-eye"></i> Ver
                             </a>
-                            <a href="@Url.Action("Edit", "PlayLists", new { id = playlist.Codigo })" class="btn btn-outline-warning btn-sm">
+                            <a href="@Url.Action("Edit", "PlayLists", new { id = playlist.Code })" class="btn btn-outline-warning btn-sm">
                                 <i class="bi bi-pencil"></i> Editar
                             </a>
-                            <a href="@Url.Action("Delete", "PlayLists", new { id = playlist.Codigo })" class="btn btn-outline-danger btn-sm">
+                            <a href="@Url.Action("Delete", "PlayLists", new { id = playlist.Code })" class="btn btn-outline-danger btn-sm">
                                 <i class="bi bi-trash"></i> Eliminar
                             </a>
                         </div>

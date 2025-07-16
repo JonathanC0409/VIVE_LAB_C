@@ -95,7 +95,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     id = int.Parse(u.Value);
                 }
             }
-            var usuario = CRUD<Usuario>.GetById(id);
+            var usuario = CRUD<User>.GetById(id);
             if (usuario == null) return NotFound();
 
             return View(usuario);
@@ -105,11 +105,11 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public IActionResult RecargarSaldo(int id, double monto)
         {
 
-            var usuario = CRUD<Usuario>.GetById(id);
+            var usuario = CRUD<User>.GetById(id);
             if (usuario == null) return NotFound();
 
-            usuario.Saldo += monto;
-            CRUD<Usuario>.Update(id, usuario);
+            usuario.Balance += monto;
+            CRUD<User>.Update(id, usuario);
 
             return RedirectToAction("Index", "Home");
         }
@@ -118,7 +118,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public ActionResult ListaUsuarios()
         {
             // Obtener todos los usuarios
-            var usuarios = CRUD<Usuario>.GetAll();
+            var usuarios = CRUD<User>.GetAll();
 
             // Pasar los usuarios a la vista
             return View(usuarios);
@@ -133,7 +133,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         // GET: UsuarioController/BloquearUsuario
         public ActionResult BloquearUsuario()
         {
-            var usuarios = CRUD<Usuario>.GetAll();
+            var usuarios = CRUD<User>.GetAll();
 
             // Pasar la lista de usuarios a la vista
             return View(usuarios);
@@ -145,15 +145,15 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public IActionResult BloquearUsuario(int usuarioId)
         {
             // Verificar si el usuario existe
-            var usuario = CRUD<Usuario>.GetById(usuarioId);
+            var usuario = CRUD<User>.GetById(usuarioId);
             if (usuario == null)
             {
                 return NotFound();
             }
 
 
-            usuario.Rol = "bloqueado";
-            CRUD<Usuario>.Update(usuarioId, usuario);
+            usuario.Role = "bloqueado";
+            CRUD<User>.Update(usuarioId, usuario);
 
             // Redirigir a la lista de usuarios
             return RedirectToAction("Index", "Home");
@@ -163,7 +163,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
 
             // Obtener los usuarios vinculados a la suscripción
-            var usuariosVinculados = CRUD<UsuarioSuscripcion>.GetAll();
+            var usuariosVinculados = CRUD<UserSubscription>.GetAll();
             ViewBag.UsuariosVinculados = usuariosVinculados;
             return View();
         }
@@ -186,15 +186,15 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
 
             }
-            var usuario = CRUD<Usuario>.GetById(userId);
+            var usuario = CRUD<User>.GetById(userId);
 
-            if (usuario.Suscripcion == null)
+            if (usuario.Subscription == null)
             {
                 ViewBag.ErrorMessage = "Usuario no tiene subcripcion";
                 return View();
             }
-            var SubId = usuario.Suscripcion.Codigo;
-            var Subcripcion = CRUD<Suscripcion>.GetById(SubId);
+            var SubId = usuario.Subscription.Code;
+            var Subcripcion = CRUD<Subscription>.GetById(SubId);
 
 
 
@@ -204,14 +204,14 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 ViewBag.ErrorMessage = "El correo del usuario a vincular no puede estar vacío.";
                 return View();  // Regresar a la vista con el error
             }
-            int cantidadPermitidad = usuario.Suscripcion.Plan.CantidadUsuarios;
-            int cantidadUsuariosAdicionales = Subcripcion.UsuariosAdicionales?.Count() ?? 0;
+            int cantidadPermitidad = usuario.Subscription.Plan.UserCount;
+            int cantidadUsuariosAdicionales = Subcripcion.AdditionalUsers?.Count() ?? 0;
 
             if (cantidadPermitidad > 0)
             {
 
                 // Llamar al método del CRUD para vincular el usuario
-                var resultado = await CRUD<Usuario>.VincularUsuarioASuscripcion(emailUsuarioVincular, emailUsuarioLogueado);
+                var resultado = await CRUD<User>.VincularUsuarioASuscripcion(emailUsuarioVincular, emailUsuarioLogueado);
 
                 if (resultado == "Usuario vinculado correctamente.")
                 {
@@ -246,18 +246,18 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
 
             // Obtener las canciones del artista desde la base de datos
-            var usuario = CRUD<Usuario>.GetById(id);
+            var usuario = CRUD<User>.GetById(id);
             if (usuario == null) return NotFound();
 
             // Suponiendo que Usuario tiene una lista de canciones
-            var canciones = usuario.Canciones;
+            var canciones = usuario.Songs;
             return View(canciones); // Pasar las canciones a la vista
         }
 
         // GET: UsuarioController/EditarCancion/5
         public ActionResult EditarCancion(int id)
         {
-            var cancion = CRUD<Cancion>.GetById(id); // Obtener la canción por su id
+            var cancion = CRUD<Song>.GetById(id); // Obtener la canción por su id
             if (cancion == null) return NotFound();
 
             return View(cancion); // Pasar la canción a la vista para editarla
@@ -266,20 +266,20 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         // POST: UsuarioController/EditarCancion/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditarCancion(int id, Cancion cancionEditada)
+        public ActionResult EditarCancion(int id, Song cancionEditada)
         {
             try
             {
                 // Obtener la canción original
-                var cancion = CRUD<Cancion>.GetById(id);
+                var cancion = CRUD<Song>.GetById(id);
                 if (cancion == null) return NotFound();
 
                 // Actualizar los valores de la canción
-                cancion.Titulo = cancionEditada.Titulo;
-                cancion.Duracion = cancionEditada.Duracion;
+                cancion.Title = cancionEditada.Title;
+                cancion.Duration = cancionEditada.Duration;
 
                 // Guardar los cambios
-                CRUD<Cancion>.Update(id, cancion);
+                CRUD<Song>.Update(id, cancion);
 
                 return RedirectToAction("MisCanciones"); // Redirigir al listado de canciones
             }
@@ -292,7 +292,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         // GET: UsuarioController/EliminarCancion/5
         public ActionResult EliminarCancion(int id)
         {
-            var cancion = CRUD<Cancion>.GetById(id); // Obtener la canción por su id
+            var cancion = CRUD<Song>.GetById(id); // Obtener la canción por su id
             if (cancion == null) return NotFound();
 
             return View(cancion); // Pasar la canción a la vista para confirmar su eliminación
@@ -305,10 +305,10 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
             try
             {
-                var cancion = CRUD<Cancion>.GetById(id);
+                var cancion = CRUD<Song>.GetById(id);
                 if (cancion == null) return NotFound();
 
-                CRUD<Cancion>.Delete(id); // Eliminar la canción
+                CRUD<Song>.Delete(id); // Eliminar la canción
 
                 return RedirectToAction("MisCanciones"); // Redirigir al listado de canciones
             }
@@ -331,7 +331,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
 
             // Obtener los álbumes del artista desde la base de datos
-            var usuario = CRUD<Usuario>.GetById(id);
+            var usuario = CRUD<User>.GetById(id);
             if (usuario == null) return NotFound();
 
             // Suponiendo que Usuario tiene una lista de álbumes
@@ -360,8 +360,8 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 if (album == null) return NotFound();
 
                 // Actualizar los valores del álbum
-                album.Nombre = albumEditado.Nombre;
-                album.Canciones = albumEditado.Canciones;
+                album.Name = albumEditado.Name;
+                album.Songs = albumEditado.Songs;
 
                 // Verificar si se ha cargado una nueva portada
                 var archivo = Request.Form.Files["PortadaUrl"];
@@ -385,7 +385,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     }
 
                     // Guardar la ruta relativa del archivo en la base de datos
-                    album.PortadaUrl = "/portadas/" + fileName;
+                    album.CoverUrl = "/portadas/" + fileName;
                 }
 
                 // Guardar los cambios en la base de datos
@@ -454,11 +454,11 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     }
                 }
 
-                var usuario = CRUD<Usuario>.GetById(id);
+                var usuario = CRUD<User>.GetById(id);
                 if (usuario == null) return NotFound();
 
-                nuevoAlbum.ArtistaCodigo = usuario.Codigo; // Asignar el código del artista al nuevo álbum
-                nuevoAlbum.FechaCreacion = DateTime.UtcNow; // Asignar la fecha de creación como la fecha actual
+                nuevoAlbum.ArtistCode = usuario.Code; // Asignar el código del artista al nuevo álbum
+                nuevoAlbum.CreationDate = DateTime.UtcNow; // Asignar la fecha de creación como la fecha actual
 
                 // Si el archivo de imagen no es nulo, lo guardamos
                 if (archivo != null && archivo.Length > 0)
@@ -481,7 +481,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                     }
 
                     // Guardar la ruta relativa del archivo en la base de datos (por ejemplo: "/portadas/imagen.jpg")
-                    nuevoAlbum.PortadaUrl = "/portadas/" + fileName;
+                    nuevoAlbum.CoverUrl = "/portadas/" + fileName;
                 }
 
                 // Guardar el álbum
@@ -503,16 +503,16 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
 
             // Si el álbum no tiene canciones, inicializar la lista
-            if (album.Canciones == null)
+            if (album.Songs == null)
             {
-                album.Canciones = new List<Cancion>();  // Inicializar lista vacía si es null
+                album.Songs = new List<Song>();  // Inicializar lista vacía si es null
             }
 
             // Obtener las canciones ya asociadas al álbum
-            var canciones = album.Canciones;
+            var canciones = album.Songs;
 
             // Obtener las canciones disponibles que no están en el álbum
-            var cancionesDisponibles = CRUD<Cancion>.GetAll().Where(c => !album.Canciones.Any(ac => ac.Codigo == c.Codigo)).ToList();
+            var cancionesDisponibles = CRUD<Song>.GetAll().Where(c => !album.Songs.Any(ac => ac.Code == c.Code)).ToList();
 
             ViewBag.AlbumId = albumId;  // Pasar el ID del álbum a la vista
             ViewBag.CancionesDisponibles = cancionesDisponibles;  // Pasar las canciones disponibles para agregar
@@ -526,22 +526,22 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public IActionResult AgregarCancion(int albumId, int cancionId)
         {
             var album = CRUD<Album>.GetById(albumId);  // Obtener el álbum
-            var cancion = CRUD<Cancion>.GetById(cancionId);  // Obtener la canción seleccionada
+            var cancion = CRUD<Song>.GetById(cancionId);  // Obtener la canción seleccionada
 
             if (album == null || cancion == null)
             {
                 return NotFound();
             }
             // Verificar si la canción ya está asociada a otro álbum
-            if (cancion.AlbumCodigo != null)
+            if (cancion.AlbumCode != null)
             {
                 TempData["ErrorMessage"] = "La canción ya está asociada a otro álbum.";  // Usamos TempData para almacenar el error
                 return RedirectToAction("VerCanciones", new { albumId = albumId });  // Redirigir a la vista de canciones del álbum
             }
             // Asociar la canción con el álbum
-            cancion.AlbumCodigo = albumId;
+            cancion.AlbumCode = albumId;
 
-            CRUD<Cancion>.Update(cancionId, cancion);  // Actualizar el álbum con la nueva canción
+            CRUD<Song>.Update(cancionId, cancion);  // Actualizar el álbum con la nueva canción
 
             return RedirectToAction("VerCanciones", new { albumId = albumId });  // Redirigir a la vista de canciones del álbum
         }
@@ -551,15 +551,15 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public IActionResult EliminarCancionDelAlbum(int albumId, int cancionId)
         {
             var album = CRUD<Album>.GetById(albumId);  // Obtener el álbum
-            var cancion = CRUD<Cancion>.GetById(cancionId);  // Obtener la canción seleccionada
+            var cancion = CRUD<Song>.GetById(cancionId);  // Obtener la canción seleccionada
 
             if (album == null || cancion == null)
             {
                 return NotFound();  // Si el álbum o la canción no existen, devolver 404
             }
 
-            cancion.AlbumCodigo = null;
-            CRUD<Cancion>.Update(cancionId, cancion);
+            cancion.AlbumCode = null;
+            CRUD<Song>.Update(cancionId, cancion);
             return RedirectToAction("VerCanciones", new { albumId = albumId });
 
 

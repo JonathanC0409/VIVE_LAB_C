@@ -11,11 +11,11 @@ namespace Vivelab.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlbumesController : ControllerBase
+    public class AlbumsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public AlbumesController(AppDbContext context)
+        public AlbumsController(AppDbContext context)
         {
             _context = context;
         }
@@ -24,8 +24,8 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Album>>> GetAlbum()
         {
-            return await _context.Albumes
-               .Include(a => a.Artista)
+            return await _context.Albums
+               .Include(a => a.Artist)
                .ToListAsync();
         }
 
@@ -33,9 +33,9 @@ namespace Vivelab.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Album>> GetAlbum(int id)
         {
-            var album = await _context.Albumes
-               .Where(a => a.Codigo == id)
-               .Include(a => a.Canciones)
+            var album = await _context.Albums
+               .Where(a => a.Code == id)
+               .Include(a => a.Songs)
                .FirstAsync();
 
 
@@ -52,7 +52,7 @@ namespace Vivelab.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAlbum(int id, Album album)
         {
-            if (id != album.Codigo)
+            if (id != album.Code)
             {
                 return BadRequest();
             }
@@ -83,23 +83,23 @@ namespace Vivelab.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Album>> PostAlbum(Album album)
         {
-            _context.Albumes.Add(album);
+            _context.Albums.Add(album);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAlbum", new { id = album.Codigo }, album);
+            return CreatedAtAction("GetAlbum", new { id = album.Code }, album);
         }
 
         // DELETE: api/Albumes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAlbum(int id)
         {
-            var album = await _context.Albumes.FindAsync(id);
+            var album = await _context.Albums.FindAsync(id);
             if (album == null)
             {
                 return NotFound();
             }
 
-            _context.Albumes.Remove(album);
+            _context.Albums.Remove(album);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -107,7 +107,7 @@ namespace Vivelab.Api.Controllers
 
         private bool AlbumExists(int id)
         {
-            return _context.Albumes.Any(e => e.Codigo == id);
+            return _context.Albums.Any(e => e.Code == id);
         }
     }
 }

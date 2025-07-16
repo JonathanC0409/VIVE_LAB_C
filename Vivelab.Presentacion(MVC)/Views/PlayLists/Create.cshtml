@@ -13,15 +13,15 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <!-- Campo oculto para el código del usuario -->
             <div class="form-group" style="display:none;">
-                <label asp-for="UsuarioCodigo" class="control-label"></label>
-                <input asp-for="UsuarioCodigo" class="form-control" value="@ViewBag.UsuarioCodigo" />
+                <label asp-for="UserCode" class="control-label"></label>
+                <input asp-for="UserCode" class="form-control" value="@ViewBag.UsuarioCodigo" />
             </div>
 
             <div class="form-group">

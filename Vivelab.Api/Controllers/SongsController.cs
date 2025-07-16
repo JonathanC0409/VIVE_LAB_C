@@ -14,13 +14,13 @@ namespace Vivelab.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CancionesController : ControllerBase
+    public class SongsController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly BlobServiceClient _blobService;
         private readonly string _containerName;
 
-        public CancionesController(
+        public SongsController(
             AppDbContext context,
             BlobServiceClient blobService,
             IConfiguration config)
@@ -32,19 +32,19 @@ namespace Vivelab.Api.Controllers
 
         // GET: api/Canciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cancion>>> GetCancion()
+        public async Task<ActionResult<IEnumerable<Song>>> GetCancion()
         {
-            var canciones = await _context.Canciones
-                .Include(c => c.Artista)
+            var canciones = await _context.Songs
+                .Include(c => c.Artist)
                 .ToListAsync();
             return canciones;
         }
 
         // GET: api/Canciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cancion>> GetCancion(int id)
+        public async Task<ActionResult<Song>> GetCancion(int id)
         {
-            var cancion = await _context.Canciones.FindAsync(id);
+            var cancion = await _context.Songs.FindAsync(id);
 
             if (cancion == null)
             {
@@ -57,9 +57,9 @@ namespace Vivelab.Api.Controllers
         // PUT: api/Canciones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCancion(int id, Cancion cancion)
+        public async Task<IActionResult> PutCancion(int id, Song cancion)
         {
-            if (id != cancion.Codigo)
+            if (id != cancion.Code)
             {
                 return BadRequest();
             }
@@ -88,25 +88,25 @@ namespace Vivelab.Api.Controllers
         // POST: api/Canciones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cancion>> PostCancion(Cancion cancion)
+        public async Task<ActionResult<Song>> PostCancion(Song cancion)
         {
-            _context.Canciones.Add(cancion);
+            _context.Songs.Add(cancion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCancion", new { id = cancion.Codigo }, cancion);
+            return CreatedAtAction("GetCancion", new { id = cancion.Code }, cancion);
         }
 
         // DELETE: api/Canciones/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCancion(int id)
         {
-            var cancion = await _context.Canciones.FindAsync(id);
+            var cancion = await _context.Songs.FindAsync(id);
             if (cancion == null)
             {
                 return NotFound();
             }
 
-            _context.Canciones.Remove(cancion);
+            _context.Songs.Remove(cancion);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -114,11 +114,11 @@ namespace Vivelab.Api.Controllers
 
         private bool CancionExists(int id)
         {
-            return _context.Canciones.Any(e => e.Codigo == id);
+            return _context.Songs.Any(e => e.Code == id);
         }
 
         [HttpPost("upload")]
-        public async Task<ActionResult<Cancion>> UploadCancion([FromForm] CancionUploadDto dto)
+        public async Task<ActionResult<Song>> UploadCancion([FromForm] CancionUploadDto dto)
         {
             // 1. Obtener/crear contenedor
             var container = _blobService.GetBlobContainerClient(_containerName);
@@ -132,36 +132,36 @@ namespace Vivelab.Api.Controllers
             await blob.UploadAsync(stream, new BlobHttpHeaders { ContentType = dto.Archivo.ContentType });
 
             // 3. Mapear DTO → entidad y guardar en BD
-            var cancion = new Cancion
+            var cancion = new Song
             {
-                Titulo = dto.Titulo,
-                ArchivoUrl = blob.Uri.ToString(),
-                Duracion = dto.Duracion,
-                FechaSubida = DateTime.UtcNow,
-                ArtistaCodigo = dto.ArtistaCodigo,
-                AlbumCodigo = dto.AlbumCodigo
+                Title = dto.Titulo,
+                FileUrl = blob.Uri.ToString(),
+                Duration = dto.Duracion,
+                UploadDate = DateTime.UtcNow,
+                ArtistCode = dto.ArtistaCodigo,
+                AlbumCode = dto.AlbumCodigo
             };
-            _context.Canciones.Add(cancion);
+            _context.Songs.Add(cancion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCancion), new { id = cancion.Codigo }, cancion);
+            return CreatedAtAction(nameof(GetCancion), new { id = cancion.Code }, cancion);
         }
 
         // En CancionesController.cs
         [HttpPost("{id}/incrementar-reproduccion")]
         public async Task<IActionResult> IncrementarReproduccion(int id)
         {
-            var cancion = await _context.Canciones.FindAsync(id);
+            var cancion = await _context.Songs.FindAsync(id);
             if (cancion == null)
             {
                 return NotFound();
             }
 
             // Incrementamos la cantidad de reproducciones
-            cancion.TotalReproducciones++;
+            cancion.TotalPlays++;
 
             // Guardamos los cambios en la base de datos
-            _context.Canciones.Update(cancion);
+            _context.Songs.Update(cancion);
             await _context.SaveChangesAsync();
 
             return NoContent(); // Respuesta exitosa sin contenido

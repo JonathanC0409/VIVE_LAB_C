@@ -28,12 +28,12 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (await _authService.Login(email, password))
             {
 
-                var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+                var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
 
                 if (usuario != null)
                 {
 
-                    if (usuario.Rol.Equals("bloqueado", StringComparison.OrdinalIgnoreCase))
+                    if (usuario.Role.Equals("bloqueado", StringComparison.OrdinalIgnoreCase))
                     {
                         return RedirectToAction("UsuarioBloqueado", "Usuario");
                     }
@@ -78,7 +78,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         [HttpPost]
         public async Task<IActionResult> RecuperarPassword(string email)
         {
-            var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+            var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
             if (usuario == null)
             {
                 ViewBag.ErrorMessage = "El correo electrónico no está registrado.";

@@ -7,17 +7,17 @@ namespace Vivelab.Modelos;
 public class Album
 {
     [Key]
-    public int Codigo { get; set; }
+    public int Code { get; set; }
 
-    public string Nombre { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    public DateTime FechaCreacion { get; set; }
+    public DateTime CreationDate { get; set; }
 
-    public string? PortadaUrl { get; set; }
+    public string? CoverUrl { get; set; }
 
-    public int ArtistaCodigo { get; set; }
+    public int ArtistCode { get; set; }
 
-    public virtual Usuario? Artista { get; set; }
+    public virtual User? Artist { get; set; }
 
-    public virtual List<Cancion>? Canciones { get; set; }
+    public virtual List<Song>? Songs { get; set; }
 }

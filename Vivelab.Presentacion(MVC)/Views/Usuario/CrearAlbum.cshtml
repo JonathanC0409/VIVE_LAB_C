@@ -15,28 +15,28 @@
 
             <!-- Nombre del Álbum -->
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label">Nombre del Álbum</label>
-                <input asp-for="Nombre" class="form-control" required />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <label asp-for="Name" class="control-label">Nombre del Álbum</label>
+                <input asp-for="Name" class="form-control" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <!-- Fecha de Creación (predeterminada a la fecha actual) -->
             <div class="form-group">
                 
-                <input asp-for="FechaCreacion" class="form-control" type="hidden" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
-                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+                <input asp-for="CreationDate" class="form-control" type="hidden" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
             </div>
 
             <!-- Portada del Álbum -->
             <div class="form-group">
-                <label asp-for="PortadaUrl" class="control-label">Portada del Álbum (Imagen)</label>
-                <input asp-for="PortadaUrl" class="form-control" type="file" accept="image/*" />
-                <span asp-validation-for="PortadaUrl" class="text-danger"></span>
+                <label asp-for="CoverUrl" class="control-label">Portada del Álbum (Imagen)</label>
+                <input asp-for="CoverUrl" class="form-control" type="file" accept="image/*" />
+                <span asp-validation-for="CoverUrl" class="text-danger"></span>
             </div>
 
             <!-- Artista Código (autoasignado) -->
             <div class="form-group">
-                <input asp-for="ArtistaCodigo" type="hidden" value="@User.FindFirst("UsuarioCodigo")?.Value" />
+                <input asp-for="ArtistCode" type="hidden" value="@User.FindFirst("UsuarioCodigo")?.Value" />
             </div>
 
             <!-- Botón de Crear -->

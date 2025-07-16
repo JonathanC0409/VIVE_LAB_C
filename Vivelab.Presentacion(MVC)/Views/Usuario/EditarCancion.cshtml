@@ -1,4 +1,4 @@
-﻿@model Vivelab.Modelos.Cancion
+﻿@model Vivelab.Modelos.Song
 
 @{
     ViewData["Title"] = "Editar Canción";
@@ -10,7 +10,7 @@
 <form method="post">
     <div class="form-group">
         <label for="Titulo">Título:</label>
-        <input type="text" class="form-control" id="Titulo" name="Titulo" value="@Model.Titulo" required />
+        <input type="text" class="form-control" id="Titulo" name="Titulo" value="@Model.Title" required />
     </div>
    
     <button type="submit" class="btn btn-primary">Guardar cambios</button>

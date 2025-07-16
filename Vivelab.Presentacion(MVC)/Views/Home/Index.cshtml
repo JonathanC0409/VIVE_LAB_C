@@ -9,10 +9,10 @@
 
 @{
     ViewData["Title"] = "Home";
-    var artistas = ViewBag.Artistas as IEnumerable<Vivelab.Modelos.Usuario>;
+    var artistas = ViewBag.Artistas as IEnumerable<Vivelab.Modelos.User>;
     var albumes = ViewBag.Albumes as IEnumerable<Vivelab.Modelos.Album>;
-    var canciones = ViewBag.Canciones as IEnumerable<Vivelab.Modelos.Cancion>;
-    var topCanciones = ViewBag.TopCanciones as IEnumerable<Vivelab.Modelos.Cancion>;
+    var canciones = ViewBag.Canciones as IEnumerable<Vivelab.Modelos.Song>;
+    var topCanciones = ViewBag.TopCanciones as IEnumerable<Vivelab.Modelos.Song>;
 }
 
 <link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
@@ -69,12 +69,12 @@
     <div class="carrusel-artistas scroll-animation">
         @foreach (var a in artistas)
         {
-            var inicial = !string.IsNullOrEmpty(a.Nombre) ? a.Nombre.Substring(0, 1).ToUpper() : "?";
+            var inicial = !string.IsNullOrEmpty(a.Name) ? a.Name.Substring(0, 1).ToUpper() : "?";
             <div class="tarjeta-artista">
                 <div class="avatar @GetRandomColorClass()">
                     @inicial
                 </div>
-                <p class="nombre">@a.Nombre</p>
+                <p class="nombre">@a.Name</p>
                 <p class="rol">Artista</p>
             </div>
         }
@@ -86,19 +86,19 @@
         @foreach (var alb in albumes)
         {
             <div class="tarjeta-album">
-                @if (!string.IsNullOrEmpty(alb.PortadaUrl))
+                @if (!string.IsNullOrEmpty(alb.CoverUrl))
                 {
-                    <img src="@Url.Content(alb.PortadaUrl)" alt="@alb.Nombre" />
+                    <img src="@Url.Content(alb.CoverUrl)" alt="@alb.Name" />
                 }
                 else
                 {
                     <div class="avatar-album @GetRandomColorClass()">
-                        @alb.Nombre.Substring(0, 1).ToUpper()
+                        @alb.Name.Substring(0, 1).ToUpper()
                     </div>
                 }
                 <div class="info">
-                    <p class="titulo">@alb.Nombre</p>
-                    <p class="artista">@alb.Artista.Nombre</p>
+                    <p class="titulo">@alb.Name</p>
+                    <p class="artista">@alb.Artist.Name</p>
                 </div>
             </div>
         }
@@ -110,21 +110,21 @@
         @foreach (var c in canciones)
         {
             <div class="tarjeta-cancion">
-                @if (!string.IsNullOrEmpty(c.PortadaUrl))
+                @if (!string.IsNullOrEmpty(c.CoverUrl))
                 {
-                    <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                    <img src="@Url.Content(c.CoverUrl)" alt="@c.Title" />
                 }
                 else
                 {
                     <div class="avatar-cancion @GetRandomColorClass()">
-                        @c.Titulo.Substring(0, 1).ToUpper()
+                        @c.Title.Substring(0, 1).ToUpper()
                     </div>
                 }
                 <div class="info">
-                    <p class="titulo">@c.Titulo</p>
-                    <p class="artista">@c.Artista?.Nombre</p>
+                    <p class="titulo">@c.Title</p>
+                    <p class="artista">@c.Artist?.Name</p>
                 </div>
-                <a href="@Url.Action("Player", "Home", new { id = c.Codigo })" class="boton-play" title="Reproducir">
+                <a href="@Url.Action("Player", "Home", new { id = c.Code })" class="boton-play" title="Reproducir">
                     <svg viewBox="0 0 16 16" fill="currentColor">
                         <path d="M4 4l8 4-8 4z" />
                     </svg>
@@ -144,23 +144,23 @@
             <li class="item-top">
                 <span class="posicion">@pos</span>
                 <div class="portada">
-                    @if (!string.IsNullOrEmpty(c.PortadaUrl))
+                    @if (!string.IsNullOrEmpty(c.CoverUrl))
                     {
-                        <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                        <img src="@Url.Content(c.CoverUrl)" alt="@c.Title" />
                     }
                     else
                     {
                         <div class="@GetRandomColorClass()" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;border-radius:12px;">
-                            @c.Titulo.Substring(0, 1).ToUpper()
+                            @c.Title.Substring(0, 1).ToUpper()
                         </div>
                     }
                 </div>
                 <div class="info">
-                    <p class="titulo">@c.Titulo</p>
-                    <p class="reproducciones">@c.TotalReproducciones reproducciones</p>
+                    <p class="titulo">@c.Title</p>
+                    <p class="reproducciones">@c.TotalPlays reproducciones</p>
                 </div>
-                <span class="duracion">@c.Duracion.ToString(@"mm\:ss")</span>
-                <a href="@Url.Action("Player", "Home", new { id = c.Codigo })" class="boton-play" title="Reproducir">
+                <span class="duracion">@c.Duration.ToString(@"mm\:ss")</span>
+                <a href="@Url.Action("Player", "Home", new { id = c.Code })" class="boton-play" title="Reproducir">
                     <svg viewBox="0 0 16 16" fill="currentColor">
                         <path d="M4 4l8 4-8 4z" />
                     </svg>

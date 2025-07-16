@@ -73,11 +73,11 @@ namespace Vivelab.Servicios
                     await cliente.DisconnectAsync(true); // Desconectar del servidor SMTP
                 }
 
-                var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email); //Actualizar contraseña
+                var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email); //Actualizar contraseña
                 if (usuario != null)
                 {
                     usuario.Password = tempPassword;
-                    CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                    CRUD<User>.Update(usuario.Code, usuario);
                     Console.WriteLine($"contraseña actualizada: {tempPassword}");
 
                 }

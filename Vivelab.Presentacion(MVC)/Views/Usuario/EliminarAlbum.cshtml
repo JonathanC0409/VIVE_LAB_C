@@ -13,36 +13,36 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Codigo)
+            @Html.DisplayNameFor(model => model.Code)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Codigo)
+            @Html.DisplayFor(model => model.Code)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
+            @Html.DisplayNameFor(model => model.CreationDate)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
+            @Html.DisplayFor(model => model.CreationDate)
         </dd>
      
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ArtistaCodigo)
+            @Html.DisplayNameFor(model => model.ArtistCode)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ArtistaCodigo)
+            @Html.DisplayFor(model => model.ArtistCode)
         </dd>
     </dl>
 
     <!-- Formulario para eliminar el álbum -->
     <form asp-action="EliminarAlbum" method="post">
         <!-- Campo oculto para enviar el ID del álbum -->
-        <input type="hidden" asp-for="Codigo" />
+        <input type="hidden" asp-for="Code" />
 
         <div class="form-group">
             <input type="submit" value="Eliminar" class="btn btn-danger" />

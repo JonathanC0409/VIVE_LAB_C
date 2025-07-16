@@ -26,7 +26,7 @@ namespace Vivelab.Api.Controllers
         {
             // Buscar las playlists por el UsuarioCodigo
             var playlists = await _context.Playlists
-                .Where(p => p.UsuarioCodigo == id)  // Filtramos las playlists por UsuarioCodigo
+                .Where(p => p.UserCode == id)  // Filtramos las playlists por UsuarioCodigo
                 .ToListAsync();
 
 
@@ -60,7 +60,7 @@ namespace Vivelab.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlaylist(int id, Playlist playlist)
         {
-            if (id != playlist.Codigo)
+            if (id != playlist.Code)
             {
                 return BadRequest();
             }
@@ -94,7 +94,7 @@ namespace Vivelab.Api.Controllers
             _context.Playlists.Add(playlist);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlaylist", new { id = playlist.Codigo }, playlist);
+            return CreatedAtAction("GetPlaylist", new { id = playlist.Code }, playlist);
         }
 
         // DELETE: api/Playlists/5
@@ -115,7 +115,7 @@ namespace Vivelab.Api.Controllers
 
         private bool PlaylistExists(int id)
         {
-            return _context.Playlists.Any(e => e.Codigo == id);
+            return _context.Playlists.Any(e => e.Code == id);
         }
     }
 }

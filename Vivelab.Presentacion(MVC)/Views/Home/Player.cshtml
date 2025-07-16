@@ -1,10 +1,10 @@
-﻿@model Vivelab.Modelos.Cancion
+﻿@model Vivelab.Modelos.Song
 @{
     Layout = null;
-    ViewBag.Title = "Reproduciendo: " + Model.Titulo;
+    ViewBag.Title = "Reproduciendo: " + Model.Title;
 }
 <script>
-    window.songId = @Model.Codigo;
+    window.songId = @Model.Code;
 </script>
 
 <!DOCTYPE html>
@@ -31,28 +31,28 @@
 
         <div class="player-box">
             <div class="disc">
-                @if (!string.IsNullOrEmpty(Model.PortadaUrl))
+                @if (!string.IsNullOrEmpty(Model.CoverUrl))
                 {
-                    <img src="@Url.Content(Model.PortadaUrl)" alt="@Model.Titulo" />
+                    <img src="@Url.Content(Model.CoverUrl)" alt="@Model.Title" />
                 }
                 else
                 {
                     <span class="initial">
-                        @Model.Titulo.Substring(0, 1).ToUpper()
+                        @Model.Title.Substring(0, 1).ToUpper()
                     </span>
                 }
             </div>
 
-            <h2 class="song-title">@Model.Titulo</h2>
+            <h2 class="song-title">@Model.Title</h2>
 
             <audio class="audio-player" controls autoplay
-                   src="@Url.Content(Model.ArchivoUrl)">
+                   src="@Url.Content(Model.FileUrl)">
                 Tu navegador no soporta audio.
             </audio>
 
             <div class="info">
-                <span>Duración: @Model.Duracion.ToString(@"mm\:ss")</span>
-                <span>@Model.TotalReproducciones reproducciones</span>
+                <span>Duración: @Model.Duration.ToString(@"mm\:ss")</span>
+                <span>@Model.TotalPlays reproducciones</span>
             </div>
         </div>
     </div>

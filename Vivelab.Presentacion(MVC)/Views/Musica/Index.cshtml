@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vivelab.Modelos.Cancion>
+﻿@model IEnumerable<Vivelab.Modelos.Song>
 
 @{
     ViewData["Title"] = "Listado de Canciones";
@@ -45,24 +45,24 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Titulo</td>
-                <td>@item.Duracion.ToString(@"hh\:mm\:ss")</td>
+                <td>@item.Title</td>
+                <td>@item.Duration.ToString(@"hh\:mm\:ss")</td>
                 <td>
-                    <audio controls class="audio-player" data-id="@item.Codigo" style="max-width:200px;">
-                        <source src="@item.ArchivoUrl" />
+                    <audio controls class="audio-player" data-id="@item.Code" style="max-width:200px;">
+                        <source src="@item.FileUrl" />
                         Tu navegador no soporta el elemento
                         <code>audio</code>.
                     </audio>
                 </td>
-                <td>@item.Artista.Nombre</td>
-                <td>@item.TotalReproducciones</td>
+                <td>@item.Artist.Name</td>
+                <td>@item.TotalPlays</td>
                 <td>
                     @if (plan != 0)
                     {
                         bool puedeDescargar = descargasHoy < limiteDescargas;
                         <button type="button"
                                 class="btn btn-outline-success btn-sm download-btn"
-                                data-id="@item.Codigo"
+                                data-id="@item.Code"
                         @(puedeDescargar ? "" : "disabled")
                                 title="@(puedeDescargar ? "Descargar canción" : "Límite alcanzado")">
                             <i class="bi bi-download"></i> Descargar

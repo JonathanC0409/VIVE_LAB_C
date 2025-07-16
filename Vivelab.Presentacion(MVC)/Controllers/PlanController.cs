@@ -112,8 +112,8 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public IActionResult ComprarPlan(int id)
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
-            var plan = CRUD<Plan>.GetAll().FirstOrDefault(p => p.Codigo == id);
+            var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
+            var plan = CRUD<Plan>.GetAll().FirstOrDefault(p => p.Code == id);
 
             if (usuario == null || plan == null)
             {
@@ -122,19 +122,19 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
 
             // Verificar si el usuario tiene saldo suficiente antes de continuar
-            if (usuario.Saldo < plan.Precio)
+            if (usuario.Balance < plan.Price)
             {
                 TempData["Mensaje"] = "Saldo insuficiente para realizar la compra.";
                 return RedirectToAction("Index", "Plan");
             }
 
             // Verificar si el usuario ya tiene una suscripción activa
-            var suscripcionActiva = CRUD<Suscripcion>.GetAll()
-                .FirstOrDefault(s => s.UsuarioCodigo == usuario.Codigo && s.Estado == "Activa");
+            var suscripcionActiva = CRUD<Subscription>.GetAll()
+                .FirstOrDefault(s => s.UserCode == usuario.Code && s.Status == "Activa");
 
             if (suscripcionActiva != null)
             {
-                var planActivo = CRUD<Plan>.GetAll().FirstOrDefault(p => p.Codigo == suscripcionActiva.PlanCodigo);
+                var planActivo = CRUD<Plan>.GetAll().FirstOrDefault(p => p.Code == suscripcionActiva.PlanCode);
 
                 if (planActivo == null)
                 {
@@ -143,57 +143,57 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 }
 
                 // Verifica si el usuario está intentando cambiar de un plan más barato a uno más caro
-                if (planActivo.Nombre == "Free" && (plan.Nombre == "Premium" || plan.Nombre == "Familiar" || plan.Nombre == "Empresarial"))
+                if (planActivo.Name == "Free" && (plan.Name == "Premium" || plan.Name == "Familiar" || plan.Name == "Empresarial"))
                 {
                     // Verificar si tiene saldo suficiente para el nuevo plan
-                    if (usuario.Saldo < plan.Precio)
+                    if (usuario.Balance < plan.Price)
                     {
                         TempData["Mensaje"] = "Saldo insuficiente para realizar el cambio al nuevo plan.";
                         return RedirectToAction("Index", "Plan");
                     }
 
                     // Actualiza la suscripción al nuevo plan y establece la fecha de fin a 1 mes
-                    suscripcionActiva.PlanCodigo = plan.Codigo;
-                    suscripcionActiva.FechaFin = DateTime.UtcNow.AddMonths(1); // El cambio se hará efectivo durante 1 mes
-                    CRUD<Suscripcion>.Update(suscripcionActiva.Codigo, suscripcionActiva);
+                    suscripcionActiva.PlanCode = plan.Code;
+                    suscripcionActiva.EndDate = DateTime.UtcNow.AddMonths(1); // El cambio se hará efectivo durante 1 mes
+                    CRUD<Subscription>.Update(suscripcionActiva.Code, suscripcionActiva);
 
                     // Descontar saldo
-                    usuario.Saldo -= plan.Precio;
-                    CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                    usuario.Balance -= plan.Price;
+                    CRUD<User>.Update(usuario.Code, usuario);
 
                     TempData["Mensaje"] = "Cambio de plan realizado exitosamente. El cambio se hará efectivo durante 1 mes.";
                 }
-                else if (planActivo.Nombre != "Free")
+                else if (planActivo.Name != "Free")
                 {
-                    if (plan.Nombre == "Free")
+                    if (plan.Name == "Free")
                     {
-                        TempData["Mensaje"] = "Actualmente tienes el plan " + planActivo.Nombre + ". El cambio a plan Free se hará cuando se termine tu suscripción actual.";
+                        TempData["Mensaje"] = "Actualmente tienes el plan " + planActivo.Name + ". El cambio a plan Free se hará cuando se termine tu suscripción actual.";
                         return RedirectToAction("Index", "Plan");
                     }
 
                     // Verificar si tiene saldo suficiente para el nuevo plan
-                    if (usuario.Saldo < plan.Precio)
+                    if (usuario.Balance < plan.Price)
                     {
                         TempData["Mensaje"] = "Saldo insuficiente para realizar el cambio al nuevo plan.";
                         return RedirectToAction("Index", "Plan");
                     }
 
                     // Si el plan actual no es Free, podemos hacer el cambio entre planes Premium, Familiar o Empresarial
-                    if (planActivo.Nombre != plan.Nombre)
+                    if (planActivo.Name != plan.Name)
                     {
-                        suscripcionActiva.PlanCodigo = plan.Codigo;
-                        suscripcionActiva.FechaFin = DateTime.UtcNow.AddMonths(1); // Actualiza la fecha de fin a 1 mes
-                        CRUD<Suscripcion>.Update(suscripcionActiva.Codigo, suscripcionActiva);
+                        suscripcionActiva.PlanCode = plan.Code;
+                        suscripcionActiva.EndDate = DateTime.UtcNow.AddMonths(1); // Actualiza la fecha de fin a 1 mes
+                        CRUD<Subscription>.Update(suscripcionActiva.Code, suscripcionActiva);
 
                         // Descontar saldo
-                        usuario.Saldo -= plan.Precio;
-                        CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                        usuario.Balance -= plan.Price;
+                        CRUD<User>.Update(usuario.Code, usuario);
 
                         TempData["Mensaje"] = "Cambio de plan realizado exitosamente. El cambio se hará efectivo durante 1 mes.";
                     }
                     else
                     {
-                        TempData["Mensaje"] = $"Ya tienes el plan {planActivo.Nombre}.";
+                        TempData["Mensaje"] = $"Ya tienes el plan {planActivo.Name}.";
                         return RedirectToAction("Index", "Plan");
                     }
                 }
@@ -201,21 +201,21 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             else
             {
                 // Si el usuario no tiene suscripción activa, se puede crear una nueva
-                if (usuario.Saldo >= plan.Precio)
+                if (usuario.Balance >= plan.Price)
                 {
-                    usuario.Saldo -= plan.Precio;
-                    CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                    usuario.Balance -= plan.Price;
+                    CRUD<User>.Update(usuario.Code, usuario);
 
-                    var nuevaSuscripcion = new Suscripcion
+                    var nuevaSuscripcion = new Subscription
                     {
-                        FechaInicio = DateTime.UtcNow,
-                        FechaFin = DateTime.UtcNow.AddMonths(1),
-                        Estado = "Activa",
-                        PlanCodigo = plan.Codigo,
-                        UsuarioCodigo = usuario.Codigo
+                        StartDate = DateTime.UtcNow,
+                        EndDate = DateTime.UtcNow.AddMonths(1),
+                        Status = "Activa",
+                        PlanCode = plan.Code,
+                        UserCode = usuario.Code
                     };
 
-                    CRUD<Suscripcion>.Create(nuevaSuscripcion);
+                    CRUD<Subscription>.Create(nuevaSuscripcion);
 
                     TempData["Mensaje"] = "Compra realizada exitosamente.";
                 }

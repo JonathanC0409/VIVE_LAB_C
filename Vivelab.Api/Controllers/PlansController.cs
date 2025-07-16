@@ -11,11 +11,11 @@ namespace Vivelab.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlanesController : ControllerBase
+    public class PlansController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public PlanesController(AppDbContext context)
+        public PlansController(AppDbContext context)
         {
             _context = context;
         }
@@ -24,14 +24,14 @@ namespace Vivelab.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Plan>>> GetPlan()
         {
-            return await _context.Planes.ToListAsync();
+            return await _context.Plans.ToListAsync();
         }
 
         // GET: api/Planes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Plan>> GetPlan(int id)
         {
-            var plan = await _context.Planes.FindAsync(id);
+            var plan = await _context.Plans.FindAsync(id);
 
             if (plan == null)
             {
@@ -46,7 +46,7 @@ namespace Vivelab.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlan(int id, Plan plan)
         {
-            if (id != plan.Codigo)
+            if (id != plan.Code)
             {
                 return BadRequest();
             }
@@ -77,23 +77,23 @@ namespace Vivelab.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Plan>> PostPlan(Plan plan)
         {
-            _context.Planes.Add(plan);
+            _context.Plans.Add(plan);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlan", new { id = plan.Codigo }, plan);
+            return CreatedAtAction("GetPlan", new { id = plan.Code }, plan);
         }
 
         // DELETE: api/Planes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlan(int id)
         {
-            var plan = await _context.Planes.FindAsync(id);
+            var plan = await _context.Plans.FindAsync(id);
             if (plan == null)
             {
                 return NotFound();
             }
 
-            _context.Planes.Remove(plan);
+            _context.Plans.Remove(plan);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace Vivelab.Api.Controllers
 
         private bool PlanExists(int id)
         {
-            return _context.Planes.Any(e => e.Codigo == id);
+            return _context.Plans.Any(e => e.Code == id);
         }
     }
 }

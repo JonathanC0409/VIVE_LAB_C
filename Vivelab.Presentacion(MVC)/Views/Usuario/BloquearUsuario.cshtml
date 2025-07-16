@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vivelab.Modelos.Usuario>
+﻿@model IEnumerable<Vivelab.Modelos.User>
 
 @{
     ViewData["Title"] = "Bloquear Usuario";
@@ -13,7 +13,7 @@
             <option value="">Selecciona un usuario</option>
             @foreach (var usuario in Model)
             {
-                <option value="@usuario.Codigo">@usuario.Nombre</option>
+                <option value="@usuario.Code">@usuario.Name</option>
             }
         </select>
     </div>

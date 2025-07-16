@@ -47,7 +47,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             ViewBag.DescargasHoy = descargasHoy;
             ViewBag.LimiteDescargas = limite;
 
-            var lista = CRUD<Cancion>.GetAll();
+            var lista = CRUD<Song>.GetAll();
             return View(lista);
         }
 
@@ -79,22 +79,22 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
 
             // Obtener el usuario principal (logueado)
-            var usuario = CRUD<Usuario>.GetById(UsuarioId);
+            var usuario = CRUD<User>.GetById(UsuarioId);
             if (usuario != null)
             {
                 // Si tiene una suscripción activa, se retorna el plan
-                if (usuario.Suscripcion != null)
+                if (usuario.Subscription != null)
                 {
-                    return usuario.Suscripcion.Plan.Codigo;
+                    return usuario.Subscription.Plan.Code;
                 }
 
                 // Si no tiene una suscripción activa, se busca en las suscripciones de otros usuarios si lo tienen vinculado
-                var usuarioSubcripciones = CRUD<UsuarioSuscripcion>.GetAll();
+                var usuarioSubcripciones = CRUD<UserSubscription>.GetAll();
                 foreach (var u in usuarioSubcripciones)
                 {
-                    if (usuario.Codigo == u.UsuarioCodigo)
+                    if (usuario.Code == u.UserCode)
                     {
-                        return u.Suscripcion.PlanCodigo;
+                        return u.Subscription.PlanCode;
                     }
                 }
 
@@ -111,7 +111,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (!ModelState.IsValid) return View(vm);
 
             // abre el stream y llama al CRUD
-            var cancion = CRUD<Cancion>.UploadWithFile(
+            var cancion = CRUD<Song>.UploadWithFile(
                 vm.Titulo,
                 vm.Archivo.OpenReadStream(),
                 vm.Archivo.FileName,
@@ -162,15 +162,15 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (descargasHoy >= limite)
                 return BadRequest("Has alcanzado el límite diario de descargas.");
 
-            var cancion = CRUD<Cancion>.GetById(cancionId);
+            var cancion = CRUD<Song>.GetById(cancionId);
             if (cancion == null) return NotFound();
 
             var httpClient = new HttpClient();
-            var archivoBytes = await httpClient.GetByteArrayAsync(cancion.ArchivoUrl);
+            var archivoBytes = await httpClient.GetByteArrayAsync(cancion.FileUrl);
 
             HttpContext.Session.SetInt32(key, descargasHoy + 1);
 
-            return File(archivoBytes, "audio/mpeg", $"{cancion.Titulo}.mp3");
+            return File(archivoBytes, "audio/mpeg", $"{cancion.Title}.mp3");
         }
 
 

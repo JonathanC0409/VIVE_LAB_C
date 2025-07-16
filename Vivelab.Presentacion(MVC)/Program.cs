@@ -10,14 +10,14 @@ namespace Vivelab.Presentacion_MVC_
     {
         public static void Main(string[] args)
         {
-            CRUD<Cancion>.EndPoint = "https://localhost:7008/api/Canciones";
-            CRUD<Usuario>.EndPoint = "https://localhost:7008/api/Usuarios";
-            CRUD<Plan>.EndPoint = "https://localhost:7008/api/Planes";
-            CRUD<Suscripcion>.EndPoint = "https://localhost:7008/api/Suscripciones";
+            CRUD<Song>.EndPoint = "https://localhost:7008/api/Songs";
+            CRUD<User>.EndPoint = "https://localhost:7008/api/Users";
+            CRUD<Plan>.EndPoint = "https://localhost:7008/api/Plans";
+            CRUD<Subscription>.EndPoint = "https://localhost:7008/api/Subscriptions";
             CRUD<Playlist>.EndPoint = "https://localhost:7008/api/Playlists";
-            CRUD<PlaylistCancion>.EndPoint = "https://localhost:7008/api/PlaylistCanciones";
-            CRUD<UsuarioSuscripcion>.EndPoint = "https://localhost:7008/api/UsuariosSuscripciones";
-            CRUD<Album>.EndPoint = "https://localhost:7008/api/Albumes";
+            CRUD<PlaylistSong>.EndPoint = "https://localhost:7008/api/PlaylistSongs";
+            CRUD<UserSubscription>.EndPoint = "https://localhost:7008/api/UsersSubscriptions";
+            CRUD<Album>.EndPoint = "https://localhost:7008/api/Albums";
             var builder = WebApplication.CreateBuilder(args);
 
             //Registrar Servicios

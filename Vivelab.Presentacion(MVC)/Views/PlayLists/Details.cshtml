@@ -11,11 +11,11 @@
     </div>
 }
 
-<h2>@Model.Nombre</h2>
+<h2>@Model.Name</h2>
 
 <div>
     <h4>Canciones:</h4>
-    @if (ViewBag.PlaylistCanciones != null && ((List<Vivelab.Modelos.PlaylistCancion>)ViewBag.PlaylistCanciones).Count > 0)
+    @if (ViewBag.PlaylistCanciones != null && ((List<Vivelab.Modelos.PlaylistSong>)ViewBag.PlaylistCanciones).Count > 0)
     {
         <ul>
             @foreach (var playlistCancion in ViewBag.PlaylistCanciones)
@@ -28,7 +28,7 @@
                         Your browser does not support the audio element.
                     </audio>
                     <div>
-                        <a href="@Url.Action("ConfirmDelete", "PlayLists", new { playlistId = Model.Codigo, songId = playlistCancion.CancionCodigo })" class="btn btn-warning">Eliminar Canción de la Playlist</a>
+                        <a href="@Url.Action("ConfirmDelete", "PlayLists", new { playlistId = Model.Code, songId = playlistCancion.CancionCodigo })" class="btn btn-warning">Eliminar Canción de la Playlist</a>
                     </div>
                 </li>
             }

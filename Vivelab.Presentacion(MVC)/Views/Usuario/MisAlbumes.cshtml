@@ -21,12 +21,12 @@
         @foreach (var album in Model)
         {
             <tr>
-                <td>@album.Nombre</td>
-                <td>@album.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                <td>@album.Name</td>
+                <td>@album.CreationDate.ToString("dd/MM/yyyy")</td>
                 <td>
-                    @if (!string.IsNullOrEmpty(album.PortadaUrl))
+                    @if (!string.IsNullOrEmpty(album.CoverUrl))
                     {
-                        <img src="@album.PortadaUrl" alt="Portada" style="width: 100px; height: 100px; object-fit: cover;" />
+                        <img src="@album.CoverUrl" alt="Portada" style="width: 100px; height: 100px; object-fit: cover;" />
                     }
                     else
                     {
@@ -35,11 +35,11 @@
                 </td>
                 <td>
                     <!-- Ver Canciones -->
-                    <a href="@Url.Action("VerCanciones", new { albumId = album.Codigo })" class="btn btn-info">Ver</a>
+                    <a href="@Url.Action("VerCanciones", new { albumId = album.Code })" class="btn btn-info">Ver</a>
 
                     <!-- Editar y Eliminar -->
-                    <a href="@Url.Action("EditarAlbum", new { id = album.Codigo })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("EliminarAlbum", new { id = album.Codigo })" class="btn btn-danger">Eliminar</a>
+                    <a href="@Url.Action("EditarAlbum", new { id = album.Code })" class="btn btn-warning">Editar</a>
+                    <a href="@Url.Action("EliminarAlbum", new { id = album.Code })" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
         }

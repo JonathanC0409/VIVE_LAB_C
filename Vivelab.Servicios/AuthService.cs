@@ -28,7 +28,7 @@ namespace Vivelab.Servicios
         public async Task<bool> Login(string email, string password)
         {
 
-            var usuarios = CRUD<Usuario>.GetAll();
+            var usuarios = CRUD<User>.GetAll();
             foreach (var usuario in usuarios)
             {
                 if (usuario.Email == email)
@@ -39,10 +39,10 @@ namespace Vivelab.Servicios
                     {
                         var datosUsuario = new List<Claim>
                         {
-                            new Claim("UsuarioCodigo", usuario.Codigo.ToString()),
-                            new Claim(ClaimTypes.Name, usuario.Nombre),
+                            new Claim("UsuarioCodigo", usuario.Code.ToString()),
+                            new Claim(ClaimTypes.Name, usuario.Name),
                             new Claim(ClaimTypes.Email, usuario.Email),
-                            new Claim("TipoUsuario", usuario.Rol)
+                            new Claim("TipoUsuario", usuario.Role)
                         };
                         var credencialDigital = new ClaimsIdentity(datosUsuario, "Cookies");
                         var usuarioAutenticado = new ClaimsPrincipal(credencialDigital);
@@ -59,7 +59,7 @@ namespace Vivelab.Servicios
 
         public async Task<bool> Register(string email, string nombre, string password)
         {
-            var usuarioExistente = CRUD<Usuario>.GetAll()
+            var usuarioExistente = CRUD<User>.GetAll()
                 .FirstOrDefault(u => u.Email == email);
             if (usuarioExistente != null)
             {
@@ -68,14 +68,14 @@ namespace Vivelab.Servicios
 
             try
             {
-                CRUD<Usuario>.Create(new Usuario
+                CRUD<User>.Create(new User
                 {
-                    Codigo = 0,
+                    Code = 0,
                     Email = email,
                     Password = password, // Aquí deberías aplicar un hash a la contraseña antes de guardarla
-                    Nombre = nombre,
-                    Rol = "cliente",
-                    FechaRegistro = DateTime.UtcNow
+                    Name = nombre,
+                    Role = "cliente",
+                    RegistrationDate = DateTime.UtcNow
                 });
                 return true; // Registro exitoso
             }

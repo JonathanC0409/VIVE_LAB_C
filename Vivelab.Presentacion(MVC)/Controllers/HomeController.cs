@@ -26,13 +26,13 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return View();
         }
 
-        private List<Usuario> getArtistas()
+        private List<User> getArtistas()
         {
-            var usuarios = CRUD<Usuario>.GetAll();
-            var artistas = new List<Usuario>();
+            var usuarios = CRUD<User>.GetAll();
+            var artistas = new List<User>();
             foreach (var u in usuarios)
             {
-                if (u.Rol == "artista")
+                if (u.Role == "artista")
                 {
                     artistas.Add(u);
                 }
@@ -40,11 +40,11 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return artistas;
         }
 
-        private IEnumerable<Cancion> getTopCanciones()
+        private IEnumerable<Song> getTopCanciones()
         {
             // Ordena por total de reproducciones descendente y toma las 5 primeras
-            return CRUD<Cancion>.GetAll()
-                   .OrderByDescending(c => c.TotalReproducciones)
+            return CRUD<Song>.GetAll()
+                   .OrderByDescending(c => c.TotalPlays)
                    .Take(5)
                    .ToList();
         }
@@ -53,9 +53,9 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         {
             return CRUD<Album>.GetAll().ToList();
         }
-        private List<Cancion> getCanciones()
+        private List<Song> getCanciones()
         {
-            return CRUD<Cancion>.GetAll().ToList();
+            return CRUD<Song>.GetAll().ToList();
         }
         public IActionResult Privacy()
         {
@@ -65,7 +65,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         [Authorize]
         public IActionResult Player(int id)
         {
-            var cancion = CRUD<Cancion>.GetById(id);
+            var cancion = CRUD<Song>.GetById(id);
             return View(cancion);
         }
 

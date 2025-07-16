@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vivelab.Modelos.Usuario>
+﻿@model IEnumerable<Vivelab.Modelos.User>
 
 @{
     ViewData["Title"] = "Lista Usuarios";
@@ -19,12 +19,12 @@
         @foreach (var usuario in Model)
         {
             <tr>
-                <td>@usuario.Nombre</td>
+                <td>@usuario.Name</td>
                 <td>@usuario.Email</td>
-                <td>@usuario.Saldo</td>
+                <td>@usuario.Balance</td>
                 <td>
-                    <a href="@Url.Action("Edit", "Usuario", new { id = usuario.Codigo })">Editar</a> |
-                    <a href="@Url.Action("Delete", "Usuario", new { id = usuario.Codigo })">Eliminar</a>
+                    <a href="@Url.Action("Edit", "Usuario", new { id = usuario.Code })">Editar</a> |
+                    <a href="@Url.Action("Delete", "Usuario", new { id = usuario.Code })">Eliminar</a>
                 </td>
             </tr>
         }

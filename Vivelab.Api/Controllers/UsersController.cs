@@ -12,23 +12,23 @@ namespace Vivelab.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuariosController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public UsuariosController(AppDbContext context)
+        public UsersController(AppDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Usuarios
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsuario()
         {
-            var usuarios = await _context.Usuarios
-                .Include(u => u.UsuariosSuscripciones) // Incluir la relación con UsuariosSuscripciones
-                .Include(u => u.Suscripcion) // Incluir la suscripción del usuario (si es el propietario)
-                .Include(u => u.Suscripcion.Plan) // Incluir el plan de la suscripción
+            var usuarios = await _context.Users
+                .Include(u => u.UsersSubscriptions) // Incluir la relación con UsuariosSuscripciones
+                .Include(u => u.Subscription) // Incluir la suscripción del usuario (si es el propietario)
+                .Include(u => u.Subscription.Plan) // Incluir el plan de la suscripción
                 .ToListAsync();
 
             return usuarios;
@@ -37,13 +37,13 @@ namespace Vivelab.Api.Controllers
 
         // GET: api/Usuarios/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<User>> GetUsuario(int id)
         {
-            var usuario = await _context.Usuarios
-              .Where(u => u.Codigo == id)
-              .Include(u => u.Canciones)
+            var usuario = await _context.Users
+              .Where(u => u.Code == id)
+              .Include(u => u.Songs)
               .Include(u => u.Albums)
-              .Include(u => u.Suscripcion)
+              .Include(u => u.Subscription)
               .ThenInclude(u => u.Plan)
               .FirstAsync();
 
@@ -58,15 +58,15 @@ namespace Vivelab.Api.Controllers
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<IActionResult> PutUsuario(int id, User usuario)
         {
-            if (id != usuario.Codigo)
+            if (id != usuario.Code)
             {
                 return BadRequest();
             }
 
             // Obtener el usuario actual de la base de datos
-            var usuarioExistente = await _context.Usuarios.FindAsync(id);
+            var usuarioExistente = await _context.Users.FindAsync(id);
             if (usuarioExistente == null)
             {
                 return NotFound();
@@ -109,26 +109,26 @@ namespace Vivelab.Api.Controllers
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<User>> PostUsuario(User usuario)
         {
             usuario.Password = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
-            _context.Usuarios.Add(usuario);
+            _context.Users.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.Codigo }, usuario);
+            return CreatedAtAction("GetUsuario", new { id = usuario.Code }, usuario);
         }
 
         // DELETE: api/Usuarios/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Users.FindAsync(id);
             if (usuario == null)
             {
                 return NotFound();
             }
 
-            _context.Usuarios.Remove(usuario);
+            _context.Users.Remove(usuario);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -136,7 +136,7 @@ namespace Vivelab.Api.Controllers
 
         private bool UsuarioExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Codigo == id);
+            return _context.Users.Any(e => e.Code == id);
         }
         [HttpGet("VincularUsuarios")]
         public async Task<IActionResult> VincularUsuarios(string email, string emailLogeado)
@@ -153,19 +153,19 @@ namespace Vivelab.Api.Controllers
             }
 
             // Obtener el correo del usuario logueado y verificar su suscripción activa
-            var usuarioLogueado = await _context.Usuarios
-                .Include(u => u.Suscripcion) // Incluir suscripción
-                .Include(u => u.UsuariosSuscripciones)
+            var usuarioLogueado = await _context.Users
+                .Include(u => u.Subscription) // Incluir suscripción
+                .Include(u => u.UsersSubscriptions)
                 .FirstOrDefaultAsync(u => u.Email == emailLogeado);
 
-            if (usuarioLogueado == null || usuarioLogueado.Suscripcion == null || usuarioLogueado.Suscripcion.FechaFin <= DateTime.UtcNow)
+            if (usuarioLogueado == null || usuarioLogueado.Subscription == null || usuarioLogueado.Subscription.EndDate <= DateTime.UtcNow)
             {
                 return BadRequest("El usuario logueado no tiene una suscripción activa.");
             }
 
             // Verificar si el usuario a vincular existe y no tiene una suscripción activa
-            var usuarioVincular = await _context.Usuarios
-                .Include(u => u.Suscripcion) // Incluir suscripción
+            var usuarioVincular = await _context.Users
+                .Include(u => u.Subscription) // Incluir suscripción
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (usuarioVincular == null)
@@ -173,30 +173,30 @@ namespace Vivelab.Api.Controllers
                 return BadRequest("El usuario a vincular no existe.");
             }
 
-            var usarios = await _context.UsuariosSuscripciones
+            var usarios = await _context.UsersSubscriptions
                 .ToListAsync();
 
             foreach (var u in usarios)
             {
-                if (u.UsuarioCodigo == usuarioVincular.Codigo && u.SuscripcionCodigo == usuarioLogueado.Suscripcion.Codigo)
+                if (u.UserCode == usuarioVincular.Code && u.SubscriptionCode == usuarioLogueado.Subscription.Code)
                 {
                     return BadRequest("El usuario ya está vinculado a esta suscripción.");
                 }
             }
 
-            if (usuarioVincular.Suscripcion != null && usuarioVincular.Suscripcion.FechaFin > DateTime.UtcNow)
+            if (usuarioVincular.Subscription != null && usuarioVincular.Subscription.EndDate > DateTime.UtcNow)
             {
                 return BadRequest("El usuario a vincular ya tiene una suscripción activa.");
             }
 
             // Realizar el vínculo
-            var usuarioSuscripcion = new UsuarioSuscripcion
+            var usuarioSuscripcion = new UserSubscription
             {
-                UsuarioCodigo = usuarioVincular.Codigo,
-                SuscripcionCodigo = usuarioLogueado.Suscripcion.Codigo
+                UserCode = usuarioVincular.Code,
+                SubscriptionCode = usuarioLogueado.Subscription.Code
             };
 
-            _context.UsuariosSuscripciones.Add(usuarioSuscripcion);
+            _context.UsersSubscriptions.Add(usuarioSuscripcion);
 
             // Guardar los cambios
             await _context.SaveChangesAsync();

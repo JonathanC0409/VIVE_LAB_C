@@ -4,10 +4,10 @@
     ViewData["Title"] = "Editar Playlist";
 }
 
-<h2>Editar Playlist: @Model.Nombre</h2>
+<h2>Editar Playlist: @Model.Name</h2>
 
 <form method="post" asp-action="Edit" asp-controller="PlayLists">
-    <input type="hidden" name="id" value="@Model.Codigo" />
+    <input type="hidden" name="id" value="@Model.Code" />
 
     <div>
         <label for="Canciones">Seleccionar Canciones:</label>
@@ -16,7 +16,7 @@
             {
                 <div>
                     <input type="checkbox" name="Canciones" value="@cancion.Codigo"
-                           @if (Model.PlaylistCanciones != null && Model.PlaylistCanciones.Any(pc => pc.CancionCodigo == cancion.Codigo))
+                           @if (Model.PlaylistSongs != null && Model.PlaylistSongs.Any(pc => pc.SongCode == cancion.Codigo))
                            {
                                @:checked
                            }

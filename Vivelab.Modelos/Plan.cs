@@ -8,15 +8,15 @@ namespace Vivelab.Modelos;
 public class Plan
 {
     [Key]
-    public int Codigo { get; set; }
+    public int Code  { get; set; }
 
-    public string Nombre { get; set; }
+    public string Name { get; set; }
 
-    public double Precio { get; set; }
+    public double Price { get; set; }
 
-    public int CantidadUsuarios { get; set; }
+    public int UserCount { get; set; }
 
-    public string Descripcion { get; set; }
+    public string Description { get; set; }
 
-    public virtual List<Suscripcion>? Suscripciones { get; set; }
+    public virtual List<Subscription>? Subscriptions { get; set; }
 }

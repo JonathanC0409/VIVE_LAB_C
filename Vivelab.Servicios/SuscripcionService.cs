@@ -11,7 +11,7 @@ namespace Vivelab.Servicios
 {
     public class SuscripcionService : ISuscripcionService
     {
-        public Task<bool> CrearSuscripcion(Suscripcion suscripcion)
+        public Task<bool> CrearSuscripcion(Subscription suscripcion)
         {
             if (suscripcion == null)
             {
@@ -21,7 +21,7 @@ namespace Vivelab.Servicios
             {
                 try
                 {
-                    var response = CRUD<Suscripcion>.Create(suscripcion);
+                    var response = CRUD<Subscription>.Create(suscripcion);
                     return Task.FromResult(response != null);
                 }
                 catch (Exception ex)

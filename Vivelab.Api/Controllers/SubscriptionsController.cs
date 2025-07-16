@@ -11,22 +11,22 @@ namespace Vivelab.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SuscripcionesController : ControllerBase
+    public class SubscriptionsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public SuscripcionesController(AppDbContext context)
+        public SubscriptionsController(AppDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Suscripciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Suscripcion>>> GetSuscripcion()
+        public async Task<ActionResult<IEnumerable<Subscription>>> GetSuscripcion()
         {
-            var susbcripciones = await _context.Suscripciones
-                 .Include(s => s.UsuarioPrincipal)
-                 .Include(s => s.UsuariosAdicionales)
+            var susbcripciones = await _context.Subscriptions
+                 .Include(s => s.PrimaryUser)
+                 .Include(s => s.AdditionalUsers)
                  .Include(s => s.Plan)
                  .ToListAsync();
 
@@ -35,12 +35,12 @@ namespace Vivelab.Api.Controllers
 
         // GET: api/Suscripciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Suscripcion>> GetSuscripcion(int id)
+        public async Task<ActionResult<Subscription>> GetSuscripcion(int id)
         {
-            var suscripcion = await _context.Suscripciones
-                .Where(s => s.Codigo == id)
+            var suscripcion = await _context.Subscriptions
+                .Where(s => s.Code == id)
                 .Include(s => s.Plan)
-                .Include(s => s.UsuariosAdicionales)
+                .Include(s => s.AdditionalUsers)
                 .FirstAsync();
 
             if (suscripcion == null)
@@ -54,9 +54,9 @@ namespace Vivelab.Api.Controllers
         // PUT: api/Suscripciones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSuscripcion(int id, Suscripcion suscripcion)
+        public async Task<IActionResult> PutSuscripcion(int id, Subscription suscripcion)
         {
-            if (id != suscripcion.Codigo)
+            if (id != suscripcion.Code)
             {
                 return BadRequest();
             }
@@ -85,25 +85,25 @@ namespace Vivelab.Api.Controllers
         // POST: api/Suscripciones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Suscripcion>> PostSuscripcion(Suscripcion suscripcion)
+        public async Task<ActionResult<Subscription>> PostSuscripcion(Subscription suscripcion)
         {
-            _context.Suscripciones.Add(suscripcion);
+            _context.Subscriptions.Add(suscripcion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSuscripcion", new { id = suscripcion.Codigo }, suscripcion);
+            return CreatedAtAction("GetSuscripcion", new { id = suscripcion.Code }, suscripcion);
         }
 
         // DELETE: api/Suscripciones/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSuscripcion(int id)
         {
-            var suscripcion = await _context.Suscripciones.FindAsync(id);
+            var suscripcion = await _context.Subscriptions.FindAsync(id);
             if (suscripcion == null)
             {
                 return NotFound();
             }
 
-            _context.Suscripciones.Remove(suscripcion);
+            _context.Subscriptions.Remove(suscripcion);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -111,7 +111,7 @@ namespace Vivelab.Api.Controllers
 
         private bool SuscripcionExists(int id)
         {
-            return _context.Suscripciones.Any(e => e.Codigo == id);
+            return _context.Subscriptions.Any(e => e.Code == id);
         }
     }
 }

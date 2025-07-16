@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Vivelab.Modelos;
 
-public class Playlist
+public class UserSubscription
 {
     [Key]
     public int Code { get; set; }
 
-    public string Name { get; set; }
+    public int SubscriptionCode { get; set; }
 
     public int UserCode { get; set; }
 
-    public virtual List<PlaylistSong>? PlaylistSongs { get; set; }
+    public virtual Subscription? Subscription { get; set; }
 
     public virtual User? User { get; set; }
 }

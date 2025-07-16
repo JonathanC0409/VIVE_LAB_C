@@ -1,13 +1,13 @@
-﻿@model Vivelab.Modelos.Usuario
+﻿@model Vivelab.Modelos.User
 
 @{
     ViewData["Title"] = "Recargar Saldo";
 }
 
-<h2>Recargar saldo para @Model.Nombre</h2>
+<h2>Recargar saldo para @Model.Name</h2>
 
 <form asp-action="RecargarSaldo" method="post">
-    <input type="hidden" name="id" value="@Model.Codigo" />
+    <input type="hidden" name="id" value="@Model.Code" />
 
     <div class="form-group">
         <label>Monto a recargar:</label>

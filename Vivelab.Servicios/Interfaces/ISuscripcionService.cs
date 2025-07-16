@@ -9,6 +9,6 @@ namespace Vivelab.Servicios.Interfaces
 {
     public interface ISuscripcionService
     {
-        Task<bool> CrearSuscripcion(Suscripcion suscripcion);
+        Task<bool> CrearSuscripcion(Subscription suscripcion);
     }
 }

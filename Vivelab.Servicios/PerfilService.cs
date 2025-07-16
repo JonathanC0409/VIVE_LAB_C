@@ -13,12 +13,12 @@ namespace Vivelab.Servicios
     {
         public Task<bool> ActualizarNombre(string email, string nombre)
         {
-            var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+            var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
             if (usuario != null)
             {
-                usuario.Nombre = nombre;
+                usuario.Name = nombre;
                 Console.WriteLine($"Perfil passow {usuario.Password}");
-                CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                CRUD<User>.Update(usuario.Code, usuario);
                 Console.WriteLine($"Perfil del usuario con email {email} actualizado a nombre {nombre}. password {usuario.Password}");
                 return Task.FromResult(true);
             }
@@ -31,13 +31,13 @@ namespace Vivelab.Servicios
 
         public Task<bool> CambiarPassword(string email, string passwordActual, string passwordNuevo)
         {
-            var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+            var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
             if (usuario != null)
             {
                 if (BCrypt.Net.BCrypt.Verify(passwordActual, usuario.Password))
                 {
                     usuario.Password = passwordNuevo;
-                    CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                    CRUD<User>.Update(usuario.Code, usuario);
                     Console.WriteLine($"Contraseña del usuario con email {email} cambiada exitosamente.");
                     return Task.FromResult(true); // Contraseña cambiada exitosamente
                 }
@@ -56,13 +56,13 @@ namespace Vivelab.Servicios
 
         public async Task<bool> CambiarRolUsuario(string email)
         {
-            var usuarios = CRUD<Usuario>.GetAll();
+            var usuarios = CRUD<User>.GetAll();
             foreach (var usuario in usuarios)
             {
-                if (usuario.Email == email && usuario.Rol == "cliente")
+                if (usuario.Email == email && usuario.Role == "cliente")
                 {
-                    usuario.Rol = "artista";
-                    CRUD<Usuario>.Update(usuario.Codigo, usuario);
+                    usuario.Role = "artista";
+                    CRUD<User>.Update(usuario.Code, usuario);
                     Console.WriteLine($"Rol del usuario con email {email} cambiado a artista.");
                     return true; // Rol cambiado exitosamente
                 }
@@ -75,12 +75,12 @@ namespace Vivelab.Servicios
 
         public Task<bool> EliminarCuenta(string email)
         {
-            var usuarios = CRUD<Usuario>.GetAll();
+            var usuarios = CRUD<User>.GetAll();
             foreach (var u in usuarios)
             {
                 if (u.Email == email)
                 {
-                    CRUD<Usuario>.Delete(u.Codigo);
+                    CRUD<User>.Delete(u.Code);
                     Console.WriteLine($"Cuenta del usuario con email {email} eliminada.");
                     return Task.FromResult(true); // Cuenta eliminada exitosamente
                 }

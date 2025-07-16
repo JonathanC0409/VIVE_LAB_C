@@ -11,22 +11,22 @@ namespace Vivelab.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuariosSuscripcionesController : ControllerBase
+    public class UsersSubscriptionsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public UsuariosSuscripcionesController(AppDbContext context)
+        public UsersSubscriptionsController(AppDbContext context)
         {
             _context = context;
         }
 
         // GET: api/UsuariosSuscripciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UsuarioSuscripcion>>> GetUsuarioSuscripcion()
+        public async Task<ActionResult<IEnumerable<UserSubscription>>> GetUsuarioSuscripcion()
         {
-            var data = await _context.UsuariosSuscripciones
-                         .Include(u => u.Usuario)
-                         .Include(u => u.Suscripcion)
+            var data = await _context.UsersSubscriptions
+                         .Include(u => u.User)
+                         .Include(u => u.Subscription)
                          .ToListAsync();
 
             return data;
@@ -34,9 +34,9 @@ namespace Vivelab.Api.Controllers
 
         // GET: api/UsuariosSuscripciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UsuarioSuscripcion>> GetUsuarioSuscripcion(int id)
+        public async Task<ActionResult<UserSubscription>> GetUsuarioSuscripcion(int id)
         {
-            var usuarioSuscripcion = await _context.UsuariosSuscripciones.FindAsync(id);
+            var usuarioSuscripcion = await _context.UsersSubscriptions.FindAsync(id);
 
             if (usuarioSuscripcion == null)
             {
@@ -49,9 +49,9 @@ namespace Vivelab.Api.Controllers
         // PUT: api/UsuariosSuscripciones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuarioSuscripcion(int id, UsuarioSuscripcion usuarioSuscripcion)
+        public async Task<IActionResult> PutUsuarioSuscripcion(int id, UserSubscription usuarioSuscripcion)
         {
-            if (id != usuarioSuscripcion.Codigo)
+            if (id != usuarioSuscripcion.Code)
             {
                 return BadRequest();
             }
@@ -80,25 +80,25 @@ namespace Vivelab.Api.Controllers
         // POST: api/UsuariosSuscripciones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UsuarioSuscripcion>> PostUsuarioSuscripcion(UsuarioSuscripcion usuarioSuscripcion)
+        public async Task<ActionResult<UserSubscription>> PostUsuarioSuscripcion(UserSubscription usuarioSuscripcion)
         {
-            _context.UsuariosSuscripciones.Add(usuarioSuscripcion);
+            _context.UsersSubscriptions.Add(usuarioSuscripcion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsuarioSuscripcion", new { id = usuarioSuscripcion.Codigo }, usuarioSuscripcion);
+            return CreatedAtAction("GetUsuarioSuscripcion", new { id = usuarioSuscripcion.Code }, usuarioSuscripcion);
         }
 
         // DELETE: api/UsuariosSuscripciones/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuarioSuscripcion(int id)
         {
-            var usuarioSuscripcion = await _context.UsuariosSuscripciones.FindAsync(id);
+            var usuarioSuscripcion = await _context.UsersSubscriptions.FindAsync(id);
             if (usuarioSuscripcion == null)
             {
                 return NotFound();
             }
 
-            _context.UsuariosSuscripciones.Remove(usuarioSuscripcion);
+            _context.UsersSubscriptions.Remove(usuarioSuscripcion);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -106,7 +106,7 @@ namespace Vivelab.Api.Controllers
 
         private bool UsuarioSuscripcionExists(int id)
         {
-            return _context.UsuariosSuscripciones.Any(e => e.Codigo == id);
+            return _context.UsersSubscriptions.Any(e => e.Code == id);
         }
     }
 }

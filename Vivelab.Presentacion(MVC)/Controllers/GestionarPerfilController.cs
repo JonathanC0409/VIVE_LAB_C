@@ -28,23 +28,23 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             ViewBag.Email = email;
 
             // Busca al usuario por su correo electrónico
-            var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+            var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
 
             if (usuario != null)
             {
                 // Asignar el saldo del usuario
-                ViewBag.Saldo = usuario.Saldo;
+                ViewBag.Saldo = usuario.Balance;
 
                 // Verifica si el usuario tiene una suscripción activa
-                if (usuario.Suscripcion != null)
+                if (usuario.Subscription != null)
                 {
                     // Accede al plan de la suscripción
-                    var plan = usuario.Suscripcion.Plan;
+                    var plan = usuario.Subscription.Plan;
 
                     if (plan != null)
                     {
                         // Si el plan está asociado, muestra el nombre del plan
-                        ViewBag.Plan = plan.Nombre;
+                        ViewBag.Plan = plan.Name;
                     }
                     else
                     {
@@ -76,17 +76,17 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (resultado)
             {
                 // 2. Obtener el usuario actualizado desde la base de datos
-                var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+                var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
 
                 if (usuario != null)
                 {
                     // 3. Crear una nueva identidad de Claims con el nuevo nombre
                     var datosUsuario = new List<Claim>
                     {
-                        new Claim("UsuarioCodigo", usuario.Codigo.ToString()), // Código del usuario
-                        new Claim(ClaimTypes.Name, usuario.Nombre), // Nombre actualizado
+                        new Claim("UsuarioCodigo", usuario.Code.ToString()), // Código del usuario
+                        new Claim(ClaimTypes.Name, usuario.Name), // Nombre actualizado
                         new Claim(ClaimTypes.Email, usuario.Email), // Correo electrónico (sin cambios)
-                        new Claim("TipoUsuario", usuario.Rol) // Tipo de usuario (sin cambios)
+                        new Claim("TipoUsuario", usuario.Role) // Tipo de usuario (sin cambios)
                     };
 
                     var credencialesActualizadas = new ClaimsIdentity(datosUsuario, "Cookies");
@@ -136,17 +136,17 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             if (resultado)
             {
                 // 2. Obtener el usuario actualizado desde la base de datos
-                var usuario = CRUD<Usuario>.GetAll().FirstOrDefault(u => u.Email == email);
+                var usuario = CRUD<User>.GetAll().FirstOrDefault(u => u.Email == email);
 
                 if (usuario != null)
                 {
                     // 3. Crear una nueva identidad de Claims con el nuevo nombre
                     var datosUsuario = new List<Claim>
                     {
-                        new Claim("UsuarioCodigo", usuario.Codigo.ToString()), // Código del usuario
-                        new Claim(ClaimTypes.Name, usuario.Nombre), // Nombre actualizado
+                        new Claim("UsuarioCodigo", usuario.Code.ToString()), // Código del usuario
+                        new Claim(ClaimTypes.Name, usuario.Name), // Nombre actualizado
                         new Claim(ClaimTypes.Email, usuario.Email), // Correo electrónico (sin cambios)
-                        new Claim("TipoUsuario", usuario.Rol) // Tipo de usuario (sin cambios)
+                        new Claim("TipoUsuario", usuario.Role) // Tipo de usuario (sin cambios)
                     };
 
                     var credencialesActualizadas = new ClaimsIdentity(datosUsuario, "Cookies");
