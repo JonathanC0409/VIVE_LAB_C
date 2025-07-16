@@ -85,34 +85,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
         }
 
-        public ActionResult RecargarSaldo()
-        {
-            int id = 0;
-            foreach (var u in User.Claims)
-            {
-                if (u.Type == "UsuarioCodigo")
-                {
-                    id = int.Parse(u.Value);
-                }
-            }
-            var usuario = CRUD<User>.GetById(id);
-            if (usuario == null) return NotFound();
-
-            return View(usuario);
-        }
-
-        [HttpPost]
-        public IActionResult RecargarSaldo(int id, double monto)
-        {
-
-            var usuario = CRUD<User>.GetById(id);
-            if (usuario == null) return NotFound();
-
-            usuario.Balance += monto;
-            CRUD<User>.Update(id, usuario);
-
-            return RedirectToAction("Index", "Home");
-        }
+        
 
         // GET: UsuarioController/Usuarios
         public ActionResult ListaUsuarios()
