@@ -20,10 +20,11 @@
 
                 <!-- Buscador en el centro -->
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <form class="d-flex ms-4" action="#" method="get"> <!-- Modificado: ms-4 -->
-                        <input class="busqueda" type="search" placeholder="¿Qué quieres reproducir?" aria-label="Search" />
-                        <button class="btn btn-outline-light ms-3" type="submit">Buscar</button> <!-- Modificado: me-3 -->
+                    <form class="d-flex ms-4" action="@Url.Action("SearchSong", "Usuario")" method="post">
+                        <input class="busqueda" type="text" name="name" placeholder="¿Qué quieres reproducir?" aria-label="Search" />
+                        <button class="btn btn-outline-light ms-3" type="submit">Buscar</button>
                     </form>
+
                 </div>
 
                 <!-- Botones en el lado derecho -->
