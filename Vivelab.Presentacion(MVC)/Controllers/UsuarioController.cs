@@ -536,6 +536,16 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return View(canciones); // Devuelves la lista de canciones encontradas o el mensaje de error.
         }
 
+        public IActionResult ViewDatesSubcripcionsForPlan()
+        {
+            var planes = CRUD<Plan>.GetAll(); // Obtener todos los planes desde el CRUD
+            if (planes == null || !planes.Any())
+            {
+                ViewBag.ErrorMessage = "No se encontraron planes disponibles.";
+                return View(new List<Plan>()); // Retornar una lista vacía si no hay planes
+            }
+            return View(planes); // Pasar los planes a la vista
+        }
 
     }
 }
