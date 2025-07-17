@@ -1,0 +1,17 @@
+﻿@model Vivelab.Modelos.Song
+
+@{
+    ViewData["Title"] = "Eliminar Canción";
+}
+
+
+<h3>¿Estás seguro de que deseas eliminar esta canción?</h3>
+
+<div>
+    <p><strong>Título:</strong> @Model.Title</p>
+</div>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="@Url.Action("MisCanciones")" class="btn btn-secondary">Cancelar</a>
+</form>

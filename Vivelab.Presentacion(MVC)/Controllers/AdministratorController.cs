@@ -49,5 +49,34 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        // GET: UsuarioController/EliminarCancion/5
+        public ActionResult deleteMusic(int id)
+        {
+            var cancion = CRUD<Song>.GetById(id); // Obtener la canción por su id
+            if (cancion == null) return NotFound();
+
+            return View(cancion); // Pasar la canción a la vista para confirmar su eliminación
+        }
+
+        // POST: UsuarioController/EliminarCancion/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult deleteMusic(int id, IFormCollection collection)
+        {
+            try
+            {
+                var cancion = CRUD<Song>.GetById(id);
+                if (cancion == null) return NotFound();
+
+                CRUD<Song>.Delete(id); // Eliminar la canción
+
+                return RedirectToAction("MisCanciones"); // Redirigir al listado de canciones
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

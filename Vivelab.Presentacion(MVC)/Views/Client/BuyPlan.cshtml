@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "BuyPlan";
 }
 @if (TempData["Mensaje"] != null)
 {
@@ -16,13 +16,13 @@
         <div class="col-md-4 mb-4" style="color: black">
             <div class="card h-100">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">@plan.Name</h5>
-                    <p class="card-text flex-grow-1">@plan.Description</p>
+                    <h5 class="card-title">@plan.Nombre</h5>
+                    <p class="card-text flex-grow-1">@plan.Descripcion</p>
                     <ul class="list-unstyled mb-3">
-                        <li><strong>Usuarios:</strong> @plan.UserCount</li>
-                        <li><strong>Precio:</strong> @plan.Price.ToString("C")</li>
+                        <li><strong>Usuarios:</strong> @plan.CantidadUsuarios</li>
+                        <li><strong>Precio:</strong> @plan.Precio.ToString("C")</li>
                     </ul>
-                    <a asp-controller="Plan" asp-action="ComprarPlan" asp-route-id="@plan.Code" class="btn btn-primary mt-auto">
+                    <a asp-controller="Client" asp-action="BuyPlan" asp-route-id="@plan.Codigo" class="btn btn-primary mt-auto">
                         Comprar
                     </a>
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Utilities;
 using System.Security.Claims;
 using System.Text;
 using Vivelab.API.Consume;
@@ -85,14 +86,79 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             }
         }
 
-        
+        public ActionResult RecargarSaldo()
+        {
+            int id = 0;
+            foreach (var u in User.Claims)
+            {
+                if (u.Type == "UsuarioCodigo")
+                {
+                    id = int.Parse(u.Value);
+                }
+            }
+            var usuario = CRUD<User>.GetById(id);
+            if (usuario == null) return NotFound();
 
-        
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public IActionResult RecargarSaldo(int id, double monto)
+        {
+
+            var usuario = CRUD<User>.GetById(id);
+            if (usuario == null) return NotFound();
+
+            usuario.Balance += monto;
+            CRUD<User>.Update(id, usuario);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: UsuarioController/Usuarios
+        public ActionResult ListaUsuarios()
+        {
+            // Obtener todos los usuarios
+            var usuarios = CRUD<User>.GetAll();
+
+            // Pasar los usuarios a la vista
+            return View(usuarios);
+        }
 
         public ActionResult UsuarioBloqueado()
         {
             return View();
-        }    
+        }
+
+
+        // GET: UsuarioController/BloquearUsuario
+        public ActionResult BloquearUsuario()
+        {
+            var usuarios = CRUD<User>.GetAll();
+
+            // Pasar la lista de usuarios a la vista
+            return View(usuarios);
+        }
+
+
+        // POST: UsuarioController/BloquearUsuario
+        [HttpPost]
+        public IActionResult BloquearUsuario(int usuarioId)
+        {
+            // Verificar si el usuario existe
+            var usuario = CRUD<User>.GetById(usuarioId);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+
+            usuario.Role = "bloqueado";
+            CRUD<User>.Update(usuarioId, usuario);
+
+            // Redirigir a la lista de usuarios
+            return RedirectToAction("Index", "Home");
+        }
 
         public ActionResult VincularUsuario()
         {

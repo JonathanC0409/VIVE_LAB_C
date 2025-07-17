@@ -22,7 +22,7 @@
                 <td>@cancion.Duration</td>
                 <td>
                     <a href="@Url.Action("EditarCancion", new { id = cancion.Code })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("EliminarCancion", new { id = cancion.Code })" class="btn btn-danger">Eliminar</a>
+                    <a href="@Url.Action("DeleteSong", new { id = cancion.Code })" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
         }
