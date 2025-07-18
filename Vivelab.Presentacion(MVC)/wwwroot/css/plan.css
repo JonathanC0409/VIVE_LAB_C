@@ -1,0 +1,80 @@
+﻿﻿ /* Plan card style */
+.plan-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 25px;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Title of the plan */
+.plan-card h2 {
+    font-size: 2rem;
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* List of subscriptions */
+.suscripciones-list {
+    margin-top: 1.5rem;
+}
+
+.suscripcion-card {
+    background: var(--secondary-bg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+    .suscripcion-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Text styles for subscription details */
+    .suscripcion-card p {
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        margin: 0.5rem 0;
+    }
+
+    /* Additional users list */
+    .suscripcion-card ul {
+        padding-left: 1.5rem;
+    }
+
+    .suscripcion-card li {
+        font-size: 1rem;
+        color: var(--text-secondary);
+    }
+
+/* Button Styles */
+.btn-primary {
+    background: var(--accent-green);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    border: none;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(29, 185, 84, 0.3);
+}
+
+    .btn-primary:hover {
+        background: #1ed760;
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(29, 185, 84, 0.4);
+        text-decoration: none;
+    }

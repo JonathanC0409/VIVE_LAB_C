@@ -565,6 +565,40 @@ public async Task<IActionResult> CrearAlbum(Album nuevoAlbum)
    
         }
 
+        [HttpPost]
+        public IActionResult SearchSong(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                // Si no se proporciona un nombre, devolver una vista con un mensaje de error o realizar otra acción.
+                ViewBag.ErrorMessage = "Por favor, ingresa un nombre de canción.";
+                return View();
+            }
+
+
+            var canciones = CRUD<Cancion>.GetAll(); // Obtener todas las canciones desde el CRUD
+            canciones = canciones.Where(c => c.Titulo.ToLower().Contains(name.ToLower())).ToList();
+
+
+            if (canciones.Count == 0)
+            {
+                ViewBag.ErrorMessage = "No se encontraron canciones con ese nombre.";
+            }
+
+            return View(canciones); // Devuelves la lista de canciones encontradas o el mensaje de error.
+        }
+
+        public IActionResult ViewDatesSubcripcionsForPlan()
+        {
+            var planes = CRUD<Plan>.GetAll(); // Obtener todos los planes desde el CRUD
+            if (planes == null || !planes.Any())
+            {
+                ViewBag.ErrorMessage = "No se encontraron planes disponibles.";
+                return View(new List<Plan>()); // Retornar una lista vacía si no hay planes
+            }
+            return View(planes); // Pasar los planes a la vista
+        }
+
 
     }
 }

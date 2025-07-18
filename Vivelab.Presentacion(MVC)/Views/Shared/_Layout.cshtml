@@ -6,6 +6,10 @@
     <title>@ViewData["Title"] - Vivelab.Presentacion_MVC_</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
+
+<!-- Background animation -->
+<div class="background-animation" id="backgroundAnimation"></div>
 
 </head>
 <body style="background-color: #121212; color: white;">
@@ -20,9 +24,9 @@
 
                 <!-- Buscador en el centro -->
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <form class="d-flex ms-4" action="#" method="get"> <!-- Modificado: ms-4 -->
-                        <input class="busqueda" type="search" placeholder="¿Qué quieres reproducir?" aria-label="Search" />
-                        <button class="btn btn-outline-light ms-3" type="submit">Buscar</button> <!-- Modificado: me-3 -->
+                     <form class="d-flex ms-4" action="@Url.Action("SearchSong", "Usuario")" method="post">
+                        <input class="busqueda" type="text" name="name" placeholder="¿Qué quieres reproducir?" aria-label="Search" />
+                        <button class="btn btn-outline-light ms-3" type="submit">Buscar</button>
                     </form>
                 </div>
 
@@ -74,6 +78,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/cardHome.js" asp-append-version="true"></script>
+    <script src="~/js/player.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

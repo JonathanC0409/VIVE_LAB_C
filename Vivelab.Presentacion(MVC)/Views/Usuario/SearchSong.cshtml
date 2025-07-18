@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Vivelab.Modelos.Cancion>;
+
+@functions {
+    private static readonly Random rnd = new Random();
+
+    public string GetRandomColorClass()
+    {
+        return $"avatar-color{rnd.Next(1, 7)}";
+    }
+}
+
+@{
+    ViewData["Title"] = "Resultados de búsqueda";
+}
+
+<link rel="stylesheet" href="~/css/cardHome.css" asp-append-version="true" />
+
+<!-- Background animation -->
+<div class="background-animation" id="backgroundAnimation"></div>
+
+<h2>Resultados de búsqueda</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+else
+{
+
+    <h2 class="section-title scroll-animation">Resultados</h2>
+    <div class="carrusel-canciones scroll-animation">
+        @foreach (var c in Model)
+        {
+            <div class="tarjeta-cancion">
+                @if (!string.IsNullOrEmpty(c.PortadaUrl))
+                {
+                    <img src="@Url.Content(c.PortadaUrl)" alt="@c.Titulo" />
+                }
+                else
+                {
+                    <div class="avatar-cancion @GetRandomColorClass()">
+                        @c.Titulo.Substring(0, 1).ToUpper()
+                    </div>
+                }
+                <div class="info">
+                    <p class="titulo">@c.Titulo</p>
+                    <p class="artista">@c.Artista?.Nombre</p>
+                </div>
+                <a href="@Url.Action("Player", "Home", new { id = c.Codigo })" class="boton-play" title="Reproducir">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 4l8 4-8 4z" />
+                    </svg>
+                </a>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/cardHome.js" asp-append-version="true"></script>
+    <script src="~/js/player.js" asp-append-version="true"></script>
+}
