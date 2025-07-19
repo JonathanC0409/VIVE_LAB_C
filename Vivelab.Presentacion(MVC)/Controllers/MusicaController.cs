@@ -107,10 +107,13 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         [HttpGet]
         public IActionResult Subir() => View(new CancionUploadViewModel());
 
+
         [HttpPost]
         public IActionResult Subir(CancionUploadViewModel vm)
         {
             if (!ModelState.IsValid) return View(vm);
+
+            int artistaId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0");
 
             // abre el stream y llama al CRUD
             var cancion = CRUD<Cancion>.UploadWithFile(
@@ -119,7 +122,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 vm.Archivo.FileName,
                 vm.Archivo.ContentType,
                 vm.Duracion,
-                vm.ArtistaCodigo,
+                artistaId,
                 vm.AlbumCodigo
             );
 
