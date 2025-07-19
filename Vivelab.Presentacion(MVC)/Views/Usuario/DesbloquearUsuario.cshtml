@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Vivelab.Modelos.Usuario>
+
+@{
+    ViewData["Title"] = "Desbloquear Usuario";
+}
+
+<h2>Selecciona un Usuario para Desbloquear</h2>
+
+<form method="post" action="@Url.Action("DesbloquearUsuario", "Usuario")">
+    <div class="form-group">
+        <label for="usuarioId">Usuario</label>
+        <select id="usuarioId" name="usuarioId" class="form-control">
+            <option value="">Selecciona un usuario</option>
+            @foreach (var usuario in Model.Where(u => u.Rol == "bloqueado"))
+            {
+                <option value="@usuario.Codigo">@usuario.Nombre</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-danger">Desbloquear Usuario</button>
+</form>
+
+<a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn btn-primary">Volver a la lista de usuarios</a>

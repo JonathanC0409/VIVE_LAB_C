@@ -159,6 +159,33 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: UsuarioController/BloquearUsuario
+        public ActionResult DesbloquearUsuario()
+        {
+            var usuarios = CRUD<Usuario>.GetAll();
+
+            // Pasar la lista de usuarios a la vista
+            return View(usuarios);
+        }
+
+
+        // POST: UsuarioController/BloquearUsuario
+        [HttpPost]
+        public IActionResult DesbloquearUsuario(int usuarioId)
+        {
+            // Verificar si el usuario existe
+            var usuario = CRUD<Usuario>.GetById(usuarioId);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            usuario.Rol = "cliente";
+            CRUD<Usuario>.Update(usuarioId, usuario);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         public ActionResult VincularUsuario()
         {
 
