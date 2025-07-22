@@ -69,7 +69,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             else
             {
                 // Mostrar mensaje de error
-                ViewBag.ErrorMessage = "Error al registrar el usuario.";
+                ViewBag.ErrorMessage = "El correro ya esta registrado";
                 return View();
             }
         }
