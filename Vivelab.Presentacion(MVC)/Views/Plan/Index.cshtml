@@ -1,33 +1,62 @@
 ﻿@{
-    ViewData["Title"] = "Index";
-}
-@if (TempData["Mensaje"] != null)
-{
-    <div class="alert alert-info">
-        @TempData["Mensaje"]
-    </div>
+    ViewData["Title"] = "Planes Disponibles";
 }
 
-<h1>Planes</h1>
+<link href="~/css/plans.css" rel="stylesheet" asp-append-version="true" />
 
-<div class="row">
-    @foreach (var plan in Model)
+<div class="plans-container">
+    @if (TempData["Mensaje"] != null)
     {
-        <div class="col-md-4 mb-4" style="color: black">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">@plan.Nombre</h5>
-                    <p class="card-text flex-grow-1">@plan.Descripcion</p>
-                    <ul class="list-unstyled mb-3">
-                        <li><strong>Usuarios:</strong> @plan.CantidadUsuarios</li>
-                        <li><strong>Precio:</strong> @plan.Precio.ToString("C")</li>
-                    </ul>
-                    <a asp-controller="Plan" asp-action="ComprarPlan" asp-route-id="@plan.Codigo" class="btn btn-primary mt-auto">
-                        Comprar
-                    </a>
-
-                </div>
-            </div>
+        <div class="plan-alert">
+            <i class="fas fa-info-circle"></i> @TempData["Mensaje"]
         </div>
     }
+
+    <div class="plans-header">
+        <h1 class="plans-title">
+            <i class="fas fa-crown"></i> Elige tu Plan
+            <div class="title-underline"></div>
+        </h1>
+        <p class="plans-subtitle">Selecciona el plan que mejor se adapte a tus necesidades</p>
+    </div>
+
+    <div class="plans-grid">
+        @foreach (var plan in Model)
+        {
+            <div class="plan-card @(plan.Nombre.Contains("Premium") ? "featured" : "")">
+                <div class="card-header">
+                    <h3 class="plan-name">@plan.Nombre</h3>
+                    @if (plan.Nombre.Contains("Premium"))
+                    {
+                        <div class="popular-badge">MÁS POPULAR</div>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="plan-price">
+                        <span class="price-amount">@plan.Precio.ToString("C")</span>
+                        <span class="price-period">/mes</span>
+                    </div>
+                    <p class="plan-description">@plan.Descripcion</p>
+
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> @plan.CantidadUsuarios usuarios simultáneos</li>
+                        <li><i class="fas fa-check"></i> Acceso ilimitado a canciones</li>
+                        <li><i class="fas fa-check"></i> Calidad de audio HD</li>
+                        <li><i class="fas fa-check"></i> Sin anuncios</li>
+                        @if (plan.Nombre.Contains("Premium"))
+                        {
+                            <li><i class="fas fa-check"></i> Descargas offline</li>
+                            <li><i class="fas fa-check"></i> Contenido exclusivo</li>
+                        }
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Plan" asp-action="ComprarPlan" asp-route-id="@plan.Codigo" class="plan-button @(plan.Nombre.Contains("Premium") ? "featured-button" : "")">
+                        Elegir Plan
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
 </div>

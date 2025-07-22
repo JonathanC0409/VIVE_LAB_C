@@ -1,35 +1,77 @@
 ﻿@{
     Layout = "_Layout";
+    ViewData["Title"] = "Unirse como Artista";
 }
 
-@{
-    ViewData["Title"] = "Unirse como artista ";
-}
-<h2>Cambiar Rol a Artista</h2>
+<link href="~/css/artist-join.css" rel="stylesheet" asp-append-version="true"/>
 
-@if (TempData["Mensaje"] != null)
-{
-    <div class="alert alert-info">
-        @TempData["Mensaje"]
+<div class="artist-join-container">
+    <div class="artist-join-card">
+        <div class="artist-header">
+            <h1 class="artist-title">
+                <i class="fas fa-microphone-alt"></i> Unirse como Artista
+            </h1>
+            <div class="artist-divider"></div>
+            <p class="artist-subtitle">Comparte tu música con el mundo</p>
+        </div>
+
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="artist-alert">
+                <i class="fas fa-info-circle"></i> @TempData["Mensaje"]
+            </div>
+        }
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
+            {
+                <div class="artist-benefits">
+                    <h3><i class="fas fa-star"></i> Beneficios de ser Artista</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Sube y gestiona tu música</li>
+                        <li><i class="fas fa-check"></i> Conecta con tus fans</li>
+                    </ul>
+                </div>
+
+                <form method="post" asp-action="CambiarRolUsuario" class="artist-form">
+                    <input type="hidden" name="email" value="@ViewBag.Email" />
+                    <button type="submit" class="artist-join-button">
+                        <i class="fas fa-user-astronaut"></i> Convertirme en Artista
+                    </button>
+                </form>
+
+                <div class="artist-terms">
+                    <p>Al hacer clic aceptas nuestros <a href="#">Términos para Artistas</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="artist-already">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>¡Ya eres un artista!</h3>
+                    <p>Puedes acceder a todas las funciones para artistas en tu panel de control.</p>
+                    <a href="@Url.Action("Index", "ArtistDashboard")" class="artist-dashboard-button">
+                        <i class="fas fa-tachometer-alt"></i> Ir al Panel de Artista
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="artist-login-required">
+                <i class="fas fa-sign-in-alt"></i>
+                <h3>Inicia sesión para continuar</h3>
+                <p>Debes tener una cuenta para unirte como artista.</p>
+                <div class="artist-login-actions">
+                    <a href="@Url.Action("Login", "Account")" class="artist-login-button">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                    <a href="@Url.Action("Register", "Account")" class="artist-register-button">
+                        <i class="fas fa-user-plus"></i> Registrarse
+                    </a>
+                </div>
+            </div>
+        }
     </div>
-}
-
-@if (User.Identity.IsAuthenticated)
-{
-    @* Verifica si el tipo de usuario es cliente para mostrar la opción de cambiar a artista *@
-    @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "cliente"))
-    {
-        <form method="post" asp-action="CambiarRolUsuario">
-            <input type="hidden" name="email" value="@ViewBag.Email" />
-            <button type="submit" class="btn btn-primary">Cambiar a Artista</button>
-        </form>
-    }
-    else
-    {
-        <p>Ya eres un artista.</p>
-    }
-}
-else
-{
-    <p>Por favor, inicia sesión para cambiar tu rol.</p>
-}
+</div>
