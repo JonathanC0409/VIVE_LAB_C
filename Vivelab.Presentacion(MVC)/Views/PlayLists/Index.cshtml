@@ -4,60 +4,81 @@
     ViewData["Title"] = "Playlists";
 }
 
-@if (TempData["Mensaje"] != null)
-{
-    <div class="alert alert-warning text-center">
-        @TempData["Mensaje"]
-    </div>
-}
+<link href="~/css/playlists.css" rel="stylesheet" asp-append-version="true" />
 
-@if (ViewBag.Plan != 0)
-{
-    <h2 class="mb-4">🎵 Tus Playlists</h2>
-
-    <a href="@Url.Action("Create", "PlayLists")" class="btn btn-success mb-4">
-        <i class="bi bi-plus-circle"></i> Crear Nueva Playlist
-    </a>
-
-    @if (Model.Count > 0)
+<div class="playlists-container">
+    @if (TempData["Mensaje"] != null)
     {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (var playlist in Model)
-            {
-                <div class="col">
-                    <div class="card h-100 shadow-sm bg-dark text-white border-light">
-                        <div class="card-body">
-                            <h5 class="card-title">@playlist.Nombre</h5>
-                            <p class="card-text">🎧 Disfruta de tu selección personalizada.</p>
-                        </div>
-                        <div class="card-footer d-flex justify-content-between bg-transparent border-top-0">
-                            <a href="@Url.Action("Details", "PlayLists", new { id = playlist.Codigo })" class="btn btn-outline-light btn-sm">
-                                <i class="bi bi-eye"></i> Ver
-                            </a>
-                            <a href="@Url.Action("Edit", "PlayLists", new { id = playlist.Codigo })" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-pencil"></i> Editar
-                            </a>
-                            <a href="@Url.Action("Delete", "PlayLists", new { id = playlist.Codigo })" class="btn btn-outline-danger btn-sm">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </a>
+        <div class="alert alert-notification">
+            <i class="fas fa-info-circle"></i> @TempData["Mensaje"]
+        </div>
+    }
+
+    @if (ViewBag.Plan != 0)
+    {
+        <div class="playlists-header">
+            <h1 class="playlists-title">
+                <i class="fas fa-music"></i> Tus Playlists
+                <div class="title-underline"></div>
+            </h1>
+
+            <a href="@Url.Action("Create", "PlayLists")" class="btn-create-playlist">
+                <i class="fas fa-plus"></i> Crear Nueva Playlist
+            </a>
+        </div>
+
+        @if (Model.Count > 0)
+        {
+            <div class="playlists-grid">
+                @foreach (var playlist in Model)
+                {
+                    <div class="playlist-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <h3 class="playlist-name">@playlist.Nombre</h3>
+                            <p class="playlist-description">Disfruta de tu selección personalizada</p>
+
+                            <div class="playlist-actions">
+                                <a href="@Url.Action("Details", "PlayLists", new { id = playlist.Codigo })" class="btn-action btn-view">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="@Url.Action("Edit", "PlayLists", new { id = playlist.Codigo })" class="btn-action btn-edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a href="@Url.Action("Delete", "PlayLists", new { id = playlist.Codigo })" class="btn-action btn-delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-playlists">
+                <div class="empty-content">
+                    <i class="fas fa-music"></i>
+                    <h3>Aún no tienes playlists creadas</h3>
+                    <p>¡Empieza una nueva ahora y organiza tu música favorita!</p>
+                    <a href="@Url.Action("Create", "PlayLists")" class="btn-create">
+                        <i class="fas fa-plus"></i> Crear mi primera playlist
+                    </a>
                 </div>
-            }
-        </div>
+            </div>
+        }
     }
     else
     {
-        <div class="alert alert-info mt-3 text-center">
-            Aún no tienes playlists creadas. ¡Empieza una nueva ahora!
+        <div class="upgrade-required">
+            <div class="upgrade-content">
+                <i class="fas fa-crown"></i>
+                <h2>Función no disponible</h2>
+                <p>Esta opción solo está disponible para usuarios con un plan activo.</p>
+                <a href="@Url.Action("Index", "Plan")" class="btn-upgrade">
+                    Actualizar mi Plan
+                </a>
+            </div>
         </div>
     }
-}
-else
-{
-    <div class="text-center mt-5">
-        <h2>🚫 Función no disponible</h2>
-        <p class="lead">Esta opción solo está disponible para usuarios con un plan activo.</p>
-        <a href="@Url.Action("Index", "Plan")" class="btn btn-primary mt-3">Actualizar Plan</a>
-    </div>
-}
+</div>
