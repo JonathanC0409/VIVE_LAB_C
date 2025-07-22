@@ -3,6 +3,7 @@
 }
 
 <link href="~/css/plans.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
 <div class="plans-container">
     @if (TempData["Mensaje"] != null)
@@ -17,7 +18,7 @@
             <i class="fas fa-crown"></i> Elige tu Plan
             <div class="title-underline"></div>
         </h1>
-        <p class="plans-subtitle">Selecciona el plan que mejor se adapte a tus necesidades</p>
+        <p class="plans-subtitle">Selecciona el plan que mejor se adapte a tus necesidades y disfruta de música sin límites</p>
     </div>
 
     <div class="plans-grid">
@@ -26,33 +27,32 @@
             <div class="plan-card @(plan.Nombre.Contains("Premium") ? "featured" : "")">
                 <div class="card-header">
                     <h3 class="plan-name">@plan.Nombre</h3>
-                    @if (plan.Nombre.Contains("Premium"))
-                    {
-                        <div class="popular-badge">MÁS POPULAR</div>
-                    }
                 </div>
                 <div class="card-body">
                     <div class="plan-price">
-                        <span class="price-amount">@plan.Precio.ToString("C")</span>
-                        <span class="price-period">/mes</span>
+                        <span class="price-amount">@plan.Precio.ToString("C", new System.Globalization.CultureInfo("es-ES"))</span>
+                        <span class="price-period">por mes</span>
                     </div>
                     <p class="plan-description">@plan.Descripcion</p>
 
                     <ul class="plan-features">
-                        <li><i class="fas fa-check"></i> @plan.CantidadUsuarios usuarios simultáneos</li>
-                        <li><i class="fas fa-check"></i> Acceso ilimitado a canciones</li>
-                        <li><i class="fas fa-check"></i> Calidad de audio HD</li>
-                        <li><i class="fas fa-check"></i> Sin anuncios</li>
+                        <li><i class="fas fa-check"></i> @plan.CantidadUsuarios usuario@(plan.CantidadUsuarios > 1 ? "s" : "") simultáneo@(plan.CantidadUsuarios > 1 ? "s" : "")</li>
+                        <li><i class="fas fa-check"></i> Acceso ilimitado a millones de canciones</li>
+                        <li><i class="fas fa-check"></i> Audio en alta calidad (320kbps)</li>
+                        <li><i class="fas fa-check"></i> Experiencia completamente libre de anuncios</li>
                         @if (plan.Nombre.Contains("Premium"))
                         {
-                            <li><i class="fas fa-check"></i> Descargas offline</li>
-                            <li><i class="fas fa-check"></i> Contenido exclusivo</li>
+                            <li><i class="fas fa-check"></i> Descarga canciones para escuchar offline</li>
+                            <li><i class="fas fa-check"></i> Contenido exclusivo para suscriptores</li>
+                            <li><i class="fas fa-check"></i> Prioridad en soporte técnico</li>
                         }
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <a asp-controller="Plan" asp-action="ComprarPlan" asp-route-id="@plan.Codigo" class="plan-button @(plan.Nombre.Contains("Premium") ? "featured-button" : "")">
-                        Elegir Plan
+                    <a asp-controller="Plan" asp-action="ComprarPlan" asp-route-id="@plan.Codigo"
+                       class="plan-button @(plan.Nombre.Contains("Premium") ? "featured-button" : "")">
+                        <span class="default-text">Elegir Plan</span>
+                        <span class="hover-text">Ver</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
