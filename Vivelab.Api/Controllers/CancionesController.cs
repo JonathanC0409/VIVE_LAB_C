@@ -132,19 +132,40 @@ namespace Vivelab.Api.Controllers
             await blob.UploadAsync(stream, new BlobHttpHeaders { ContentType = dto.Archivo.ContentType });
 
             // 3. Mapear DTO → entidad y guardar en BD
-            var cancion = new Cancion
+            if (dto.AlbumCodigo != 0)
             {
-                Titulo = dto.Titulo,
-                ArchivoUrl = blob.Uri.ToString(),
-                Duracion = dto.Duracion,
-                FechaSubida = DateTime.UtcNow,
-                ArtistaCodigo = dto.ArtistaCodigo,
-                AlbumCodigo = dto.AlbumCodigo
-            };
-            _context.Canciones.Add(cancion);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCancion), new { id = cancion.Codigo }, cancion);
+
+                var cancion = new Cancion
+                {
+                    Titulo = dto.Titulo,
+                    ArchivoUrl = blob.Uri.ToString(),
+                    Duracion = dto.Duracion,
+                    FechaSubida = DateTime.UtcNow,
+                    ArtistaCodigo = dto.ArtistaCodigo,
+                    AlbumCodigo = dto.AlbumCodigo
+                };
+                _context.Canciones.Add(cancion);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetCancion), new { id = cancion.Codigo }, cancion);
+            }
+            else
+            {
+                var cancion = new Cancion
+                {
+                    Titulo = dto.Titulo,
+                    ArchivoUrl = blob.Uri.ToString(),
+                    Duracion = dto.Duracion,
+                    FechaSubida = DateTime.UtcNow,
+                    ArtistaCodigo = dto.ArtistaCodigo,
+                };
+                _context.Canciones.Add(cancion);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetCancion), new { id = cancion.Codigo }, cancion);
+            }
+                
         }
 
         // En CancionesController.cs

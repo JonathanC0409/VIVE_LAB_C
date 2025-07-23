@@ -1,0 +1,248 @@
+﻿/* Estilos para la página de subir canción */
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-card {
+    max-width: 500px;
+    width: 100%;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+    .upload-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(155, 81, 224, 0.05) 0%, transparent 100%);
+        z-index: -1;
+    }
+
+.upload-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+    text-align: center;
+    background: linear-gradient(45deg, var(--accent-purple), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+    .upload-title::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-purple), transparent);
+        margin: 1rem auto 0;
+        border-radius: 2px;
+    }
+
+.form-group {
+    margin-bottom: 1.8rem;
+    position: relative;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: var(--text-primary);
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    background: var(--secondary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.2);
+        background: var(--hover-bg);
+    }
+
+/* Estilo especial para el input de archivo */
+input[type="file"] {
+    padding: 0.5rem;
+}
+
+    input[type="file"]::file-selector-button {
+        margin-right: 1rem;
+        padding: 0.5rem 1rem;
+        background: var(--accent-purple);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #8a4acf;
+        }
+
+/* Estilo para el select de álbum */
+.album-select {
+    width: 100%;
+    padding: 1rem;
+    background: var(--secondary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23b3b3b3' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+}
+
+    .album-select:focus {
+        outline: none;
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.2);
+    }
+
+.btn-upload {
+    width: 100%;
+    padding: 1.1rem;
+    background: linear-gradient(45deg, var(--accent-purple), #a05ae0);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 30px rgba(155, 81, 224, 0.3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+    .btn-upload::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s;
+    }
+
+    .btn-upload:hover::before {
+        left: 100%;
+    }
+
+    .btn-upload:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(155, 81, 224, 0.4);
+    }
+
+.btn-icon {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-upload:hover .btn-icon {
+    transform: translateX(5px);
+}
+
+/* Animaciones y responsive (reutilizadas del login) */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .upload-card {
+        padding: 1.8rem;
+    }
+
+    .upload-title {
+        font-size: 2rem;
+    }
+
+    .form-control {
+        padding: 0.9rem;
+    }
+
+    .btn-upload {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-container {
+        padding: 1rem;
+    }
+
+    .upload-card {
+        padding: 1.5rem;
+    }
+
+    .upload-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* Estilo para mensajes de validación */
+.text-danger {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: block;
+}

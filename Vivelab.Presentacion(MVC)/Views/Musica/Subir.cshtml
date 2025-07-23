@@ -4,35 +4,48 @@
     ViewData["Title"] = "Subir Canción";
 }
 
-<h2>Subir Canción</h2>
+<link href="~/css/subirCancion.css" rel="stylesheet" asp-append-version="true"/>
 
-<form asp-action="Subir" method="post" enctype="multipart/form-data">
-    <div class="form-group mb-3">
-        <label asp-for="Titulo" class="form-label"></label>
-        <input asp-for="Titulo" class="form-control" />
-        <span asp-validation-for="Titulo" class="text-danger"></span>
+<div class="upload-container">
+    <div class="upload-card">
+        <h2 class="upload-title">Subir Canción</h2>
+
+        <form asp-action="Subir" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Titulo" class="form-label">Título</label>
+                <input asp-for="Titulo" class="form-control" placeholder="Nombre de la canción" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Archivo" class="form-label">Archivo de audio</label>
+                <input asp-for="Archivo" type="file" class="form-control" accept="audio/*" />
+                <span asp-validation-for="Archivo" class="text-danger"></span>
+            </div>
+         
+            <div class="form-group">
+                <label asp-for="AlbumCodigo" class="form-label">Álbum</label>
+                <select asp-for="AlbumCodigo" class="form-control album-select">
+                    <option value="">-- Sin álbum --</option>
+                    @foreach (var album in ViewBag.Albums)
+                    {
+                        <option value="@album.Codigo">@album.Nombre</option>
+                    }
+                </select>
+                <span asp-validation-for="AlbumCodigo" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-upload">
+                <i class="fas fa-upload btn-icon"></i> Subir Canción
+            </button>
+        </form>
     </div>
-    <div class="form-group mb-3">
-        <label asp-for="Archivo" class="form-label"></label>
-        <input asp-for="Archivo" type="file" class="form-control" />
-        <span asp-validation-for="Archivo" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Duracion" class="form-label"></label>
-        <input asp-for="Duracion" class="form-control" placeholder="hh:mm:ss" />
-        <span asp-validation-for="Duracion" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-4">
-        <label asp-for="AlbumCodigo" class="form-label"></label>
-        <input asp-for="AlbumCodigo" class="form-control" />
-        <span asp-validation-for="AlbumCodigo" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Subir Canción</button>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 }
-
