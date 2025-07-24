@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Vivelab.API.Consume;
 using Vivelab.Modelos;
 using Vivelab.Presentacion_MVC_.Models;
+using NAudio.Wave;
 
 namespace Vivelab.Presentacion_MVC_.Controllers
 {
@@ -52,10 +53,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             var lista = CRUD<Cancion>.GetAll();
             return View(lista);
         }
-
-
-
-
 
         private string Rol()
         {
@@ -107,12 +104,27 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
 
         [HttpGet]
-        public IActionResult Subir() => View(new CancionUploadViewModel());
+        public IActionResult Subir()
+        {
+            ViewBag.Albums = albums();
+            return View(new CancionUploadViewModel());
+        }
+
+        private List<Album> albums()
+        {
+            var albums = CRUD<Album>.GetAll()
+                .Where(a => a.ArtistaCodigo == int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0"))
+                .ToList();
+            return albums;
+        }
+
 
         [HttpPost]
         public IActionResult Subir(CancionUploadViewModel vm)
         {
             if (!ModelState.IsValid) return View(vm);
+            int artistaId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0");
+            vm.Duracion = GetAudioDuration(vm.Archivo.OpenReadStream());
 
             // abre el stream y llama al CRUD
             var cancion = CRUD<Cancion>.UploadWithFile(
@@ -121,12 +133,21 @@ namespace Vivelab.Presentacion_MVC_.Controllers
                 vm.Archivo.FileName,
                 vm.Archivo.ContentType,
                 vm.Duracion,
-                vm.ArtistaCodigo,
-                vm.AlbumCodigo
+                artistaId,
+                vm.AlbumCodigo ?? 0
             );
 
             // redirige o maneja la respuesta
             return RedirectToAction("Index");
+        }
+
+        private TimeSpan GetAudioDuration(Stream audioStream)
+        {
+            // Crea un lector de audio (WaveFileReader o Mp3FileReader, dependiendo del formato)
+            using (var reader = new Mp3FileReader(audioStream)) // Usa Mp3FileReader o WaveFileReader según el tipo de archivo
+            {
+                return reader.TotalTime; // Retorna el TimeSpan directamente
+            }
         }
 
         [HttpPost]
