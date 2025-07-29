@@ -45,17 +45,7 @@
                     <p>Al hacer clic aceptas nuestros <a href="#">Términos para Artistas</a></p>
                 </div>
             }
-            else
-            {
-                <div class="artist-already">
-                    <i class="fas fa-check-circle"></i>
-                    <h3>¡Ya eres un artista!</h3>
-                    <p>Puedes acceder a todas las funciones para artistas en tu panel de control.</p>
-                    <a href="@Url.Action("Index", "ArtistDashboard")" class="artist-dashboard-button">
-                        <i class="fas fa-tachometer-alt"></i> Ir al Panel de Artista
-                    </a>
-                </div>
-            }
+            
         }
         else
         {
@@ -64,10 +54,10 @@
                 <h3>Inicia sesión para continuar</h3>
                 <p>Debes tener una cuenta para unirte como artista.</p>
                 <div class="artist-login-actions">
-                    <a href="@Url.Action("Login", "Account")" class="artist-login-button">
+                    <a href="@Url.Action("Index", "Login")" class="artist-login-button">
                         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                     </a>
-                    <a href="@Url.Action("Register", "Account")" class="artist-register-button">
+                    <a href="@Url.Action("Register", "Login")" class="artist-register-button">
                         <i class="fas fa-user-plus"></i> Registrarse
                     </a>
                 </div>

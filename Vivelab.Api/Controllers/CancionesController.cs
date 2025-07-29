@@ -117,6 +117,7 @@ namespace Vivelab.Api.Controllers
             return _context.Canciones.Any(e => e.Codigo == id);
         }
 
+        // UPLOAD: api/Canciones/upload
         [HttpPost("upload")]
         public async Task<ActionResult<Cancion>> UploadCancion([FromForm] CancionUploadDto dto)
         {

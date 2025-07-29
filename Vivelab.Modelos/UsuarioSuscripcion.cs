@@ -13,7 +13,7 @@ public class UsuarioSuscripcion
 
     public int UsuarioCodigo { get; set; }
 
-    public virtual Suscripcion? Suscripcion { get; set; }
+    public Suscripcion? Suscripcion { get; set; }
 
-    public virtual Usuario? Usuario { get; set; }
+    public Usuario? Usuario { get; set; }
 }

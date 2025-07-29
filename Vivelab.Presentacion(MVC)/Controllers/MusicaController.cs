@@ -172,7 +172,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public async Task<IActionResult> Descargar(int cancionId)
         {
             int usuarioId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UsuarioCodigo")?.Value ?? "0");
-            int plan = ObtenerPlan();  // Aquí ya estamos obteniendo el plan, incluso si el usuario está vinculado.
+            int plan = ObtenerPlan();  // obteniendo el plan, incluso si el usuario está vinculado.
 
             string key = $"Descargas_{usuarioId}_{DateTime.UtcNow:yyyyMMdd}";
             int descargasHoy = HttpContext.Session.GetInt32(key) ?? 0;
@@ -205,3 +205,4 @@ namespace Vivelab.Presentacion_MVC_.Controllers
     }
 }
 
+ 

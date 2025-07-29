@@ -18,5 +18,5 @@ public class Plan
 
     public string Descripcion { get; set; }
 
-    public virtual List<Suscripcion>? Suscripciones { get; set; }
+    public  List<Suscripcion>? Suscripciones { get; set; }
 }

@@ -8,6 +8,6 @@ namespace Vivelab.Api.DTO
         [Required] public IFormFile Archivo { get; set; } = null!;
         public TimeSpan Duracion { get; set; }
         [Required] public int ArtistaCodigo { get; set; }
-        [Required] public int AlbumCodigo { get; set; }
+        public int? AlbumCodigo { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace Vivelab.Servicios
         {
             try
             {
-                var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 5); //Genera contraseña aletoria de 10 caracteres
+                var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 5); //Genera contraseña aletoria de 5 caracteres
                 var mensaje = new MimeMessage(); // Crear un nuevo mensaje MIME
                 mensaje.From.Add(new MailboxAddress("Vivelab", _fromEmail)); // Establecer el remitente
                 mensaje.To.Add(new MailboxAddress("", email)); // Establecer el destinatario

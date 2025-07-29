@@ -19,9 +19,9 @@ public class Suscripcion
 
     public int UsuarioCodigo { get; set; }
 
-    public virtual Plan? Plan { get; set; }
+    public Plan? Plan { get; set; }
 
-    public virtual Usuario? UsuarioPrincipal { get; set; }
+    public Usuario? UsuarioPrincipal { get; set; }
 
-    public virtual List<UsuarioSuscripcion>? UsuariosAdicionales { get; set; }
+    public List<UsuarioSuscripcion>? UsuariosAdicionales { get; set; }
 }

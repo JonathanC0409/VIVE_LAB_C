@@ -23,7 +23,7 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
         public IActionResult Index()
         {
-            // Obtén el email del usuario desde los claims
+            // Obténer el email del usuario desde los claims
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             ViewBag.Email = email;
 

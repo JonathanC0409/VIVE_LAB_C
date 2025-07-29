@@ -13,7 +13,7 @@ public class Playlist
 
     public int UsuarioCodigo { get; set; }
 
-    public virtual List<PlaylistCancion>? PlaylistCanciones { get; set; }
+    public  List<PlaylistCancion>? PlaylistCanciones { get; set; }
 
-    public virtual Usuario? Usuario { get; set; }
+    public  Usuario? Usuario { get; set; }
 }
