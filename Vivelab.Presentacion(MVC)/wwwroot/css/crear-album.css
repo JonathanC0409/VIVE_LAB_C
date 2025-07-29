@@ -1,0 +1,250 @@
+﻿/* Estilos base consistentes */
+:root {
+    --card-bg: rgba(25, 25, 35, 0.9);
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-green: #1DB954;
+    --accent-purple: #9B51E0;
+    --secondary-bg: rgba(255, 255, 255, 0.08);
+    --hover-bg: rgba(255, 255, 255, 0.12);
+    --error-color: #ff6b6b;
+    --border-radius: 12px;
+}
+
+/* Contenedor principal */
+.crear-album-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+/* Títulos */
+.crear-album-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    text-align: center;
+    background: linear-gradient(45deg, var(--accent-purple), #B56AF0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.crear-album-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Separador */
+.title-separator {
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-purple), transparent);
+    margin: 1rem auto 2rem;
+    border-radius: 2px;
+}
+
+/* Formulario */
+.album-form {
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.8rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    background: var(--secondary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.2);
+        background: var(--hover-bg);
+    }
+
+/* Input de archivo personalizado */
+.file-input-container {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--secondary-bg);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+    .file-input-label:hover {
+        border-color: var(--accent-purple);
+        background: var(--hover-bg);
+    }
+
+    .file-input-label i {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+        color: var(--accent-purple);
+    }
+
+.file-input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.file-name {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--accent-purple);
+    display: none;
+}
+
+/* Botones */
+.btn-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-crear {
+    flex: 1;
+    padding: 1rem;
+    background: linear-gradient(45deg, var(--accent-green), #1ed760);
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .btn-crear:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(29, 185, 84, 0.4);
+    }
+
+.btn-volver {
+    flex: 1;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid var(--text-secondary);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .btn-volver:hover {
+        background: var(--hover-bg);
+        border-color: var(--accent-purple);
+        color: var(--accent-purple);
+    }
+
+/* Mensajes de error */
+.text-danger {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .crear-album-container {
+        padding: 1.8rem;
+        margin: 1.5rem;
+    }
+
+    .crear-album-title {
+        font-size: 2rem;
+    }
+
+    .btn-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .crear-album-container {
+        padding: 1.5rem;
+    }
+
+    .crear-album-title {
+        font-size: 1.8rem;
+    }
+
+    .form-control {
+        padding: 0.9rem;
+    }
+
+    .btn-crear,
+    .btn-volver {
+        padding: 0.9rem;
+        font-size: 0.9rem;
+    }
+}

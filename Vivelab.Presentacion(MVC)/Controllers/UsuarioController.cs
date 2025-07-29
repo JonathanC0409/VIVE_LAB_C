@@ -118,7 +118,8 @@ namespace Vivelab.Presentacion_MVC_.Controllers
         public ActionResult ListaUsuarios()
         {
             // Obtener todos los usuarios
-            var usuarios = CRUD<Usuario>.GetAll(); 
+            var usuarios = CRUD<Usuario>.GetAll()
+                .Where(u => u.Rol != "administrador").ToList();
 
             // Pasar los usuarios a la vista
             return View(usuarios);
@@ -129,15 +130,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
             return View();
         }
 
-
-        // GET: UsuarioController/BloquearUsuario
-        public ActionResult BloquearUsuario()
-        {
-            var usuarios = CRUD<Usuario>.GetAll(); 
-
-            // Pasar la lista de usuarios a la vista
-            return View(usuarios);
-        }
 
 
         // POST: UsuarioController/BloquearUsuario
@@ -157,15 +149,6 @@ namespace Vivelab.Presentacion_MVC_.Controllers
 
             // Redirigir a la lista de usuarios
             return RedirectToAction("Index", "Home");
-        }
-
-        // GET: UsuarioController/BloquearUsuario
-        public ActionResult DesbloquearUsuario()
-        {
-            var usuarios = CRUD<Usuario>.GetAll();
-
-            // Pasar la lista de usuarios a la vista
-            return View(usuarios);
         }
 
 
@@ -541,6 +524,7 @@ public async Task<IActionResult> CrearAlbum(Album nuevoAlbum)
             var cancionesDisponibles = CRUD<Cancion>.GetAll().Where(c => !album.Canciones.Any(ac => ac.Codigo == c.Codigo)).ToList();
 
             ViewBag.AlbumId = albumId;  // Pasar el ID del álbum a la vista
+            ViewBag.Album = CRUD<Album>.GetById(albumId);
             ViewBag.CancionesDisponibles = cancionesDisponibles;  // Pasar las canciones disponibles para agregar
 
             return View(canciones);  // Mostrar las canciones asociadas al álbum

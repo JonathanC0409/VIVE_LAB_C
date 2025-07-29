@@ -1,31 +1,82 @@
 ﻿@model IEnumerable<Vivelab.Modelos.Usuario>
 
 @{
-    ViewData["Title"] = "Lista Usuarios";
+    ViewData["Title"] = "Lista de Usuarios";
 }
 
-<h2>Lista de Usuarios</h2>
+<link href="~/css/lista-usuarios.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Saldo</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var usuario in Model)
-        {
+<div class="lista-usuarios-container">
+    <h2 class="lista-usuarios-title">@ViewData["Title"]</h2>
+
+    <table class="usuarios-table">
+        <thead>
             <tr>
-                <td>@usuario.Nombre</td>
-                <td>@usuario.Email</td>
-                <td>@usuario.Saldo</td>
-                <td>
-                    <a href="@Url.Action("BloquearUsuario", "Usuario", new { id = usuario.Codigo })">Bloquear</a>
-                </td>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Saldo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="user-name">
+                            <div class="user-avatar">
+                                @usuario.Nombre.Substring(0, 1).ToUpper()
+                            </div>
+                            @usuario.Nombre
+                        </div>
+                    </td>
+                    <td>@usuario.Email</td>
+                    <td class="@(usuario.Saldo > 0 ? "saldo-positivo" : usuario.Saldo < 0 ? "saldo-negativo" : "saldo-cero")">
+                        $@usuario.Saldo.ToString("N2")
+                    </td>
+                    <td>
+                        @if (usuario.Rol != "bloqueado")
+                        {
+                            <span class="estado-activo">
+                                <i class="bi bi-check-circle"></i> Activo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="estado-bloqueado">
+                                <i class="bi bi-lock"></i> Bloqueado
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @if (usuario.Rol != "bloqueado")
+                        {
+                            <form method="post" asp-action="BloquearUsuario">
+                                <input type="hidden" name="usuarioId" value="@usuario.Codigo" />
+                                <button type="submit"
+                                        class="btn-accion btn-bloquear"
+                                        onclick="return confirm('¿Estás seguro de bloquear a este usuario?')">
+                                    <i class="bi bi-lock"></i> Bloquear
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-action="DesbloquearUsuario">
+                                <input type="hidden" name="usuarioId" value="@usuario.Codigo" />
+                                <button type="submit"
+                                        class="btn-accion btn-editar"
+                                        onclick="return confirm('¿Estás seguro de desbloquear a este usuario?')">
+                                    <i class="bi bi-unlock"></i> Desbloquear
+                                </button>
+                            </form>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

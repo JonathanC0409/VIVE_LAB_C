@@ -40,6 +40,7 @@
                         <a href="@Url.Action("RecargarSaldo", "Usuario")" class="btn-modern">
                             💳 Recargar Saldo
                         </a>
+                        <a href="@Url.Action("VincularUsuario","Usuario")" class="btn-modern">Vincular Usuarios</a>
                     }
                     @if (User.HasClaim(c => c.Type == "TipoUsuario" && c.Value == "artista"))
                     {
@@ -52,12 +53,7 @@
                         <a href="@Url.Action("ListaUsuarios", "Usuario")" class="btn-modern">
                             👥 Ver Usuarios
                         </a>
-                        <a href="@Url.Action("BloquearUsuario", "Usuario")" class="btn-modern btn-danger-modern">
-                            ⚠️ Bloquear Usuario
-                        </a>
-                        <a href="@Url.Action("DesbloquearUsuario", "Usuario")" class="btn-modern btn-danger-modern">
-                            ⚠️ Desbloquear Usuario
-                        </a>
+                        <a href="@Url.Action("ViewDatesSubcripcionsForPlan","Usuario")" class="btn-modern"> Subscripciones por plan</a>
                     }
                 </div>
             }

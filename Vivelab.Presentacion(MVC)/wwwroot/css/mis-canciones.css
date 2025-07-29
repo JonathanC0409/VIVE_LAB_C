@@ -1,0 +1,215 @@
+﻿/* Estilos base consistentes */
+:root {
+    --card-bg: rgba(25, 25, 35, 0.9);
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-green: #1DB954;
+    --accent-purple: #9B51E0;
+    --accent-orange: #FF9500;
+    --accent-red: #FF3B30;
+    --secondary-bg: rgba(255, 255, 255, 0.08);
+    --hover-bg: rgba(255, 255, 255, 0.12);
+    --table-header: rgba(155, 81, 224, 0.15);
+}
+
+/* Contenedor principal */
+.mis-canciones-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+/* Título */
+.mis-canciones-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    text-align: center;
+    background: linear-gradient(45deg, var(--accent-purple), #B56AF0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+    .mis-canciones-title::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-purple), transparent);
+        margin: 1rem auto 0;
+        border-radius: 2px;
+    }
+
+/* Botón de subir */
+.btn-subir-cancion {
+    background: linear-gradient(45deg, var(--accent-purple), #B56AF0);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(155, 81, 224, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+    .btn-subir-cancion:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(155, 81, 224, 0.4);
+        color: white;
+    }
+
+/* Tabla de canciones */
+.mis-canciones-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    color: var(--text-primary);
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .mis-canciones-table thead {
+        background: var(--table-header);
+    }
+
+    .mis-canciones-table th {
+        padding: 1.2rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        color: var(--accent-purple);
+    }
+
+    .mis-canciones-table td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+    }
+
+    .mis-canciones-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .mis-canciones-table tbody tr:hover {
+        background: var(--hover-bg);
+    }
+
+/* Botones de acción */
+.btn-accion {
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.btn-editar {
+    background: linear-gradient(45deg, var(--accent-orange), #FFAA33);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.2);
+}
+
+    .btn-editar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 149, 0, 0.3);
+        color: white;
+    }
+
+.btn-eliminar {
+    background: linear-gradient(45deg, var(--accent-red), #FF5E5E);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.2);
+}
+
+    .btn-eliminar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 59, 48, 0.3);
+        color: white;
+    }
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .mis-canciones-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .mis-canciones-container {
+        padding: 1.8rem;
+    }
+
+    .mis-canciones-title {
+        font-size: 2rem;
+    }
+
+    .btn-accion {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .mis-canciones-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .mis-canciones-title {
+        font-size: 1.8rem;
+    }
+
+    .mis-canciones-table th,
+    .mis-canciones-table td {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-subir-cancion,
+    .btn-accion {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .btn-accion {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}

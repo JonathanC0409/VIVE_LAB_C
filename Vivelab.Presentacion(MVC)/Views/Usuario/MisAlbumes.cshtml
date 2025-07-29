@@ -4,44 +4,56 @@
     ViewData["Title"] = "Mis Álbumes";
 }
 
-<h2>@ViewData["Title"]</h2>
+<link href="~/css/mis-albumes.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<a href="@Url.Action("CrearAlbum")" class="btn btn-success mb-3">Crear Nuevo Álbum</a>
+<div class="mis-albumes-container">
+    <h2 class="mis-albumes-title">@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre del Álbum</th>
-            <th>Fecha de Creación</th>
-            <th>Portada</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var album in Model)
-        {
+    <a href="@Url.Action("CrearAlbum")" class="btn-crear-album">
+        <i class="bi bi-plus-circle"></i> Crear Nuevo Álbum
+    </a>
+
+    <table class="albumes-table">
+        <thead>
             <tr>
-                <td>@album.Nombre</td>
-                <td>@album.FechaCreacion.ToString("dd/MM/yyyy")</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(album.PortadaUrl))
-                    {
-                        <img src="@album.PortadaUrl" alt="Portada" style="width: 100px; height: 100px; object-fit: cover;" />
-                    }
-                    else
-                    {
-                        <span>No disponible</span>
-                    }
-                </td>
-                <td>
-                    <!-- Ver Canciones -->
-                    <a href="@Url.Action("VerCanciones", new { albumId = album.Codigo })" class="btn btn-info">Ver</a>
-
-                    <!-- Editar y Eliminar -->
-                    <a href="@Url.Action("EditarAlbum", new { id = album.Codigo })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("EliminarAlbum", new { id = album.Codigo })" class="btn btn-danger">Eliminar</a>
-                </td>
+                <th>Nombre del Álbum</th>
+                <th>Fecha de Creación</th>
+                <th>Portada</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var album in Model)
+            {
+                <tr>
+                    <td>@album.Nombre</td>
+                    <td>@album.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(album.PortadaUrl))
+                        {
+                            <img src="@album.PortadaUrl" alt="Portada" class="album-portada" />
+                        }
+                        else
+                        {
+                            <div class="portada-placeholder">
+                                <span>No disponible</span>
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("VerCanciones", new { albumId = album.Codigo })" class="btn-accion btn-ver">
+                            <i class="bi bi-eye"></i> Ver
+                        </a>
+                        <a href="@Url.Action("EditarAlbum", new { id = album.Codigo })" class="btn-accion btn-editar">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <a href="@Url.Action("EliminarAlbum", new { id = album.Codigo })" class="btn-accion btn-eliminar">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

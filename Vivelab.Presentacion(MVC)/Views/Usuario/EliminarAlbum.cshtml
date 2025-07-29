@@ -4,49 +4,60 @@
     ViewData["Title"] = "Eliminar Álbum";
 }
 
-<h1>@ViewData["Title"]</h1>
+<link href="~/css/eliminar-album.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<h3>¿Estás seguro de que deseas eliminar este álbum?</h3>
+<div class="eliminar-album-container">
+    <h1 class="eliminar-album-title">@ViewData["Title"]</h1>
+    <h3 class="eliminar-album-subtitle">¿Estás seguro de que deseas eliminar este álbum?</h3>
+    <span class="title-separator"></span>
 
-<div>
-    <h4>Detalles del Álbum</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
-        </dd>
-     
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ArtistaCodigo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ArtistaCodigo)
-        </dd>
-    </dl>
+    <div class="warning-message">
+        <i class="bi bi-exclamation-triangle-fill"></i> Esta acción no se puede deshacer. Todas las canciones asociadas también serán eliminadas.
+    </div>
+
+    <div class="album-details">
+        <!-- Portada del álbum -->
+        <div class="album-cover-container">
+            @if (!string.IsNullOrEmpty(Model.PortadaUrl))
+            {
+                <img src="@Model.PortadaUrl" alt="Portada del álbum" class="album-cover" />
+            }
+            else
+            {
+                <div class="no-cover">
+                    <i class="bi bi-image" style="font-size: 2rem;"></i>
+                    <p>No hay portada</p>
+                </div>
+            }
+        </div>
+
+        <!-- Detalles del álbum -->
+
+
+        <div class="detail-row">
+            <div class="detail-label">@Html.DisplayNameFor(model => model.Nombre)</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.Nombre)</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">@Html.DisplayNameFor(model => model.FechaCreacion)</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.FechaCreacion)</div>
+        </div>
+
+    </div>
 
     <!-- Formulario para eliminar el álbum -->
     <form asp-action="EliminarAlbum" method="post">
-        <!-- Campo oculto para enviar el ID del álbum -->
         <input type="hidden" asp-for="Codigo" />
 
-        <div class="form-group">
-            <input type="submit" value="Eliminar" class="btn btn-danger" />
-            <a asp-action="MisAlbumes" class="btn btn-secondary">Volver a la lista</a>
+        <div class="btn-container">
+            <button type="submit" class="btn-eliminar">
+                <i class="bi bi-trash-fill"></i> Eliminar permanentemente
+            </button>
+            <a asp-action="MisAlbumes" class="btn-volver">
+                <i class="bi bi-arrow-left"></i> Volver a la lista
+            </a>
         </div>
     </form>
 </div>

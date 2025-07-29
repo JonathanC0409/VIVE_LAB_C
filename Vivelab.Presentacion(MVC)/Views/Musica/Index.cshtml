@@ -8,75 +8,95 @@
     var limiteDescargas = ViewBag.LimiteDescargas ?? 0;
 }
 
-<script>
-    window.reproduccionesHoy = @reproducciones;
-    window.planCodigo = @plan;
-    window.descargasHoy = @descargasHoy;
-    window.limiteDescargas = @limiteDescargas;
-</script>
+<link href="~/css/musica.css" rel="stylesheet" asp-append-version="true"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<h2>@ViewData["Title"]</h2>
+<div class="musica-container">
+    <h2 class="musica-title">@ViewData["Title"]</h2>
 
-@if (ViewBag.Rol == "artista")
-{
-    <p>
-        <a asp-action="Subir" class="btn btn-primary">
-            <i class="bi bi-upload"></i> Subir nueva canción
-        </a>
-    </p>
-}
+    <!-- Indicadores de uso -->
+    <div class="usage-indicator">
+        <div class="usage-item">
+            <div class="usage-value">@reproducciones</div>
+            <div class="usage-label">Reproducciones hoy</div>
+        </div>
+        <div class="usage-item">
+            <div class="usage-value">@descargasHoy/@limiteDescargas</div>
+            <div class="usage-label">Descargas hoy</div>
+        </div>
+        <div class="usage-item">
+            <div class="usage-value">@(plan == 0 ? "Gratis" : "Premium")</div>
+            <div class="usage-label">Plan actual</div>
+        </div>
+    </div>
 
-<div id="bannerAnuncio" class="alert alert-info text-center d-none" style="font-weight: bold;">
-    🎙️ Anuncio: Disfruta sin interrupciones con el Plan Premium. ¡Cámbiate ahora!
-</div>
+    @if (ViewBag.Rol == "artista")
+    {
+        <p>
+            <a asp-action="Subir" class="btn-subir">
+                <i class="bi bi-upload"></i> Subir nueva canción
+            </a>
+        </p>
+    }
 
-<table class="table table-striped align-middle">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Duración</th>
-            <th>Reproducción</th>
-            <th>Artista</th>
-            <th>Reproducciones</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    @if (plan == 0)
+    {
+        <div id="bannerAnuncio" class="banner-anuncio">
+            🎙️ Anuncio: Disfruta sin interrupciones con el Plan Premium. ¡Cámbiate ahora!
+        </div>
+    }
+
+    <table class="musica-table">
+        <thead>
             <tr>
-                <td>@item.Titulo</td>
-                <td>@item.Duracion.ToString(@"hh\:mm\:ss")</td>
-                <td>
-                    <audio controls class="audio-player" data-id="@item.Codigo" style="max-width:200px;">
-                        <source src="@item.ArchivoUrl" />
-                        Tu navegador no soporta el elemento
-                        <code>audio</code>.
-                    </audio>
-                </td>
-                <td>@item.Artista.Nombre</td>
-                <td>@item.TotalReproducciones</td>
-                <td>
-                    @if (plan != 0)
-                    {
-                        bool puedeDescargar = descargasHoy < limiteDescargas;
-                        <button type="button"
-                                class="btn btn-outline-success btn-sm download-btn"
-                                data-id="@item.Codigo"
-                                @(puedeDescargar ? "" : "disabled")
-                                title="@(puedeDescargar ? "Descargar canción" : "Límite alcanzado")">
-                            <i class="bi bi-download"></i> Descargar
-                        </button>
-                    }
-                </td>
+                <th>Título</th>
+                <th>Duración</th>
+                <th>Reproducción</th>
+                <th>Artista</th>
+                <th>Reproducciones</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Titulo</td>
+                    <td>@item.Duracion.ToString(@"hh\:mm\:ss")</td>
+                    <td>
+                        <audio controls class="audio-player" data-id="@item.Codigo">
+                            <source src="@item.ArchivoUrl" />
+                            Tu navegador no soporta el elemento
+                            <code>audio</code>.
+                        </audio>
+                    </td>
+                    <td>@item.Artista.Nombre</td>
+                    <td>@item.TotalReproducciones</td>
+                    <td>
+                        @if (plan != 0)
+                        {
+                            bool puedeDescargar = descargasHoy < limiteDescargas;
+                            <button type="button"
+                                    class="btn-descargar"
+                                    data-id="@item.Codigo"
+                                    @(puedeDescargar ? "" : "disabled")
+                                    title="@(puedeDescargar ? "Descargar canción" : "Límite alcanzado")">
+                                <i class="bi bi-download"></i> Descargar
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     <script src="~/js/musica.js"></script>
+    <script>
+        window.reproduccionesHoy = @reproducciones;
+        window.planCodigo = @plan;
+        window.descargasHoy = @descargasHoy;
+        window.limiteDescargas = @limiteDescargas;
+    </script>
 }
-
-
-

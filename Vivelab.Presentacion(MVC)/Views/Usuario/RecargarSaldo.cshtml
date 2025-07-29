@@ -4,15 +4,39 @@
     ViewData["Title"] = "Recargar Saldo";
 }
 
-<h2>Recargar saldo para @Model.Nombre</h2>
+<link href="~/css/recargar.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<form asp-action="RecargarSaldo" method="post">
-    <input type="hidden" name="id" value="@Model.Codigo" />
+<div class="recargar-container">
+    <h2 class="recargar-title">Recargar saldo para @Model.Nombre</h2>
 
-    <div class="form-group">
-        <label>Monto a recargar:</label>
-        <input type="number" name="monto" step="0.01" min="0" class="form-control" required />
-    </div>
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert-message success">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>@ViewBag.SuccessMessage</div>
+        </div>
+    }
 
-    <button type="submit" class="btn btn-primary">Recargar</button>
-</form>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert-message error">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div>@ViewBag.ErrorMessage</div>
+        </div>
+    }
+
+    <form asp-action="RecargarSaldo" method="post" class="recargar-form">
+        <input type="hidden" name="id" value="@Model.Codigo" />
+
+        <div class="form-group">
+            <label><i class="bi bi-currency-dollar"></i> Monto a recargar:</label>
+            <input type="number" name="monto" step="0.01" min="0"
+                   class="form-control" placeholder="Ej: 50.00" required />
+        </div>
+
+        <button type="submit" class="btn-recargar">
+            <i class="bi bi-arrow-repeat"></i> Recargar
+        </button>
+    </form>
+</div>

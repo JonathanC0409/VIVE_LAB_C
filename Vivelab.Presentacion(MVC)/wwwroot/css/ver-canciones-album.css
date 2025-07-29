@@ -1,0 +1,289 @@
+﻿/* Estilos base consistentes */
+:root {
+    --card-bg: rgba(25, 25, 35, 0.9);
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-green: #1DB954;
+    --accent-purple: #9B51E0;
+    --accent-blue: #4A90E2;
+    --accent-orange: #FF9500;
+    --secondary-bg: rgba(255, 255, 255, 0.08);
+    --hover-bg: rgba(255, 255, 255, 0.12);
+    --border-radius: 12px;
+}
+
+/* Contenedor principal */
+.album-canciones-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+/* Encabezado del álbum */
+.album-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 2rem;
+}
+
+.album-cover {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.album-info {
+    flex: 1;
+}
+
+.album-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    background: linear-gradient(45deg, var(--accent-purple), #B56AF0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.album-meta {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.album-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Secciones */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--accent-purple);
+    padding-bottom: 0.5rem;
+}
+
+/* Tabla de canciones */
+.canciones-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    color: var(--text-primary);
+    background: var(--secondary-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+    .canciones-table thead {
+        background: rgba(155, 81, 224, 0.15);
+    }
+
+    .canciones-table th {
+        padding: 1.2rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        color: var(--accent-purple);
+    }
+
+    .canciones-table td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+    }
+
+    .canciones-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .canciones-table tbody tr:hover {
+        background: var(--hover-bg);
+    }
+
+/* Reproductor de audio */
+.audio-player {
+    width: 100%;
+    max-width: 250px;
+    height: 40px;
+}
+
+    .audio-player::-webkit-media-controls-panel {
+        background: var(--secondary-bg);
+        border-radius: var(--border-radius);
+    }
+
+/* Botones de acción */
+.btn-accion {
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.btn-eliminar {
+    background: linear-gradient(45deg, var(--accent-red), #FF5E5E);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.2);
+}
+
+    .btn-eliminar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 59, 48, 0.3);
+        color: white;
+    }
+
+.btn-agregar {
+    background: linear-gradient(45deg, var(--accent-green), #1ed760);
+    color: white;
+    box-shadow: 0 4px 15px rgba(29, 185, 84, 0.2);
+}
+
+    .btn-agregar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(29, 185, 84, 0.3);
+        color: white;
+    }
+
+.btn-volver {
+    background: transparent;
+    border: 1px solid var(--text-secondary);
+    color: var(--text-primary);
+}
+
+    .btn-volver:hover {
+        background: var(--hover-bg);
+        border-color: var(--accent-blue);
+        color: var(--accent-blue);
+    }
+
+/* Formulario para agregar canciones */
+.agregar-cancion-form {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--secondary-bg);
+    border-radius: var(--border-radius);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--secondary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+/* Estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--accent-purple);
+    }
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .album-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .album-actions {
+        justify-content: center;
+    }
+
+    .canciones-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .album-canciones-container {
+        padding: 1.8rem;
+    }
+
+    .album-title {
+        font-size: 1.8rem;
+    }
+
+    .btn-accion {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .album-canciones-container {
+        padding: 1.5rem;
+    }
+
+    .album-title {
+        font-size: 1.6rem;
+    }
+
+    .canciones-table th,
+    .canciones-table td {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-accion {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}

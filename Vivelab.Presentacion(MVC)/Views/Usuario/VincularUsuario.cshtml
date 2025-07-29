@@ -2,44 +2,87 @@
     ViewData["Title"] = "Vincular Usuario";
 }
 
-<h2>@ViewData["Title"]</h2>
+<link href="~/css/vincularUsuario.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<form method="post" asp-action="VincularUsuario">
-    <div class="form-group">
-        <label for="EmailUsuarioVincular">Correo del Usuario a Vincular</label>
-        <input type="email" class="form-control" id="EmailUsuarioVincular" name="emailUsuarioVincular" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Vincular Usuario</button>
-</form>
+<div class="vincular-container">
+    <h2>@ViewData["Title"]</h2>
 
-<!-- Mostrar mensaje de error con ViewBag -->
-@if (ViewBag.ErrorMessage != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-        <strong>¡Ups!</strong> @ViewBag.ErrorMessage
-    </div>
-}
+    <form method="post" asp-action="VincularUsuario" class="vincular-form">
+        <div class="form-group">
+            <label for="EmailUsuarioVincular" class="form-label">
+                <i class="bi bi-envelope"></i> Correo del Usuario a Vincular
+            </label>
+            <input type="email" class="form-control" id="EmailUsuarioVincular" name="emailUsuarioVincular"
+                   placeholder="ejemplo@correo.com" required />
+        </div>
+        <button type="submit" class="btn-vincular">
+            <i class="bi bi-link-45deg"></i> Vincular Usuario
+        </button>
+    </form>
 
-<!-- Mostrar los usuarios vinculados como tarjetas estilizadas -->
-@if (ViewBag.UsuariosVinculados != null)
-{
-    <h3 class="mt-5">Usuarios Vinculados:</h3>
-    <div class="row">
-        @foreach (var usuarioSuscripcion in ViewBag.UsuariosVinculados)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card user-card">
-                    <div class="card-body text-center">
-                        <!-- Ícono del usuario (similar a un avatar) -->
-                        <div class="mb-3">
-                            <i class="bi bi-person-circle" style="font-size: 50px; color: #007bff;"></i>
-                        </div>
-                        <!-- Nombre y correo del usuario -->
-                        <h5 class="card-title">@usuarioSuscripcion.Usuario.Nombre</h5>
-                        <p class="card-text">@usuarioSuscripcion.Usuario.Email</p>
-                    </div>
-                </div>
+    <!-- Mostrar mensaje de error con ViewBag -->
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert-message error">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div>
+                <strong>¡Ups!</strong> @ViewBag.ErrorMessage
             </div>
-        }
-    </div>
-}
+        </div>
+    }
+
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert-message success">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>
+                <strong>¡Éxito!</strong> @ViewBag.SuccessMessage
+            </div>
+        </div>
+    }
+
+    <!-- Mostrar los usuarios vinculados como tarjetas estilizadas -->
+    @if (ViewBag.UsuariosVinculados != null && ViewBag.UsuariosVinculados.Count > 0)
+    {
+        <h3>Usuarios Vinculados</h3>
+        <div class="usuarios-vinculados-container">
+            <div class="usuarios-grid">
+                @foreach (var usuarioSuscripcion in ViewBag.UsuariosVinculados)
+                {
+                    <div class="usuario-card">
+                        <div class="usuario-avatar avatar-color@(usuarioSuscripcion.UsuarioId % 6)">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <div class="usuario-info">
+                            <h5 class="usuario-nombre">@usuarioSuscripcion.Usuario.Nombre</h5>
+                            <p class="usuario-email">
+                                <i class="bi bi-envelope"></i> @usuarioSuscripcion.Usuario.Email
+                            </p>
+                            <p class="usuario-fecha">
+                                <i class="bi bi-calendar-check"></i> Vinculado el: @usuarioSuscripcion.FechaVinculacion.ToString("dd/MM/yyyy")
+                            </p>
+                        </div>
+                        <form method="post" asp-action="EliminarVinculacion"
+                              onsubmit="return confirm('¿Estás seguro de eliminar esta vinculación?');">
+                            <input type="hidden" name="usuarioId" value="@usuarioSuscripcion.UsuarioId" />
+                            <button type="submit" class="btn-action">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else if (ViewBag.UsuariosVinculados != null)
+    {
+        <div class="alert-message info">
+            <i class="bi bi-info-circle-fill"></i>
+            <div>
+                <strong>No hay usuarios vinculados</strong>
+                <p>Comienza vinculando usuarios usando el formulario superior</p>
+            </div>
+        </div>
+    }
+</div>

@@ -1,57 +1,85 @@
 ﻿@model IEnumerable<Vivelab.Modelos.Plan>
 
 @{
-    ViewData["Title"] = "ViewDatesSubcripcionsForPlan";
+    ViewData["Title"] = "Suscripciones por Planes";
 }
-<link rel="stylesheet" href="~/css/plan.css" asp-append-version="true" />
 
-<h1>Suscripciones por Planes</h1>
+<link href="~/css/plan.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-@foreach(var plan in Model)
-{
-    <div class="plan-card">
-        <!-- Nombre del Plan -->
-        <h2>@plan.Nombre</h2>
+<div class="suscripciones-container">
+    <h1 class="suscripciones-title">@ViewData["Title"]</h1>
 
-        <!-- Mostrar la cantidad de suscripciones -->
-        <p><strong>Este plan tiene @plan.Suscripciones.Count() suscripciones.</strong></p>
+    @foreach (var plan in Model)
+    {
+        <div class="plan-card">
+            <!-- Nombre del Plan -->
+            <h2><i class="bi bi-collection"></i> @plan.Nombre</h2>
 
-        <!-- Verificar si el plan tiene suscripciones -->
-        @if (plan.Suscripciones != null && plan.Suscripciones.Any()) 
+            <!-- Mostrar la cantidad de suscripciones -->
+            <p><strong><i class="bi bi-people-fill"></i> Suscripciones:</strong> @plan.Suscripciones.Count()</p>
+
+            <!-- Verificar si el plan tiene suscripciones -->
+            @if (plan.Suscripciones != null && plan.Suscripciones.Any())
+            {
+                <div class="suscripciones-list">
+                    <!-- Mostrar cada suscripción como tarjeta -->
+                    @foreach (var sub in plan.Suscripciones)
+                    {
+                        <div class="suscripcion-card">
+                            <!-- Mostrar el nombre del Usuario Principal -->
+                            <p><strong><i class="bi bi-person-badge"></i> Usuario Principal:</strong> @sub.UsuarioPrincipal?.Nombre</p>
+                            <p><strong><i class="bi bi-calendar-event"></i> Fecha Inicio:</strong> @sub.FechaInicio.ToString("dd/MM/yyyy")</p>
+                            <p><strong><i class="bi bi-calendar-x"></i> Fecha Fin:</strong> @sub.FechaFin.ToString("dd/MM/yyyy")</p>
+                            <p>
+                                <strong><i class="bi bi-circle-fill"></i> Estado:</strong>
+                                <span class="@GetEstadoClass(sub.Estado)">
+                                    @sub.Estado
+                                </span>
+                            </p>
+
+                            <!-- Mostrar los Usuarios Adicionales -->
+                            @if (sub.UsuariosAdicionales != null && sub.UsuariosAdicionales.Any())
+                            {
+                                <p><strong><i class="bi bi-people"></i> Usuarios Adicionales:</strong></p>
+                                <ul>
+                                    @foreach (var u in sub.UsuariosAdicionales)
+                                    {
+                                        <li><i class="bi bi-person"></i> @u.Usuario.Nombre</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p><i class="bi bi-info-circle"></i> No hay usuarios adicionales.</p>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-suscripciones">
+                    <i class="bi bi-exclamation-circle"></i> No hay suscripciones para este plan.
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@functions {
+    string GetEstadoClass(string estado)
+    {
+        switch (estado.ToLower())
         {
-            <div class="suscripciones-list">
-                <!-- Mostrar cada suscripción como tarjeta -->
-                @foreach(var sub in plan.Suscripciones)
-                {
-                    <div class="suscripcion-card">
-                        <!-- Mostrar el nombre del Usuario Principal -->
-                        <p><strong>Usuario Principal:</strong> @sub.UsuarioPrincipal?.Nombre</p>
-                        <p><strong>Fecha de Inicio:</strong> @sub.FechaInicio.ToString("dd/MM/yyyy")</p>
-                        <p><strong>Fecha de Fin:</strong> @sub.FechaFin.ToString("dd/MM/yyyy")</p>
-                        <p><strong>Estado:</strong> @(sub.Estado)</p>
-
-                        <!-- Mostrar los Usuarios Adicionales -->
-                        @if (sub.UsuariosAdicionales != null && sub.UsuariosAdicionales.Any())
-                        {
-                            <p><strong>Usuarios Adicionales:</strong></p>
-                            <ul>
-                                @foreach(var u in sub.UsuariosAdicionales)
-                                {
-                                    <li>@u.Usuario.Nombre</li>  <!-- Mostrar nombre de cada usuario adicional -->
-                                }
-                            </ul>
-                        }
-                        else
-                        {
-                            <p>No hay usuarios adicionales.</p>
-                        }
-                    </div>
-                }
-            </div>
+            case "activo":
+                return "estado-activo";
+            case "inactivo":
+                return "estado-inactivo";
+            case "cancelado":
+                return "estado-cancelado";
+            default:
+                return "";
         }
-        else
-        {
-            <p>No hay suscripciones disponibles para este plan.</p>  <!-- Mensaje si no hay suscripciones -->
-        }
-    </div>
+    }
 }

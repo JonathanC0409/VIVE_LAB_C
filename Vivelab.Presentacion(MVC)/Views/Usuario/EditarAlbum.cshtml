@@ -4,59 +4,77 @@
     ViewData["Title"] = "Editar Álbum";
 }
 
-<h1>@ViewData["Title"]</h1>
+<link href="~/css/editar-album.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<h4>Editar Álbum</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="EditarAlbum" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="editar-album-container">
+    <h1 class="editar-album-title">@ViewData["Title"]</h1>
+    <h4 class="editar-album-subtitle">Editar Álbum</h4>
+    <span class="title-separator"></span>
 
-            <!-- Código del Álbum (oculto) -->
-            <div class="form-group">
-                <input asp-for="Codigo" type="hidden" value="@Model.Codigo" />
-            </div>
+    <form asp-action="EditarAlbum" enctype="multipart/form-data" class="album-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Nombre del Álbum -->
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label">Nombre del Álbum</label>
-                <input asp-for="Nombre" class="form-control" value="@Model.Nombre" required />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
+        <!-- Código del Álbum (oculto) -->
+        <input asp-for="Codigo" type="hidden" value="@Model.Codigo" />
 
-            <!-- Fecha de Creación (no editable) -->
-            <div class="form-group">
-                <input asp-for="FechaCreacion" type="hidden" value="@Model.FechaCreacion.ToString("yyyy-MM-dd")" />
-            </div>
+        <!-- Nombre del Álbum -->
+        <div class="form-group">
+            <label asp-for="Nombre" class="form-label">Nombre del Álbum</label>
+            <input asp-for="Nombre" class="form-control" value="@Model.Nombre" required placeholder="Ej: Mi álbum mejorado" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
 
-            <!-- Portada del Álbum (opcional) -->
-            <div class="form-group">
-                <label asp-for="PortadaUrl" class="control-label">Portada del Álbum (Imagen)</label>
-                <input asp-for="PortadaUrl" class="form-control" type="file" accept="image/*" />
-                @if (!string.IsNullOrEmpty(Model.PortadaUrl))
-                {
-                    <div>
-                        <h5>Portada Actual:</h5>
-                        <img src="@Model.PortadaUrl" alt="Portada" style="width: 100px; height: 100px; object-fit: cover;" />
-                    </div>
-                }
+        <!-- Fecha de Creación (oculta) -->
+        <input asp-for="FechaCreacion" type="hidden" value="@Model.FechaCreacion.ToString("yyyy-MM-dd")" />
+
+        <!-- Portada del Álbum -->
+        <div class="form-group">
+            <label class="form-label">Portada del Álbum</label>
+            <div class="file-input-container">
+                <label for="PortadaUrl" class="file-input-label">
+                    <i class="bi bi-image"></i> Cambiar imagen
+                </label>
+                <input asp-for="PortadaUrl" id="PortadaUrl" class="file-input" type="file" accept="image/*" />
+                <span class="file-name" id="fileName"></span>
                 <span asp-validation-for="PortadaUrl" class="text-danger"></span>
             </div>
 
-            <!-- Artista Código (oculto) -->
-            <div class="form-group">
-                <input asp-for="ArtistaCodigo" type="hidden" value="@Model.ArtistaCodigo" />
-            </div>
+            @if (!string.IsNullOrEmpty(Model.PortadaUrl))
+            {
+                <div class="current-cover">
+                    <h5 class="current-cover-title">Portada Actual:</h5>
+                    <img src="@Model.PortadaUrl" alt="Portada" class="current-cover-image" />
+                </div>
+            }
+        </div>
 
-            <!-- Botón de Guardar -->
-            <div class="form-group">
-                <input type="submit" value="Guardar Cambios" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        <!-- Artista Código (oculto) -->
+        <input asp-for="ArtistaCodigo" type="hidden" value="@Model.ArtistaCodigo" />
+
+        <!-- Botones -->
+        <div class="btn-container">
+            <button type="submit" class="btn-guardar">
+                <i class="bi bi-save"></i> Guardar Cambios
+            </button>
+            <a asp-action="MisAlbumes" class="btn-volver">
+                <i class="bi bi-arrow-left"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="MisAlbumes" class="btn btn-secondary">Volver a la lista</a>
-</div>
+@section Scripts {
+    <script>
+        // Mostrar nombre del archivo seleccionado
+        document.getElementById('PortadaUrl').addEventListener('change', function(e) {
+            const fileName = document.getElementById('fileName');
+            if (this.files.length > 0) {
+                fileName.textContent = this.files[0].name;
+                fileName.style.display = 'block';
+            } else {
+                fileName.style.display = 'none';
+            }
+        });
+    </script>
+}

@@ -4,14 +4,28 @@
     ViewData["Title"] = "Eliminar Canción";
 }
 
+<link href="~/css/eliminar-cancion.css" rel="stylesheet" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 
-<h3>¿Estás seguro de que deseas eliminar esta canción?</h3>
+<div class="eliminar-cancion-container">
+    <h3 class="eliminar-cancion-title">¿Estás seguro de que deseas eliminar esta canción?</h3>
 
-<div>
-    <p><strong>Título:</strong> @Model.Titulo</p>
+    <div class="confirmacion-content">
+        <p class="confirmacion-text">Esta acción no se puede deshacer. La canción será eliminada permanentemente.</p>
+
+        <div class="cancion-info">
+            <p><strong>Título:</strong> @Model.Titulo</p>
+        </div>
+    </div>
+
+    <form method="post">
+        <div class="btn-container">
+            <button type="submit" class="btn-eliminar-confirm">
+                <i class="bi bi-trash-fill"></i> Eliminar permanentemente
+            </button>
+            <a href="@Url.Action("MisCanciones")" class="btn-cancelar">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </form>
 </div>
-
-<form method="post">
-    <button type="submit" class="btn btn-danger">Eliminar</button>
-    <a href="@Url.Action("MisCanciones")" class="btn btn-secondary">Cancelar</a>
-</form>

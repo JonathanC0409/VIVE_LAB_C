@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-body">
                     <div class="plan-price">
-                        <span class="price-amount">@plan.Precio.ToString("C", new System.Globalization.CultureInfo("es-ES"))</span>
+                        <span class="price-amount">@plan.Precio.ToString("C", new System.Globalization.CultureInfo("en-US"))</span>
                         <span class="price-period">por mes</span>
                     </div>
                     <p class="plan-description">@plan.Descripcion</p>
@@ -38,14 +38,18 @@
                     <ul class="plan-features">
                         <li><i class="fas fa-check"></i> @plan.CantidadUsuarios usuario@(plan.CantidadUsuarios > 1 ? "s" : "") simultáneo@(plan.CantidadUsuarios > 1 ? "s" : "")</li>
                         <li><i class="fas fa-check"></i> Acceso ilimitado a millones de canciones</li>
-                        <li><i class="fas fa-check"></i> Audio en alta calidad (320kbps)</li>
-                        <li><i class="fas fa-check"></i> Experiencia completamente libre de anuncios</li>
-                        @if (plan.Nombre.Contains("Premium"))
+                        <li><i class="fas fa-check"></i> Reproducciones ilimitadas</li>
+                        <li><i class="fas fa-check"></i> PlayList personalizadas</li>
+
+                        @if (plan.Nombre.Contains("Familiar"))
                         {
-                            <li><i class="fas fa-check"></i> Descarga canciones para escuchar offline</li>
-                            <li><i class="fas fa-check"></i> Contenido exclusivo para suscriptores</li>
-                            <li><i class="fas fa-check"></i> Prioridad en soporte técnico</li>
+                            <li><i class="fas fa-check"></i> 1 Descarga por dia</li>
                         }
+                        @if (plan.Nombre.Contains("Empresarial"))
+                        {
+                            
+                        }
+
                     </ul>
                 </div>
                 <div class="card-footer">
